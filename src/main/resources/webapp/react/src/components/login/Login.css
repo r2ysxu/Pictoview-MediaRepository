@@ -1,0 +1,95 @@
+.login_form_container {
+    font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei", 华文细黑, STHeiti, MingLiu;
+	position: fixed;
+	right: 0;
+	top: 66px;
+	background-color: #fff;
+	width: 370px;
+	height: 280px;
+    border-radius: 0px 0px 0px 4px;
+    padding: 20px 40px;
+    box-shadow: 0 3px 7px 0 rgb(0 0 0 / 35%);
+	transition: all 0.2s ease-in-out 0s;
+}
+
+.login_form_container input {
+	width: 100%;
+    padding: 10px 12px;
+    background-color: transparent;
+    line-height: 18px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 0 1px 0px #404040bf;
+    margin-bottom: 15px;
+}
+
+.login_form_container input::placeholder {
+	color: #c8cccf;
+}
+
+.login_form_error {
+    color: #b70707;
+    margin:  15px 15px;
+    font-size: 14px;
+}
+
+.login_form_button {
+	display: block;
+    width: 100%;
+    border: 1px solid #3b4354;
+    background-color: #3b4354;
+    color: #fff;
+    border-radius: 4px;
+    line-height: 38px;
+    text-align: center;
+    font-size: 18px;
+    outline: none;
+}
+
+.login_form_disclaimer {
+	font-size: 14px;
+	color: #c5c5c5;
+	margin-left: 15px;
+}
+
+.login_form_additional_login_options {
+	display: flex;
+	justify-content: space-between;
+	text-align: center;
+}
+
+.login_form_additional_login_options > a {
+	text-decoration: none;
+    cursor: pointer;
+    color: #7f858a;
+}
+
+.login_form_close_button {
+	color: #7f858a;
+	float: right;
+	margin: -10px -20px;
+	font-size: 20px;
+	cursor: pointer;
+	user-select: none;
+}
+
+.login_form_float_out {
+	animation-name: float_out;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    -webkit-animation-name: float_out;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: 1;
+    -moz-animation-name: float_out;
+    -moz-animation-duration: 1s;
+    -moz-animation-timing-function: ease-in-out;
+    -moz-animation-iteration-count: 1;
+}
+
+@keyframes float_out {
+    from {transform:translate(420px, 0px);}
+    to {transform: translate(0, 0px);}
+}

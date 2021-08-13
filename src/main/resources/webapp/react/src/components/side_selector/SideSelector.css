@@ -1,0 +1,25 @@
+.side_selector {
+	height: 100%;
+	display: flex;
+	padding-left: 15px;
+	background-color: rgba(212, 104, 33, 0.8);
+}
+
+.side_selector_chosen {
+	margin-top: 5px;
+    display: flex;
+}
+
+
+.searchbar_chevron_icon {
+	height: 50px;
+    width: 50px;
+}
+
+.searchbar_child {
+	padding: 5px 10px 5px 10px;
+}
+
+.searchbar_child:hover {
+	background-color: rgb(86 127 230 / 75%)
+}

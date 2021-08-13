@@ -1,0 +1,46 @@
+import React from 'react';
+import { useState, useEffect } from 'react';
+import LoginForm from '../login/LoginForm';
+import Searchbar from '../searchbar/Searchbar';
+import './Header.css';
+
+async function fetchUserProfile() {
+    const userProfileRequest = fetch('/profile', {
+            method: 'GET',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+        }).then( response => response.json());
+    return userProfileRequest;
+}
+
+const hasProfile = (userProfile) => {
+    return userProfile !== null && userProfile !== undefined && userProfile.username && userProfile.username !== "";
+}
+
+function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit}) {
+    const [userProfile, setUserProfile] = useState(null);
+
+    useEffect(()=> {
+        fetchUserProfile().then(data => {
+            if (hasProfile(data) && !hasProfile(userProfile)) {
+                setUserProfile(data)
+                setLoggedIn(true);
+            }
+        });
+    }, [userProfile, setLoggedIn, setUserProfile]);
+
+    return (
+        <div className="header">
+            {!hasProfile(userProfile) && <LoginForm onLoggedIn={setLoggedIn} />}
+            {hasProfile(userProfile) && 
+                <Searchbar 
+                    searchInput={searchInput}
+                    onSearchChange={onSearchChange}
+                    onSearch={onSearchSubmit} />}
+        </div>
+    );
+}
+
+export default Header;

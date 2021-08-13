@@ -1,0 +1,43 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### NodeJS ###
+src/main/resources/webapp/react/public/assets
+src/main/resources/webapp/react/build/
+src/main/resources/webapp/react/node/
+src/main/resources/webapp/react/node_modules/
+src/main/resources/webapp/react/config/
+src/main/resources/webapp/react/scripts/
+src/main/resources/webapp/react/src/**/__generated__/
+src/main/resources/webapp/react/package-lock.json

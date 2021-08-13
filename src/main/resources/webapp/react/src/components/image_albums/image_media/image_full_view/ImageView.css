@@ -1,0 +1,28 @@
+.image_view_container {
+
+}
+
+.image_view_image_container {
+	position: fixed;
+	height: 100%;
+    top: calc(50% + 66px);
+    left: 0;
+    right: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.image_view_image {
+    transform: translateY(-50%);
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.image_view_container_modal {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0 0 0 / 75%);
+}

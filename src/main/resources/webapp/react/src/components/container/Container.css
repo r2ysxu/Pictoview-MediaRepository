@@ -1,0 +1,9 @@
+body {
+  background-image: url("./bg-repeat.png");
+}
+
+.container_content {
+  position: relative;
+  top: 66px;
+  margin: 5px 30px 5px 30px;
+}

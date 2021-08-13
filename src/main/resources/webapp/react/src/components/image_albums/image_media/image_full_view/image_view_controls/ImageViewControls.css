@@ -1,0 +1,42 @@
+.image_view_controls_container {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
+.image_view_controls_container > img {
+    opacity: 0;
+}
+
+.image_view_controls_container:hover img {
+    opacity: 0.25;
+    transition: 1s;
+}
+
+.image_view_controls_hidden {
+    visibility: hidden;
+}
+
+.image_vie_controls_icons {
+    user-select: none;
+}
+
+.image_view_controls_icons_small {
+    width: 100px;
+    height: 100px;
+    margin: 0 15px 15px;
+}
+
+.image_view_controls_icons_small:hover {
+    opacity: 1 !important;
+}
+
+.image_view_controls_icons_large {
+    width: 150px;
+    height: 150px;
+    margin-top: 25px;
+}
+
+.image_view_controls_icons_large:hover {
+    opacity: 1 !important;
+}

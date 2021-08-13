@@ -1,0 +1,13 @@
+.image_albums_container {
+}
+
+.image_albums_albums_container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.image_albums_prompt_text {
+    border-bottom: 1px solid #777;
+    font-size: 22px;
+    color: #fff;
+}
