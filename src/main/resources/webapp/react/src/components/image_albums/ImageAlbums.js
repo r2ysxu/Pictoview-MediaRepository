@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ImageAlbum from './image_album/ImageAlbum';
 import ImageMedia from './image_media/ImageMedia';
-import { selectAlbums, loadCurrentAlbumInfo } from '../../model/reducers/albumSlice';
+import { selectAlbums, loadCurrentAlbumInfo, loadMoreImages } from '../../model/reducers/albumSlice';
 import './ImageAlbums.css';
 
 async function listAlbums(page, parentId) {
@@ -32,6 +32,7 @@ function ImageAlbums({albumHistory, setAlbumHistory}) {
 
     useEffect(()=> {
         dispatch(loadCurrentAlbumInfo(albumId));
+        dispatch(loadMoreImages({page: 1, albumId}));
     }, [albumId]);
 
     return (

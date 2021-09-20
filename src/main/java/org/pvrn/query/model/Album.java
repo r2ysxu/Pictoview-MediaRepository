@@ -22,6 +22,7 @@ public class Album {
 	private Album(Long id, String name, String description, String subtitle, Long coverPhotoId, String mediaType) {
 		this.id = id;
 		this.name = name;
+		this.publisher = subtitle;
 		this.description = description;
 		this.coverPhotoId = coverPhotoId;
 		this.mediaType = mediaType;

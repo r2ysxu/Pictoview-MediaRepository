@@ -10,7 +10,7 @@ export const get_searchAlbums = async (query) => {
 
 
 export const get_listAlbumImages = async (page, albumId) => {
-    if (albumId < 0) return [];
+    if (albumId <= 0) return [];
     let searchParams = new URLSearchParams({page, albumId});
     return fetch('/album/image/photos/list?' + searchParams.toString()).then( response => response.json());
 }

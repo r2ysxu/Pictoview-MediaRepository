@@ -1,35 +1,35 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-function ScrollLoader({loading, children, onLoad, hasNext, height}) {
+function ScrollLoader({isLoading, children, loadMore, hasNext, height}) {
 
-    const [isBottom, setIsBottom] = useState(true);
+    const loadUntilScrollable = () => {
+        const scrollHeight = (document.documentElement
+          && document.documentElement.scrollHeight)
+          || document.body.scrollHeight;
+        if (window.innerHeight == scrollHeight && !isLoading) {
+            loadMore();
+        }
+    }
 
     const onScrollLoad = () => {
-        console.log('scrolling');
+        //console.log('scrolling');
         const scrollTop = (document.documentElement
           && document.documentElement.scrollTop)
           || document.body.scrollTop;
         const scrollHeight = (document.documentElement
           && document.documentElement.scrollHeight)
           || document.body.scrollHeight;
-        console.log('scrollTop ' + scrollTop + ' scrollHeight ' + scrollHeight);
-        if (scrollTop + window.innerHeight + height >= scrollHeight) {
-            setIsBottom(false);
+        if (scrollTop + window.innerHeight + height >= scrollHeight && !isLoading) {
+            loadMore();
         }
     }
 
     useEffect(() => {
+        loadUntilScrollable();
         window.addEventListener('scroll', onScrollLoad);
         return () => window.removeEventListener('scroll', onScrollLoad);
-    }, [onScrollLoad]);
-
-    useEffect(() => {
-        //if (!loading && isBottom) {
-            //onLoad();
-            //onScrollLoad();
-        //}
-    }, [isBottom, loading, onLoad, onScrollLoad]);
+    }, [onScrollLoad, isLoading]);
 
     return (
         <>{children}</>
