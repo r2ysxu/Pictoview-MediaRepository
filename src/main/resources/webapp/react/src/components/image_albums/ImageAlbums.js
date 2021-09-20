@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 import ImageAlbum from './image_album/ImageAlbum';
 import ImageMedia from './image_media/ImageMedia';
-import { selectAlbums, fetchAlbums } from '../../model/reducers/albumSlice';
+import { selectAlbums, loadCurrentAlbumInfo } from '../../model/reducers/albumSlice';
 import './ImageAlbums.css';
 
 async function listAlbums(page, parentId) {
@@ -11,17 +11,14 @@ async function listAlbums(page, parentId) {
     return fetch('/album/image/list?' + searchParams.toString()).then( response => response.json());
 }
 
-function ImageAlbums({albumHistory, setAlbums, setAlbumHistory}) {
-    const dispatch = useDispatch()
+function ImageAlbums({albumHistory, setAlbumHistory}) {
+    const dispatch = useDispatch();
     const [page, setPage] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
-    const albums = useSelector(selectAlbums);
-    console.log('albums', albums);
-    const [albumId, setAlbumId] = useState(albumHistory.length ? albumHistory[0] : 0);
+    const { albumId, albums } = useSelector(selectAlbums);
 
-    const addAlbumHistory = (newAlbumId) => {
+    const changeCurrentAlbum = (newAlbumId) => {
+        dispatch(loadCurrentAlbumInfo(newAlbumId));
         setAlbumHistory([...albumHistory, newAlbumId]);
-        setAlbumId(newAlbumId);
     }
 
     const removeAlbumHistory = () => {
@@ -29,22 +26,12 @@ function ImageAlbums({albumHistory, setAlbums, setAlbumHistory}) {
             albumHistory.pop();
             const lastAlbumId = albumHistory[albumHistory.length - 1];
             setAlbumHistory(albumHistory);
-            setAlbumId(lastAlbumId);
-            loadAlbums(lastAlbumId);
+            dispatch(loadCurrentAlbumInfo(lastAlbumId));
         }
     }
 
-    const loadAlbums = (albumId) => {
-        setIsLoading(true);
-        listAlbums(0, albumId).then(data => {
-            setAlbums(data)
-            setIsLoading(false);
-        });
-    }
-
     useEffect(()=> {
-        //loadAlbums(albumId);
-        dispatch(fetchAlbums(albumId));
+        dispatch(loadCurrentAlbumInfo(albumId));
     }, [albumId]);
 
     return (
@@ -55,7 +42,7 @@ function ImageAlbums({albumHistory, setAlbums, setAlbumHistory}) {
                 </div>
                 {albums.length > 0 && <div><span className="image_albums_prompt_text">Albums</span></div>}
                 <div className="image_albums_albums_container">
-                    {albums.map( album => <ImageAlbum key={album.id} album={album} onChangeParentId={addAlbumHistory} /> )}
+                    {albums.map( album => <ImageAlbum key={album.id} album={album} onChangeAlbum={changeCurrentAlbum} /> )}
                 </div>
                 <ImageMedia albumId={albumId} />
             </div>

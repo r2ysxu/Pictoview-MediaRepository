@@ -1,31 +1,49 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { get_fetchAlbums } from '../apis/album_apis';
+import { get_fetchAlbums, get_searchAlbums, get_listAlbumImages } from '../apis/album_apis';
 
 const initialState = {
-    currentId: 0,
-    history: [],
+    albumId: 0,
     albums: [],
     imageIds: [],
 }
 
+export const searchAlbums = createAsyncThunk('album/search', async (query) => {
+    const albums = await get_searchAlbums(query);
+    return {
+        albumId: 0,
+        albums,
+        imageIds: [],
+    };
+});
 
-
-export const fetchAlbums = createAsyncThunk('album/load', async(albumId) => {
-    return await get_fetchAlbums(0, albumId);
+export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async (albumId) => {
+    const albums = await get_fetchAlbums(0, albumId);
+    const imageIds = await get_listAlbumImages(0, albumId);
+    return {
+        albumId,
+        albums,
+        imageIds,
+    };
 });
 
 export const albumSlice = createSlice({
     name: 'album',
     initialState,
-    reducers: {},
+    reducers: {
+
+    },
     extraReducers(builder) {
-        builder.addCase(fetchAlbums.fulfilled, (state, action) => {
-            console.log('payload', action);
-            state.albums = action.payload;
-        });
+        builder
+            .addCase(loadCurrentAlbumInfo.fulfilled, (state, action) => {
+                Object.assign(state, action.payload);
+            }).addCase(searchAlbums.fulfilled, (state, action) => {
+                Object.assign(state, action.payload);
+            });
     },
 });
 
-export const selectAlbums = (state) => state.album.albums;
+export const selectAlbums = (state) => {
+    return state.album;
+}
 
 export default albumSlice.reducer;

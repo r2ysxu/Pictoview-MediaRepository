@@ -1,8 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import ScrollLoader from '../../scroll_loader/ScrollLoader';
 import ImagePhoto from './image_photo/ImagePhoto';
 import ImageView from './image_full_view/ImageView';
+import { selectAlbums } from '../../../model/reducers/albumSlice';
 import './ImageMedia.css';
 
 async function listImages(page, albumId) {
@@ -12,9 +14,10 @@ async function listImages(page, albumId) {
 }
 
 function ImageMedia({albumId}) {
+    const dispatch = useDispatch();
+    const { imageIds } = useSelector(selectAlbums);
     const [page, setPage] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-    const [imageIds, setImageIds] = useState([]);
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
     const [hasNext, setHasNext] = useState(true);
 
@@ -28,18 +31,13 @@ function ImageMedia({albumId}) {
                 if (data.length === 0) {
                     //setHasNext(false);
                 } else {
-                    setImageIds([...imageIds, ...data]);
+                    //setImageIds([...imageIds, ...data]);
                     setPage(page + 1);
                 }
                 setIsLoading(false); 
             });
         }
     }
-
-    useEffect(() => {
-        setHasNext(true);
-        onLoadMore(albumId);
-    }, [albumId]);
 
     return (
         <div>
