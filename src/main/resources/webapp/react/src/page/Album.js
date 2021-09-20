@@ -12,9 +12,9 @@ async function searchAlbums(query) {
 function Album(props) {
     const [loggedIn, setLoggedIn] = useState(false);
     const [searchInput, setSearchInput] = useState('');
-    const [albumId, setAlbumId] = useState(0);
     const [albums, setAlbums] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [albumHistory, setAlbumHistory] = useState([0]);
 
     const onSearch = (value) => {
         setIsLoading(true);
@@ -34,10 +34,9 @@ function Album(props) {
             <Container isLoggedIn={loggedIn}>
                 <ImageAlbums
                     isLoading={isLoading}
-                    albums={albums}
                     images={[]}
-                    albumId={albumId}
-                    setAlbumId={setAlbumId}
+                    albumHistory={albumHistory}
+                    setAlbumHistory={setAlbumHistory}
                     setAlbums={setAlbums} />
             </Container>
         </div>

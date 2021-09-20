@@ -41,5 +41,9 @@ public class Category {
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
+	
+	public void addTag(String tag) {
+		this.tags.add(tag);
+	}
 
 }

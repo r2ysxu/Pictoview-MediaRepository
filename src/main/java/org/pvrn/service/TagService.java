@@ -1,7 +1,9 @@
 package org.pvrn.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.pvrn.jpa.model.album.ImageAlbum;
 import org.pvrn.jpa.model.tags.AlbumTag;
@@ -33,6 +35,25 @@ public class TagService {
 			category = categoryRepo.save(new Category(categoryName));
 		}
 		return category;
+	}
+	
+	public org.pvrn.query.model.AlbumTag listAlbumTags(Long albumId) {
+		org.pvrn.query.model.AlbumTag albumTags = new org.pvrn.query.model.AlbumTag();
+		albumTags.setAlbumId(albumId);
+
+		List<AlbumTag> albumTagList = albumTagRepo.findAllByAlbum_Id(albumId);
+		List<Tag> tags = albumTagList.stream().map(albumTag -> albumTag.getTag()).toList();
+		Map<Long, org.pvrn.query.model.Category> tagMap = new HashMap<>();
+		tags.forEach( tag -> {
+				Long categoryId = tag.getCategory().getId();
+				if (!tagMap.containsKey(categoryId)) {
+					tagMap.put(categoryId, new org.pvrn.query.model.Category(categoryId, tag.getCategory().getName()));
+				}
+				tagMap.get(categoryId).addTag(tag.getName());
+			});
+
+		albumTags.setCategories(new ArrayList<>(tagMap.values()));
+		return albumTags;
 	}
 
 	public void tagAlbum(org.pvrn.query.model.AlbumTag albumTag) {

@@ -6,6 +6,7 @@ function ScrollLoader({loading, children, onLoad, hasNext, height}) {
     const [isBottom, setIsBottom] = useState(true);
 
     const onScrollLoad = () => {
+        console.log('scrolling');
         const scrollTop = (document.documentElement
           && document.documentElement.scrollTop)
           || document.body.scrollTop;
@@ -24,10 +25,10 @@ function ScrollLoader({loading, children, onLoad, hasNext, height}) {
     }, [onScrollLoad]);
 
     useEffect(() => {
-        if (!loading && isBottom) {
-            onLoad();
-            onScrollLoad();
-        }
+        //if (!loading && isBottom) {
+            //onLoad();
+            //onScrollLoad();
+        //}
     }, [isBottom, loading, onLoad, onScrollLoad]);
 
     return (

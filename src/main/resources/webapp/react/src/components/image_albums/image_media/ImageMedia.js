@@ -18,30 +18,33 @@ function ImageMedia({albumId}) {
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
     const [hasNext, setHasNext] = useState(true);
 
-    const onLoadMore = () => {
+    const onLoadMore = (albumId) => {
         console.log("load more... " + page);
         if (hasNext) {
             setIsLoading(true);
             listImages(page, albumId).then( data => {
+                console.log('albumId: ' + albumId + " at " + page);
+                console.log('data', data);
                 if (data.length === 0) {
-                    setHasNext(false);
+                    //setHasNext(false);
                 } else {
                     setImageIds([...imageIds, ...data]);
                     setPage(page + 1);
                 }
-                setIsLoading(false);
+                setIsLoading(false); 
             });
         }
     }
 
     useEffect(() => {
         setHasNext(true);
+        onLoadMore(albumId);
     }, [albumId]);
 
     return (
         <div>
             {imageIds.length > 0 && <div><span className="image_media_prompt_text">Images</span></div>}
-            <ScrollLoader loading={isLoading} onLoad={onLoadMore} height={50} hasNext={hasNext}>
+            <ScrollLoader loading={isLoading} onLoad={() => {}} height={50} hasNext={hasNext}>
                 <div className="image_media_list">
                     {imageIds.map( (imageId, index) =>
                         <ImagePhoto 

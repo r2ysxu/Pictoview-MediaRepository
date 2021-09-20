@@ -78,9 +78,15 @@ public class ImageAlbumController {
 		Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.unsorted());
 		return imageAlbumService.listImageMedia(user, albumId, pageable);
 	}
+	
+	@ResponseBody
+	@PostMapping(value = "/album/image/tag/list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public AlbumTag listAlbumTags(@RequestParam(name = "albumid") Long albumId) {
+		return tagService.listAlbumTags(albumId);
+	}
 
 	@ResponseBody
-	@PostMapping(value = "/album/image/tag", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/album/image/tag/create", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Boolean tagAlbum(@RequestBody AlbumTag albumTag) {
 		tagService.tagAlbum(albumTag);
 		return true;

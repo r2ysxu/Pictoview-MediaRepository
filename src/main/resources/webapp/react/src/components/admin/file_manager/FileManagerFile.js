@@ -34,7 +34,8 @@ function FileManagerFile({fileInfo, onSetPath}) {
 				<button onClick={(event) => addImageDirectories(event)} disabled={isLoading} >
 					<img src="/assets/icons/image.svg" alt="Create Album" />
 				</button>
-				<img className={'file_manager_scan_icon ' + (fileInfo.scanned ? 'file_manager_scan_icon_scanned' : '')} src="/assets/icons/upc-scan.svg" alt="alt" />
+				<img className={'file_manager_scan_icon ' + (fileInfo.scanned ? 'file_manager_scan_icon_scanned' : '')}
+					src="/assets/icons/upc-scan.svg" alt="alt" />
 			</div>
 		</div>
 	);
