@@ -38,15 +38,17 @@ public class Tag {
 		return name;
 	}
 
-	public void setName(String name) {
+	public Tag setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	public Category getCategory() {
 		return category;
 	}
 
-	public void setCategory(Category category) {
+	public Tag setCategory(Category category) {
 		this.category = category;
+		return this;
 	}
 }

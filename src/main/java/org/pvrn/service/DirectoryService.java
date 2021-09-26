@@ -121,7 +121,7 @@ public class DirectoryService {
 		Tag albumPublisher = null;
 		Category publisherCategory = categoryRepo.findByName(Categories.Publisher);
 		if (name.startsWith("[") && name.indexOf(']') > 1) {
-			String publisherName = name.substring(1, name.lastIndexOf(']')).toLowerCase();
+			String publisherName = name.substring(1, name.lastIndexOf(']'));
 			albumPublisher = tagRepo.findFirstByName(publisherName);
 			if (albumPublisher == null) {
 				albumPublisher = tagRepo.save(new Tag(publisherCategory, publisherName));
@@ -149,6 +149,7 @@ public class DirectoryService {
 			imageAlbum.setParent(parentAdded.getAlbum());
 		}
 
+		tagRepo.save(albumPublisher.setName(albumPublisher.getName().toLowerCase()));
 		AlbumTag albumPublisherTag = albumTagRepo.save(new AlbumTag(imageAlbum, albumPublisher));
 		imageAlbum.addAlbumTag(albumPublisherTag);
 		return imageAlbumRepo.save(imageAlbum);

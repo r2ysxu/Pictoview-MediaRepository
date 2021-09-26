@@ -17,9 +17,9 @@ function ImageMedia({albumId}) {
     const dispatch = useDispatch();
     const { imageIds } = useSelector(selectAlbums);
     const isLoading = useSelector((state) => state.album.isLoading);
+    const hasMore = useSelector((state) => state.album.imageIdsHasMore);
     const [page, setPage] = useState(0);
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
-    const [hasNext, setHasNext] = useState(true);
 
     const loadMore = () => {
         if (!isLoading) dispatch(loadMoreImages());
@@ -28,7 +28,7 @@ function ImageMedia({albumId}) {
     return (
         <div>
             {imageIds.length > 0 && <div><span className="image_media_prompt_text">Images</span></div>}
-            <ScrollLoader isLoading={isLoading} loadMore={loadMore} height={50} hasNext={hasNext}>
+            <ScrollLoader isLoading={isLoading} loadMore={loadMore} height={50} hasMore={hasMore}>
                 <div className="image_media_list">
                     {imageIds.map( (imageId, index) =>
                         <ImagePhoto 

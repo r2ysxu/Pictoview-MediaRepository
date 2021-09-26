@@ -56,7 +56,7 @@ public class ImageAlbumController {
 			throws UnauthenticatedUserException {
 		EndUser user = getUser();
 		Iterable<ImageAlbum> imageAlbums = imageAlbumService.searchImageAlbum(user, SearchQuery.parse(searchString),
-				null);
+				Pageable.unpaged());
 		return convertImageAlbumToQueryAlbums(imageAlbums);
 	}
 
@@ -78,10 +78,10 @@ public class ImageAlbumController {
 		Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.unsorted());
 		return imageAlbumService.listImageMedia(user, albumId, pageable);
 	}
-	
+
 	@ResponseBody
-	@PostMapping(value = "/album/image/tag/list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public AlbumTag listAlbumTags(@RequestParam(name = "albumid") Long albumId) {
+	@GetMapping(value = "/album/image/tag/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	public AlbumTag listAlbumTags(@RequestParam(name = "albumId") Long albumId) {
 		return tagService.listAlbumTags(albumId);
 	}
 

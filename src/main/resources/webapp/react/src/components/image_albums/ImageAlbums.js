@@ -1,19 +1,13 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ImageAlbum from './image_album/ImageAlbum';
 import ImageMedia from './image_media/ImageMedia';
 import { selectAlbums, loadCurrentAlbumInfo, loadMoreImages } from '../../model/reducers/albumSlice';
 import './ImageAlbums.css';
 
-async function listAlbums(page, parentId) {
-    let searchParams = new URLSearchParams({page, parentId});
-    return fetch('/album/image/list?' + searchParams.toString()).then( response => response.json());
-}
-
 function ImageAlbums({albumHistory, setAlbumHistory}) {
     const dispatch = useDispatch();
-    const [page, setPage] = useState(0);
     const { albumId, albums } = useSelector(selectAlbums);
 
     const changeCurrentAlbum = (newAlbumId) => {
@@ -33,7 +27,7 @@ function ImageAlbums({albumHistory, setAlbumHistory}) {
     useEffect(()=> {
         dispatch(loadCurrentAlbumInfo(albumId));
         dispatch(loadMoreImages({page: 1, albumId}));
-    }, [albumId]);
+    }, [dispatch, albumId]);
 
     return (
         <>
