@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.pvrn.exceptions.UnauthenticatedUserException;
 import org.pvrn.jpa.model.user.EndUser;
 import org.pvrn.query.model.Category;
+import org.pvrn.query.model.Tag;
 import org.pvrn.service.TagService;
 import org.pvrn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TagController {
+
+	private static final int PAGE_SIZE = 10;
 
 	@Autowired
 	private UserService userService;
@@ -40,18 +43,36 @@ public class TagController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/album/tag/list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> listTagNames(@RequestParam(name = "categoryId") Long categoryId)
-			throws UnauthenticatedUserException {
+	@GetMapping(value = "/album/category/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Category> searchCategoryNames(@RequestParam(name = "categoryQuery") String categoryQuery,
+			@RequestParam(name = "page", required = false) Integer page) throws UnauthenticatedUserException {
 		getUser();
-		return tagService.listTags(categoryId).stream().map(tag -> tag.getName()).collect(Collectors.toList());
+		if (page == null) page = 0;
+		return tagService.searchCategories(categoryQuery, PAGE_SIZE, page).stream()
+				.map(category -> new Category(category.getId(), category.getName())).collect(Collectors.toList());
 	}
 
 	@ResponseBody
-	@PostMapping(value = "/album/tag/category/create", consumes = MediaType.TEXT_PLAIN_VALUE)
-	public Boolean createTagCategory(@RequestBody String categoryName) throws UnauthenticatedUserException {
+	@GetMapping(value = "/album/tag/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Tag> searchTagName(@RequestParam(name = "tagQuery") String tagQuery,
+			@RequestParam(name = "page", required = false) Integer page) throws UnauthenticatedUserException {
 		getUser();
-		tagService.createCategory(categoryName);
-		return true;
+		if (page == null) page = 0;
+		return tagService.searchTags(tagQuery, PAGE_SIZE, page).stream().map(tag -> Tag.createTag(tag))
+				.collect(Collectors.toList());
+	}
+
+	@ResponseBody
+	@GetMapping(value = "/album/tag/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Tag> listTagNames(@RequestParam(name = "categoryId") Long categoryId) throws UnauthenticatedUserException {
+		getUser();
+		return tagService.listTags(categoryId).stream().map(tag -> Tag.createTag(tag)).collect(Collectors.toList());
+	}
+
+	@ResponseBody
+	@PostMapping(value = "/album/tag/category/create", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Category createTagCategory(@RequestBody String categoryName) throws UnauthenticatedUserException {
+		getUser();
+		return Category.createCategory(tagService.createCategory(categoryName));
 	}
 }

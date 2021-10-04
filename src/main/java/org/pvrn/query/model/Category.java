@@ -7,7 +7,11 @@ public class Category {
 
 	private Long id;
 	private String name;
-	private List<String> tags;
+	private List<Tag> tags;
+	
+	public static Category createCategory(org.pvrn.jpa.model.tags.Category category) {
+		return new Category(category.getId(), category.getName());
+	}
 
 	public Category() {
 	}
@@ -34,15 +38,15 @@ public class Category {
 		this.name = name;
 	}
 
-	public List<String> getTags() {
+	public List<Tag> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<String> tags) {
+	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
 	
-	public void addTag(String tag) {
+	public void addTag(Tag tag) {
 		this.tags.add(tag);
 	}
 

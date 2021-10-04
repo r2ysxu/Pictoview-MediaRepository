@@ -1,8 +1,12 @@
 package org.pvrn.jpa.repo;
 
-import org.pvrn.jpa.model.tags.Category;
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
 
-public interface CategoryRepo extends CrudRepository<Category, Long> {
+import org.pvrn.jpa.model.tags.Category;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+public interface CategoryRepo extends PagingAndSortingRepository<Category, Long> {
 	public Category findByName(String name);
+	public List<Category> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }

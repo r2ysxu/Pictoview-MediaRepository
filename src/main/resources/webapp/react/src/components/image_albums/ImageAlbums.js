@@ -1,9 +1,9 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { selectAlbums, loadCurrentAlbumInfo, loadMoreImages } from '../../model/reducers/albumSlice';
 import ImageAlbum from './image_album/ImageAlbum';
 import ImageMedia from './image_media/ImageMedia';
-import { selectAlbums, loadCurrentAlbumInfo, loadMoreImages } from '../../model/reducers/albumSlice';
 import './ImageAlbums.css';
 
 function ImageAlbums({albumHistory, setAlbumHistory}) {
@@ -37,7 +37,11 @@ function ImageAlbums({albumHistory, setAlbumHistory}) {
                 </div>
                 {albums.length > 0 && <div><span className="image_albums_prompt_text">Albums</span></div>}
                 <div className="image_albums_albums_container">
-                    {albums.map( album => <ImageAlbum key={album.id} album={album} onChangeAlbum={changeCurrentAlbum} /> )}
+                    {albums.map( album => <ImageAlbum
+                        key={album.id}
+                        album={album}
+                        onChangeAlbum={changeCurrentAlbum}
+                    />)}
                 </div>
                 <ImageMedia albumId={albumId} />
             </div>

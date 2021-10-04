@@ -1,6 +1,7 @@
 package org.pvrn.jpa.model.tags;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,10 +15,12 @@ public class AlbumTag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected long id;
-	@OneToOne(cascade = CascadeType.DETACH)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Tag tag;
-	@OneToOne(cascade = CascadeType.DETACH)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Album album;
+	@Column
+	private int revalance;
 	
 	public AlbumTag() {}
 	
@@ -44,5 +47,13 @@ public class AlbumTag {
 
 	public void setAlbum(Album album) {
 		this.album = album;
+	}
+
+	public int getRevalance() {
+		return revalance;
+	}
+
+	public void setRevalance(int revalance) {
+		this.revalance = revalance;
 	}
 }

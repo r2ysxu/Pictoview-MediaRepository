@@ -35,7 +35,7 @@ function FileManagerFile({fileInfo, onSetPath}) {
 					<img src="/assets/icons/image.svg" alt="Create Album" />
 				</button>
 				<img className={'file_manager_scan_icon ' + (fileInfo.scanned ? 'file_manager_scan_icon_scanned' : '')}
-					src="/assets/icons/upc-scan.svg" alt="alt" />
+					src="/assets/icons/upc-scan.svg" alt="" />
 			</div>
 		</div>
 	);

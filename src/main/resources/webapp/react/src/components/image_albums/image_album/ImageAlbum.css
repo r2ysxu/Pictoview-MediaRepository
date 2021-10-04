@@ -11,9 +11,15 @@
     white-space: normal;
 }
 
-.image_album_container h3 {
+.image_album_container h2 {
     color: #fff;
     margin: 5px 5px 5px 5px;
+}
+
+.image_album_container h3 {
+    color: #848484;
+    margin: 5px 5px 5px 5px;
+    font-size: 12pt;
 }
 
 .image_album_container h4 {
@@ -41,14 +47,14 @@
     position: relative;
     height: 15px;
     transition: 1s;
-    cursor: n-resize;
+    cursor: default;
 }
 
 .image_album_banner:hover {
     background-color: #98a8fd;
 }
 
-.image_album_wrapper {
+.image_album_center_container {
     border-left: 1px outset #fff;
     border-right: 1px outset #fff;
     box-shadow: 0px -1px 5px 0px rgba(0,0,0,0.1);
@@ -58,9 +64,24 @@
     cursor: pointer;
 }
 
+.image_album_wrapper {
+    height: 100%;
+    width: 100%;
+}
+
 .image_album_image {
     position: relative;
     max-height: 300px;
     box-shadow: 0px 5px 5px 2px rgba(0, 0, 0, 0.25);
     border-bottom: 1px solid #9c9c9c;
+}
+
+.image_album_info_container {
+    position: absolute;
+    width: 100%;
+    bottom: 15px;
+    padding-bottom: 10px;
+    background-color: rgba(0,0,0, 0.8);
+    color: #fff;
+    cursor: default;
 }

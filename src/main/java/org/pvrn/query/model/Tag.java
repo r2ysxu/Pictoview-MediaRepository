@@ -2,19 +2,38 @@ package org.pvrn.query.model;
 
 public class Tag {
 
+	private Long id;
 	private Long categoryId;
-	private String name;
+	private String value;
+	private Integer relevance;
 
 	public Tag() {}
 
-	public Tag(String name) {
-		this.categoryId = 0L;
-		this.name = name;
+	public static Tag createTag(org.pvrn.jpa.model.tags.Tag tag) {
+		return new Tag(tag.getId(), tag.getCategory().getId(), tag.getName());
 	}
 
-	public Tag(Long categoryId, String name) {
+	public Tag(Long id, String value) {
+		this.id = id;
+		this.categoryId = 0L;
+		this.value = value;
+	}
+
+	public Tag(Long id, Long categoryId, String value) {
+		this.id = id;
 		this.categoryId = categoryId;
-		this.name = name;
+		this.value = value;
+	}
+	
+	public Tag(Long id, Long categoryId, String value, Integer relevance) {
+		this.id = id;
+		this.categoryId = categoryId;
+		this.value = value;
+		this.relevance = relevance;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public Long getCategoryId() {
@@ -25,11 +44,19 @@ public class Tag {
 		this.categoryId = categoryId;
 	}
 
-	public String getName() {
-		return name;
+	public String getValue() {
+		return value;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public Integer getRelevance() {
+		return relevance;
+	}
+
+	public void setRelevance(Integer relevance) {
+		this.relevance = relevance;
 	}
 }

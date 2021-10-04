@@ -1,5 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { get_fetchAlbums, get_searchAlbums, get_listAlbumImages, get_listAlbumTags } from '../apis/album_apis';
+import { post_tagAlbum } from '../apis/tag_apis.js';
 
 const pendingImageRequests = new Set();
 
@@ -61,6 +62,27 @@ export const loadAlbumTags = createAsyncThunk('album/load/tags', async(albumId, 
     }
 });
 
+export const updateCategoryTags = createAsyncThunk('album/tags/update', async({albumId, categories}, thunkAPI) => {
+    const currentState = thunkAPI.getState().album;
+    const tags = await post_tagAlbum({albumId, categories});
+    console.log('tags', tags);
+    const currentAlbumIndex = currentState.albums.findIndex(album => album.id === albumId);
+    const currentAlbum = {...currentState.albums[currentAlbumIndex], tags };
+    return {
+        currentAlbumIndex,
+        currentAlbum,
+    }
+});
+
+export const addCategory = createAsyncThunk('/album/tags/category/new', async ({albumId, newCategory}, thunkAPI) => {
+    const currentState = thunkAPI.getState().album;
+    const currentAlbumIndex = currentState.albums.findIndex(album => album.id === albumId);
+    return {
+        currentAlbumIndex,
+        newCategory
+    };
+});
+
 export const albumSlice = createSlice({
     name: 'album',
     initialState,
@@ -89,8 +111,11 @@ export const albumSlice = createSlice({
                 state.isLoading = false;
             }).addCase(loadAlbumTags.fulfilled, (state, action) => {
                 state.albums[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
-            }).addCase(loadAlbumTags.rejected, (state, action) => {
-                console.error('loadAlbumTags', state, action);
+            }).addCase(updateCategoryTags.fulfilled, (state, action) => {
+                state.albums[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
+            }).addCase(addCategory.fulfilled, (state, action) => {
+                console.log('action', action.payload);
+                state.albums[action.payload.currentAlbumIndex].tags.categories.push(action.payload.newCategory);
             });
     },
 });

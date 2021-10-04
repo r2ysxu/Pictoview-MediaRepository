@@ -4,7 +4,7 @@ import java.util.List;
 
 public class AlbumTag {
 	private Long albumId;
-	private List<Category> Categories;
+	private List<Category> categories;
 
 	public AlbumTag() {
 	}
@@ -18,11 +18,11 @@ public class AlbumTag {
 	}
 
 	public List<Category> getCategories() {
-		return Categories;
+		return categories;
 	}
 
 	public void setCategories(List<Category> categories) {
-		Categories = categories;
+		this.categories = categories;
 	}
 
 }

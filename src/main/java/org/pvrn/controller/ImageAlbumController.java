@@ -9,6 +9,7 @@ import org.pvrn.jpa.model.tags.SearchQuery;
 import org.pvrn.jpa.model.user.EndUser;
 import org.pvrn.query.model.Album;
 import org.pvrn.query.model.AlbumTag;
+import org.pvrn.query.model.Category;
 import org.pvrn.service.ImageAlbumService;
 import org.pvrn.service.TagService;
 import org.pvrn.service.UserService;
@@ -87,8 +88,8 @@ public class ImageAlbumController {
 
 	@ResponseBody
 	@PostMapping(value = "/album/image/tag/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Boolean tagAlbum(@RequestBody AlbumTag albumTag) {
+	public AlbumTag tagAlbum(@RequestBody AlbumTag albumTag) {
 		tagService.tagAlbum(albumTag);
-		return true;
+		return tagService.listAlbumTags(albumTag.getAlbumId());
 	}
 }

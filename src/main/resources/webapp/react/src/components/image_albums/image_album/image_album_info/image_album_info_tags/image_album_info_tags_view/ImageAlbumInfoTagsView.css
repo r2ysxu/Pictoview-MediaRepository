@@ -1,0 +1,73 @@
+.image_album_info_tag_content {
+    margin-left: 15px;
+    width: calc(100% - 30px);
+}
+
+.image_album_info_tag_category_container {
+    display: flex;
+}
+
+.image_album_info_tag_title {
+    display: flex;
+}
+
+.image_album_info_tag_title_edit_icon {
+    filter: invert(42%);
+    margin-top: 5px;
+    margin-left: 2px;
+    height: 10pt;
+    width: 10pt;
+}
+
+.image_album_info_tag_category_label {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color: #000;
+    padding: 0 10px;
+    border: 1px solid #8a8a8a;
+}
+
+.image_album_info_tag_category_tag_container {
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: #000;
+    padding: 0 10px;
+    border-top: 1px solid #8a8a8a;
+    border-bottom: 1px solid #8a8a8a;
+    border-right: 1px solid #8a8a8a;
+}
+
+.image_album_info_tag_edit_field {
+    color: #fff;
+    background: none;
+    border: none;
+    width: 100%;
+    margin-left: 5px;
+}
+
+.image_album_info_tag_edit_field:focus {
+    outline-width: 0;
+}
+
+.image_album_info_tag_edit_icon_container {
+    position: relative;
+    height: 14pt;
+    width: 14pt;
+}
+
+.image_album_info_tag_edit_add_tag_icon {
+    position: absolute;
+    left: 5px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 12px;
+    filter: invert(50%) sepia(1) hue-rotate(90deg) saturate(3);
+}
+
+.image_album_info_tag_edit_add_tag_icon:hover {
+    filter: invert(50%) sepia(1) hue-rotate(90deg) saturate(7);
+}
