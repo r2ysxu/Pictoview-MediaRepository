@@ -4,39 +4,39 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.pvrn.jpa.model.album.Album;
-import org.pvrn.jpa.model.album.ImageAlbum;
+import org.pvrn.jpa.model.album.MediaAlbum;
 import org.pvrn.jpa.model.album.ImageMedia;
 import org.pvrn.jpa.model.tags.SearchQuery;
 import org.pvrn.jpa.model.user.User;
 import org.pvrn.jpa.repo.AlbumRepo;
-import org.pvrn.jpa.repo.ImageAlbumRepo;
+import org.pvrn.jpa.repo.MediaAlbumRepo;
 import org.pvrn.jpa.repo.ImageMediaRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ImageAlbumService {
+public class MediaAlbumService {
 
 	@Autowired
 	private AlbumRepo albumRepo;
 	@Autowired
-	private ImageAlbumRepo imageAlbumRepo;
+	private MediaAlbumRepo mediaAlbumRepo;
 	@Autowired
 	private ImageMediaRepo imageMediaRepo;
 
-	public Iterable<ImageAlbum> searchImageAlbum(User user, SearchQuery searchQuery, Pageable pageable) {
+	public Iterable<MediaAlbum> searchMediaAlbum(User user, SearchQuery searchQuery, Pageable pageable) {
 		List<Album> albums = albumRepo.searchAlbums(user, searchQuery, pageable);
 		List<Long> ids = albums.stream().map(Album::getId).collect(Collectors.toList());
 
-		return imageAlbumRepo.findAllById(ids);
+		return mediaAlbumRepo.findAllById(ids);
 	}
 
-	public Iterable<ImageAlbum> listImageAlbums(User user, Long parentId, Pageable pageable) {
+	public Iterable<MediaAlbum> listMediaAlbums(User user, Long parentId, Pageable pageable) {
 		if (parentId == null || parentId < 1)
-			return imageAlbumRepo.findAllByOwner(user, pageable);
+			return mediaAlbumRepo.findAllByOwner(user, pageable);
 		else
-			return imageAlbumRepo.findAllByOwnerAndParent_Id(user, parentId, pageable);
+			return mediaAlbumRepo.findAllByOwnerAndParent_Id(user, parentId, pageable);
 	}
 
 	public List<Long> listImageMedia(User user, Long albumId, Pageable pageable) {

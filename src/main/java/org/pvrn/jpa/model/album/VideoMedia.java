@@ -16,7 +16,7 @@ public class VideoMedia extends Media {
 	@Enumerated(EnumType.ORDINAL)
 	private Type type;
 	@ManyToOne
-	private VideoAlbum album;
+	private MediaAlbum album;
 
 	public Type getType() {
 		return type;
@@ -26,11 +26,11 @@ public class VideoMedia extends Media {
 		this.type = type;
 	}
 
-	public VideoAlbum getAlbum() {
+	public MediaAlbum getAlbum() {
 		return album;
 	}
 
-	public void setAlbum(VideoAlbum album) {
+	public void setAlbum(MediaAlbum album) {
 		this.album = album;
 	}
 }

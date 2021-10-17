@@ -9,13 +9,13 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.pvrn.jpa.model.album.ImageAlbum;
+import org.pvrn.jpa.model.album.MediaAlbum;
 import org.pvrn.jpa.model.tags.AlbumTag;
 import org.pvrn.jpa.model.tags.Category;
 import org.pvrn.jpa.model.tags.Tag;
 import org.pvrn.jpa.repo.AlbumTagRepo;
 import org.pvrn.jpa.repo.CategoryRepo;
-import org.pvrn.jpa.repo.ImageAlbumRepo;
+import org.pvrn.jpa.repo.MediaAlbumRepo;
 import org.pvrn.jpa.repo.TagRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TagService {
 
 	@Autowired
-	private ImageAlbumRepo imageAlbumRepo;
+	private MediaAlbumRepo imageAlbumRepo;
 	@Autowired
 	private CategoryRepo categoryRepo;
 	@Autowired
@@ -82,7 +82,7 @@ public class TagService {
 
 	@Transactional
 	public void tagAlbum(org.pvrn.query.model.AlbumTag albumTag) {
-		ImageAlbum imageAlbum = imageAlbumRepo.findById(albumTag.getAlbumId()).get();
+		MediaAlbum imageAlbum = imageAlbumRepo.findById(albumTag.getAlbumId()).get();
 		Set<Long> categoryIds = albumTag.getCategories().stream().map(org.pvrn.query.model.Category::getId)
 				.collect(Collectors.toSet());
 		List<Tag> tags = persistTags(albumTag);

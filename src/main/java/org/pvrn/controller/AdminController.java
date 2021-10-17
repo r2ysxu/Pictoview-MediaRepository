@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.pvrn.exceptions.UnauthenticatedUserException;
-import org.pvrn.jpa.model.album.ImageAlbum;
+import org.pvrn.jpa.model.album.MediaAlbum;
 import org.pvrn.jpa.model.album.ImageMedia;
 import org.pvrn.jpa.model.user.EndUser;
 import org.pvrn.query.model.ScannedDirectory;
@@ -57,7 +57,7 @@ public class AdminController {
 	public ScannedDirectory addImageAlbum(@RequestBody Path currentPath)
 			throws UnauthenticatedUserException, IOException {
 		EndUser user = getUser();
-		ImageAlbum imageAlbum = directoryService.addImageDirectory(user, currentPath.getPath(), currentPath.getName());
+		MediaAlbum imageAlbum = directoryService.addImageDirectory(user, currentPath.getPath(), currentPath.getName());
 		List<ImageMedia> imageMedia = directoryService.addImages(user, currentPath.getPath(), imageAlbum);
 		directoryService.createImageThumbnails(imageAlbum, imageMedia);
 		imageAlbum = directoryService.setAlbumCoverPhoto(imageAlbum);

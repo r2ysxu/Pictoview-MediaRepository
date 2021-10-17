@@ -21,12 +21,12 @@ public class ImageMedia extends Media {
 	@Column
 	private String thumbnailSource;
 	@ManyToOne
-	private ImageAlbum album;
+	private MediaAlbum album;
 
 	public ImageMedia() {
 	}
 
-	public ImageMedia(User owner, String source, String name, Type type, ImageAlbum album) {
+	public ImageMedia(User owner, String source, String name, Type type, MediaAlbum album) {
 		super(owner, source, name);
 		this.album = album;
 		this.type = type;
@@ -58,11 +58,11 @@ public class ImageMedia extends Media {
 		this.thumbnailSource = thumbnailSource;
 	}
 
-	public ImageAlbum getAlbum() {
+	public MediaAlbum getAlbum() {
 		return album;
 	}
 
-	public void setAlbum(ImageAlbum album) {
+	public void setAlbum(MediaAlbum album) {
 		this.album = album;
 	}
 }

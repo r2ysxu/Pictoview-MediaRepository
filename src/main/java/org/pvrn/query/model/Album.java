@@ -1,31 +1,26 @@
 package org.pvrn.query.model;
 
-import org.pvrn.jpa.model.album.ImageAlbum;
+import org.pvrn.jpa.model.album.MediaAlbum;
 
 public class Album {
-
-	private static final String ImageMedia = "Image";
-	// private static final String VideoMedia = "Video";
 
 	private Long id;
 	private String name;
 	private String publisher;
 	private String description;
 	private Long coverPhotoId;
-	private String mediaType;
 
-	public static Album createImageAlbum(ImageAlbum imageAlbum) {
+	public static Album createImageAlbum(MediaAlbum imageAlbum) {
 		return new Album(imageAlbum.getId(), imageAlbum.getName(), imageAlbum.getDescription(),
-				imageAlbum.getSubtitle(), imageAlbum.getCoverPhoto().getId(), ImageMedia);
+				imageAlbum.getSubtitle(), imageAlbum.getCoverPhoto().getId());
 	}
 
-	private Album(Long id, String name, String description, String subtitle, Long coverPhotoId, String mediaType) {
+	private Album(Long id, String name, String description, String subtitle, Long coverPhotoId) {
 		this.id = id;
 		this.name = name;
 		this.publisher = subtitle;
 		this.description = description;
 		this.coverPhotoId = coverPhotoId;
-		this.mediaType = mediaType;
 	}
 
 	public Long getId() {
@@ -66,13 +61,5 @@ public class Album {
 
 	public void setCoverPhotoId(Long coverPhotoId) {
 		this.coverPhotoId = coverPhotoId;
-	}
-
-	public String getMediaType() {
-		return mediaType;
-	}
-
-	public void setMediaType(String mediaType) {
-		this.mediaType = mediaType;
 	}
 }

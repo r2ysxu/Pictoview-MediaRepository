@@ -13,7 +13,7 @@ import org.pvrn.filemanager.ThumbnailDirectory;
 import org.pvrn.filemanager.ThumbnailDirectoryManager;
 import org.pvrn.filemanager.ThumbnailFile;
 import org.pvrn.jpa.model.album.Album;
-import org.pvrn.jpa.model.album.ImageAlbum;
+import org.pvrn.jpa.model.album.MediaAlbum;
 import org.pvrn.jpa.model.album.ImageMedia;
 import org.pvrn.jpa.model.file.DirectoryAdded;
 import org.pvrn.jpa.model.tags.AlbumTag;
@@ -24,7 +24,7 @@ import org.pvrn.jpa.model.user.EndUser;
 import org.pvrn.jpa.repo.AlbumTagRepo;
 import org.pvrn.jpa.repo.CategoryRepo;
 import org.pvrn.jpa.repo.DirectoryAddedRepo;
-import org.pvrn.jpa.repo.ImageAlbumRepo;
+import org.pvrn.jpa.repo.MediaAlbumRepo;
 import org.pvrn.jpa.repo.ImageMediaRepo;
 import org.pvrn.jpa.repo.TagRepo;
 import org.pvrn.query.model.ScannedDirectory;
@@ -46,7 +46,7 @@ public class DirectoryService {
 	@Autowired
 	private DirectoryAddedRepo directoryRepo;
 	@Autowired
-	private ImageAlbumRepo imageAlbumRepo;
+	private MediaAlbumRepo imageAlbumRepo;
 	@Autowired
 	private TagRepo tagRepo;
 	@Autowired
@@ -84,7 +84,7 @@ public class DirectoryService {
 		return new ScannedDirectory(new ThumbnailDirectory(directory.getAbsolutePath(), directory.getName()), true);
 	}
 
-	public List<ImageMedia> addImages(EndUser user, String currentPath, ImageAlbum album) throws IOException {
+	public List<ImageMedia> addImages(EndUser user, String currentPath, MediaAlbum album) throws IOException {
 		ThumbnailDirectoryManager manager = new ThumbnailDirectoryManager(adminSource);
 		List<ThumbnailFile> imageFiles = manager.listImageFiles(currentPath);
 		List<ImageMedia> imageMedia = new ArrayList<>(imageFiles.size());
@@ -96,7 +96,7 @@ public class DirectoryService {
 		return photos;
 	}
 
-	public Iterable<ImageMedia> createImageThumbnails(ImageAlbum album, List<ImageMedia> images) throws IOException {
+	public Iterable<ImageMedia> createImageThumbnails(MediaAlbum album, List<ImageMedia> images) throws IOException {
 		for (ImageMedia image : images) {
 			image.setThumbnailSource(
 					adminThumbnailSource + album.getId() + "/" + image.getId() + image.getTypeExtension());
@@ -105,11 +105,11 @@ public class DirectoryService {
 		return imageMediaRepo.saveAll(images);
 	}
 
-	public static String generateCoverPhotoFileSource(String base, ImageAlbum album, ImageMedia imageMedia) {
+	public static String generateCoverPhotoFileSource(String base, MediaAlbum album, ImageMedia imageMedia) {
 		return base + album.getId() + "_" + imageMedia.getId() + imageMedia.getTypeExtension();
 	}
 
-	public ImageAlbum setAlbumCoverPhoto(ImageAlbum album) throws IOException {
+	public MediaAlbum setAlbumCoverPhoto(MediaAlbum album) throws IOException {
 		ImageMedia imageMedia = imageMediaRepo.findFirstByAlbumOrderByNameAsc(album);
 		AlbumFileManager.createCoverPhotoFile(imageMedia.getSource(),
 				generateCoverPhotoFileSource(adminCoverSource, album, imageMedia));
@@ -130,7 +130,7 @@ public class DirectoryService {
 		return albumPublisher;
 	}
 
-	public ImageAlbum addImageDirectory(EndUser user, String currentPath, String name) {
+	public MediaAlbum addImageDirectory(EndUser user, String currentPath, String name) {
 		if (!StringUtils.hasLength(name))
 			return null;
 
@@ -140,7 +140,7 @@ public class DirectoryService {
 		File currentPathFile = new File(adminSource + currentPath);
 		String parentPath = new File(currentPathFile.getParent()).getAbsolutePath();
 
-		ImageAlbum imageAlbum = new ImageAlbum(user, name, "");
+		MediaAlbum imageAlbum = new MediaAlbum(user, name, "");
 		imageAlbum.setSubtitle(albumPublisher.getName());
 		imageAlbum = imageAlbumRepo.save(imageAlbum);
 

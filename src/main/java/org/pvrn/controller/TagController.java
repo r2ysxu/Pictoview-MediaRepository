@@ -35,7 +35,7 @@ public class TagController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/album/category/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/category/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Category> listCategoryNames() throws UnauthenticatedUserException {
 		getUser();
 		return tagService.listCategories().stream().map(category -> new Category(category.getId(), category.getName()))
@@ -43,7 +43,7 @@ public class TagController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/album/category/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/category/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Category> searchCategoryNames(@RequestParam(name = "categoryQuery") String categoryQuery,
 			@RequestParam(name = "page", required = false) Integer page) throws UnauthenticatedUserException {
 		getUser();
@@ -53,7 +53,7 @@ public class TagController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/album/tag/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/tag/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Tag> searchTagName(@RequestParam(name = "tagQuery") String tagQuery,
 			@RequestParam(name = "page", required = false) Integer page) throws UnauthenticatedUserException {
 		getUser();
@@ -63,14 +63,14 @@ public class TagController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/album/tag/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/tag/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Tag> listTagNames(@RequestParam(name = "categoryId") Long categoryId) throws UnauthenticatedUserException {
 		getUser();
 		return tagService.listTags(categoryId).stream().map(tag -> Tag.createTag(tag)).collect(Collectors.toList());
 	}
 
 	@ResponseBody
-	@PostMapping(value = "/album/tag/category/create", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/tag/category/create", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Category createTagCategory(@RequestBody String categoryName) throws UnauthenticatedUserException {
 		getUser();
 		return Category.createCategory(tagService.createCategory(categoryName));

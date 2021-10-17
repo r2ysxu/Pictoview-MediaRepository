@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pvrn.exceptions.UnauthenticatedUserException;
-import org.pvrn.jpa.model.album.ImageAlbum;
+import org.pvrn.jpa.model.album.MediaAlbum;
 import org.pvrn.jpa.model.tags.SearchQuery;
 import org.pvrn.jpa.model.user.EndUser;
 import org.pvrn.query.model.Album;
 import org.pvrn.query.model.AlbumTag;
-import org.pvrn.query.model.Category;
-import org.pvrn.service.ImageAlbumService;
+import org.pvrn.service.MediaAlbumService;
 import org.pvrn.service.TagService;
 import org.pvrn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +26,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ImageAlbumController {
+public class MediaAlbumController {
 
 	private static final int PAGE_SIZE = 10;
 
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private ImageAlbumService imageAlbumService;
+	private MediaAlbumService mediaAlbumService;
 	@Autowired
 	private TagService tagService;
 
@@ -43,7 +42,7 @@ public class ImageAlbumController {
 		return userService.findByUserName(user.getUsername());
 	}
 
-	private List<Album> convertImageAlbumToQueryAlbums(Iterable<ImageAlbum> imageAlbums) {
+	private List<Album> convertMediaAlbumToQueryAlbums(Iterable<MediaAlbum> imageAlbums) {
 		List<Album> albums = new ArrayList<>();
 		imageAlbums.forEach(imageAlbum -> {
 			albums.add(Album.createImageAlbum(imageAlbum));
@@ -52,42 +51,42 @@ public class ImageAlbumController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/album/image/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/album/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Album> searchAlbums(@RequestParam(name = "query") String searchString)
 			throws UnauthenticatedUserException {
 		EndUser user = getUser();
-		Iterable<ImageAlbum> imageAlbums = imageAlbumService.searchImageAlbum(user, SearchQuery.parse(searchString),
+		Iterable<MediaAlbum> imageAlbums = mediaAlbumService.searchMediaAlbum(user, SearchQuery.parse(searchString),
 				Pageable.unpaged());
-		return convertImageAlbumToQueryAlbums(imageAlbums);
+		return convertMediaAlbumToQueryAlbums(imageAlbums);
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/album/image/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/album/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Album> listAlbums(@RequestParam(name = "parentId") Long parentId,
 			@RequestParam(name = "page") Integer page) throws UnauthenticatedUserException {
 		EndUser user = getUser();
 		Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.unsorted());
-		Iterable<ImageAlbum> imageAlbums = imageAlbumService.listImageAlbums(user, parentId, pageable);
-		return convertImageAlbumToQueryAlbums(imageAlbums);
+		Iterable<MediaAlbum> imageAlbums = mediaAlbumService.listMediaAlbums(user, parentId, pageable);
+		return convertMediaAlbumToQueryAlbums(imageAlbums);
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/album/image/photos/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/album/photos/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Long> listPhotos(@RequestParam(name = "albumId") Long albumId,
 			@RequestParam(name = "page") Integer page) throws UnauthenticatedUserException {
 		EndUser user = getUser();
 		Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.unsorted());
-		return imageAlbumService.listImageMedia(user, albumId, pageable);
+		return mediaAlbumService.listImageMedia(user, albumId, pageable);
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/album/image/tag/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/album/tag/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	public AlbumTag listAlbumTags(@RequestParam(name = "albumId") Long albumId) {
 		return tagService.listAlbumTags(albumId);
 	}
 
 	@ResponseBody
-	@PostMapping(value = "/album/image/tag/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/album/tag/create", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public AlbumTag tagAlbum(@RequestBody AlbumTag albumTag) {
 		tagService.tagAlbum(albumTag);
 		return tagService.listAlbumTags(albumTag.getAlbumId());
