@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org</groupId>
-	<artifactId>pvrn</artifactId>
+	<artifactId>mrn</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>pvrn</name>
-	<description>Picture Viewer Repo V2</description>
+	<description>Media Repository Network</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
