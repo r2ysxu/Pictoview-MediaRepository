@@ -2,11 +2,11 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAlbums, loadCurrentAlbumInfo, loadMoreImages } from '../../model/reducers/albumSlice';
-import ImageAlbum from './image_album/ImageAlbum';
-import ImageMedia from './image_media/ImageMedia';
-import './ImageAlbums.css';
+import Album from './album/Album';
+import ImageMedia from './media/image_media/ImageMedia';
+import './Albums.css';
 
-function ImageAlbums({albumHistory, setAlbumHistory}) {
+function Albums({albumHistory, setAlbumHistory}) {
     const dispatch = useDispatch();
     const { albumId, albums } = useSelector(selectAlbums);
 
@@ -31,13 +31,13 @@ function ImageAlbums({albumHistory, setAlbumHistory}) {
 
     return (
         <>
-            <div className="image_albums_container">
+            <div className="albums_container">
                 <div onClick={() => removeAlbumHistory()}>
                    <img className="file_manager_file_icon" src="/assets/icons/folder-symlink.svg" alt="" />
                 </div>
-                {albums.length > 0 && <div><span className="image_albums_prompt_text">Albums</span></div>}
-                <div className="image_albums_albums_container">
-                    {albums.map( album => <ImageAlbum
+                {albums.length > 0 && <div><span className="albums_prompt_text">Albums</span></div>}
+                <div className="albums_albums_container">
+                    {albums.map( album => <Album
                         key={album.id}
                         album={album}
                         onChangeAlbum={changeCurrentAlbum}
@@ -49,4 +49,4 @@ function ImageAlbums({albumHistory, setAlbumHistory}) {
     );
 }
 
-export default ImageAlbums;
+export default Albums;

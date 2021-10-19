@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import Dropdown from '../../../../../dropdown/Dropdown';
 import { get_categories } from '../../../../../../model/apis/tag_apis';
 import { addCategory } from '../../../../../../model/reducers/albumSlice';
-import './ImageAlbumInfoTagsNewCategory.css';
+import './AlbumInfoTagsNewCategory.css';
 
-function ImageAlbumInfoTagsNewCategory({albumId, existingCategories}) {
+function AlbumInfoTagsNewCategory({albumId, existingCategories}) {
     const dispatch = useDispatch();
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [categories, setCategories] = useState([]);
@@ -25,7 +25,7 @@ function ImageAlbumInfoTagsNewCategory({albumId, existingCategories}) {
     }, []);
 
     return (
-        <div className="image_album_info_tags_new_category_container">
+        <div className="album_info_tags_new_category_container">
             <Dropdown
                 placeholder="Category"
                 selectedValue={selectedCategory}
@@ -33,11 +33,11 @@ function ImageAlbumInfoTagsNewCategory({albumId, existingCategories}) {
                 values={categories}
                 width="115px"
             />
-            <div className="image_album_info_tags_new_category_icon" onClick={onAddCategory} >
-                <img className="image_album_info_tag_edit_add_tag_icon" src="/assets/icons/plus-circle-fill.svg" alt="" />
+            <div className="album_info_tags_new_category_icon" onClick={onAddCategory} >
+                <img className="album_info_tag_edit_add_tag_icon" src="/assets/icons/plus-circle-fill.svg" alt="" />
             </div>
         </div>
     );
 }
 
-export default ImageAlbumInfoTagsNewCategory;
+export default AlbumInfoTagsNewCategory;

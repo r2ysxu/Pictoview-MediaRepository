@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { searchAlbums } from '../model/reducers/albumSlice';
 import Header from '../components/header/Header';
-import ImageAlbums from '../components/image_albums/ImageAlbums';
+import Albums from '../components/albums/Albums';
 import Container from '../components/container/Container';
 
-function Album(props) {
+function AlbumPage(props) {
     const dispatch = useDispatch();
     const [loggedIn, setLoggedIn] = useState(false);
     const [searchInput, setSearchInput] = useState('');
@@ -24,7 +24,7 @@ function Album(props) {
                 onSearchChange={setSearchInput}
                 onSearchSubmit={onSearch} />
             <Container isLoggedIn={loggedIn}>
-                <ImageAlbums
+                <Albums
                     albumHistory={albumHistory}
                     setAlbumHistory={setAlbumHistory} />
             </Container>
@@ -32,4 +32,4 @@ function Album(props) {
     );
 }
 
-export default Album;
+export default AlbumPage;

@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import { updateCategoryTags } from '../../../../../model/reducers/albumSlice';
 import Tokenizer from '../../../../tokenizer/Tokenizer';
 import { get_searchTags, post_tagAlbum } from '../../../../../model/apis/tag_apis.js';
-import './image_album_info_tags_view/ImageAlbumInfoTagsView.css';
+import './album_info_tags_view/AlbumInfoTagsView.css';
 
-function ImageAlbumInfoTagEdit({albumId, category, onClose}) {
+function AlbumInfoTagEdit({albumId, category, onClose}) {
     const dispatch = useDispatch();
     const [autoCompleteTokens, setAutoCompleteTokens] = useState([]);
     const [tags, setTags] = useState([...category.tags]);
@@ -54,4 +54,4 @@ function ImageAlbumInfoTagEdit({albumId, category, onClose}) {
     );
 }
 
-export default ImageAlbumInfoTagEdit;
+export default AlbumInfoTagEdit;

@@ -1,4 +1,4 @@
-.image_album_container {
+.album_container {
     position: relative;
     display: inline-block;
     margin: 5px 5px;
@@ -7,28 +7,28 @@
     margin: 15px;
 }
 
-.image_album_container p {
+.album_container p {
     white-space: normal;
 }
 
-.image_album_container h2 {
+.album_container h2 {
     color: #fff;
     margin: 5px 5px 5px 5px;
 }
 
-.image_album_container h3 {
+.album_container h3 {
     color: #848484;
     margin: 5px 5px 5px 5px;
     font-size: 12pt;
 }
 
-.image_album_container h4 {
+.album_container h4 {
     color: #848484;
     margin: 0 0 0 1em;
     font-size: 10pt;
 }
 
-.image_album_title {
+.album_title {
     padding-top: 5px;
     padding-left: 10px;
     border-top-left-radius: 5px;
@@ -38,7 +38,7 @@
     border: 1px outset #fff;
 }
 
-.image_album_banner {
+.album_banner {
     margin: 0;
     border-left: 1px outset #fff;
     border-right: 1px outset #fff;
@@ -50,11 +50,11 @@
     cursor: default;
 }
 
-.image_album_banner:hover {
+.album_banner:hover {
     background-color: #98a8fd;
 }
 
-.image_album_center_container {
+.album_center_container {
     border-left: 1px outset #fff;
     border-right: 1px outset #fff;
     box-shadow: 0px -1px 5px 0px rgba(0,0,0,0.1);
@@ -64,19 +64,19 @@
     cursor: pointer;
 }
 
-.image_album_wrapper {
+.album_wrapper {
     height: 100%;
     width: 100%;
 }
 
-.image_album_image {
+.album_image {
     position: relative;
     max-height: 300px;
     box-shadow: 0px 5px 5px 2px rgba(0, 0, 0, 0.25);
     border-bottom: 1px solid #9c9c9c;
 }
 
-.image_album_info_container {
+.album_info_container {
     position: absolute;
     width: 100%;
     bottom: 15px;

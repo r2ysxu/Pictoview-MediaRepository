@@ -8,7 +8,7 @@ import {
 import { Provider } from 'react-redux';
 import store from './model/store';
 import Home from './page/Home';
-import Album from './page/Album';
+import AlbumPage from './page/AlbumPage';
 import AdminManager from './page/AdminManager';
 
 
@@ -16,7 +16,7 @@ function App() {
   return(
       <Router>
       <Switch>
-        <Route path="/album" component={Album} />
+        <Route path="/album" component={AlbumPage} />
         <Route path="/admin" component={AdminManager} />
         <Route path="/" component={Home} />
       </Switch>

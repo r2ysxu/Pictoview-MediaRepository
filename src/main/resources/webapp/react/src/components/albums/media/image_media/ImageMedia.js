@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import ScrollLoader from '../../scroll_loader/ScrollLoader';
+import ScrollLoader from '../../../scroll_loader/ScrollLoader';
 import ImagePhoto from './image_photo/ImagePhoto';
 import ImageView from './image_full_view/ImageView';
-import { selectAlbums, loadMoreImages } from '../../../model/reducers/albumSlice';
+import { selectAlbums, loadMoreImages } from '../../../../model/reducers/albumSlice';
 import './ImageMedia.css';
 
 async function listImages(page, albumId) {

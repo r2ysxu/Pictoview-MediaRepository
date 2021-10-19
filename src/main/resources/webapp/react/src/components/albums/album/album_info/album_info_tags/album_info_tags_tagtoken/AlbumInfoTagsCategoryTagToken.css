@@ -1,19 +1,19 @@
-.image_album_info_tags_category_tagToken_container {
+.album_info_tags_category_tagToken_container {
 	display: flex;
     margin: 0 3px;
 }
 
-.image_album_info_tags_category_tagToken_container_odd span {
+.album_info_tags_category_tagToken_container_odd span {
     color: #cdcdcd;
 }
 
-.image_album_info_tags_category_tagToken_delete_icon_container {
+.album_info_tags_category_tagToken_delete_icon_container {
 	position: relative;
 	height: 100%;
 	width: 12pt;
 }
 
-.image_album_info_tags_category_tagToken_delete_icon {
+.album_info_tags_category_tagToken_delete_icon {
 	position: absolute;
     left: 1px;
     top: 0;
@@ -23,7 +23,7 @@
     filter: invert(50%) sepia(1) hue-rotate(310deg) saturate(5);
 }
 
-.image_album_info_tags_category_tagToken_delete_icon:hover {
+.album_info_tags_category_tagToken_delete_icon:hover {
     filter: invert(50%) sepia(1) hue-rotate(310deg) saturate(10);
 }
 
