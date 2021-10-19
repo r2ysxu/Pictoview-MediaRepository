@@ -1,8 +1,6 @@
 package org.mrn.query.model;
 
-import org.mrn.jpa.model.album.MediaAlbum;
-
-public class Album {
+public class Album implements QueryModel {
 
 	private Long id;
 	private String name;
@@ -10,12 +8,9 @@ public class Album {
 	private String description;
 	private Long coverPhotoId;
 
-	public static Album createImageAlbum(MediaAlbum imageAlbum) {
-		return new Album(imageAlbum.getId(), imageAlbum.getName(), imageAlbum.getDescription(),
-				imageAlbum.getSubtitle(), imageAlbum.getCoverPhoto().getId());
-	}
+	public Album() {}
 
-	private Album(Long id, String name, String description, String subtitle, Long coverPhotoId) {
+	public Album(Long id, String name, String description, String subtitle, Long coverPhotoId) {
 		this.id = id;
 		this.name = name;
 		this.publisher = subtitle;

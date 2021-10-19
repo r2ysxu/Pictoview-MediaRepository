@@ -9,11 +9,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 
-import org.mrn.jpa.model.user.User;
+import org.mrn.jpa.model.EntityModel;
+import org.mrn.jpa.model.user.UserEntity;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "albumid")
-public class MediaAlbum extends Album {
+public class MediaAlbumEntity extends AlbumEntity implements EntityModel {
 
 	@Column
 	private String subtitle;
@@ -22,14 +23,14 @@ public class MediaAlbum extends Album {
 	@Column
 	private String metaType;
 	@ManyToOne(fetch = FetchType.EAGER)
-	private ImageMedia coverPhoto;
+	private ImageMediaEntity coverPhoto;
 	@OneToMany
-	private List<Media> media;
+	private List<MediaEntity> media;
 
-	public MediaAlbum() {
+	public MediaAlbumEntity() {
 	}
 
-	public MediaAlbum(User owner, String name, String description) {
+	public MediaAlbumEntity(UserEntity owner, String name, String description) {
 		super(owner, name);
 		this.description = description;
 	}
@@ -38,7 +39,7 @@ public class MediaAlbum extends Album {
 		return subtitle;
 	}
 
-	public MediaAlbum setSubtitle(String subtitle) {
+	public MediaAlbumEntity setSubtitle(String subtitle) {
 		this.subtitle = subtitle;
 		return this;
 	}
@@ -47,7 +48,7 @@ public class MediaAlbum extends Album {
 		return description;
 	}
 
-	public MediaAlbum setDescription(String description) {
+	public MediaAlbumEntity setDescription(String description) {
 		this.description = description;
 		return this;
 	}
@@ -56,25 +57,25 @@ public class MediaAlbum extends Album {
 		return metaType;
 	}
 
-	public MediaAlbum setMetaType(String metaType) {
+	public MediaAlbumEntity setMetaType(String metaType) {
 		this.metaType = metaType;
 		return this;
 	}
 
-	public ImageMedia getCoverPhoto() {
+	public ImageMediaEntity getCoverPhoto() {
 		return coverPhoto;
 	}
 
-	public MediaAlbum setCoverPhoto(ImageMedia coverPhoto) {
+	public MediaAlbumEntity setCoverPhoto(ImageMediaEntity coverPhoto) {
 		this.coverPhoto = coverPhoto;
 		return this;
 	}
 
-	public List<Media> getMedia() {
+	public List<MediaEntity> getMedia() {
 		return media;
 	}
 
-	public MediaAlbum setMedia(List<Media> media) {
+	public MediaAlbumEntity setMedia(List<MediaEntity> media) {
 		this.media = media;
 		return this;
 	}

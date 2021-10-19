@@ -13,13 +13,14 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Transient;
 
+import org.mrn.jpa.model.EntityModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User implements UserDetails {
+public class UserEntity implements UserDetails, EntityModel {
 	private static final long serialVersionUID = 1L;
 	
 	public enum Role { UNKNOWN, ADMIN, END_USER };
@@ -37,13 +38,13 @@ public class User implements UserDetails {
 	@Transient
 	private Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 	
-	public User() {}
+	public UserEntity() {}
 	
-	protected static User createEndUser(String username, String password) {
-		return new User(username, password, Role.END_USER.ordinal());
+	protected static UserEntity createEndUser(String username, String password) {
+		return new UserEntity(username, password, Role.END_USER.ordinal());
 	}
 
-	protected User(String username, String password, int role) {
+	protected UserEntity(String username, String password, int role) {
 		this.username = username;
 		this.password = password;
 		this.role = role;

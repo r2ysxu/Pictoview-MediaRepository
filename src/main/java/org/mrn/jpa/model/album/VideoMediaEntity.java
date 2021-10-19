@@ -6,9 +6,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import org.mrn.jpa.model.EntityModel;
+
 @Entity
 @PrimaryKeyJoinColumn(name = "mediaid")
-public class VideoMedia extends Media {
+public class VideoMediaEntity extends MediaEntity implements EntityModel {
 	public enum Type {
 		MP4
 	};
@@ -16,7 +18,7 @@ public class VideoMedia extends Media {
 	@Enumerated(EnumType.ORDINAL)
 	private Type type;
 	@ManyToOne
-	private MediaAlbum album;
+	private MediaAlbumEntity album;
 
 	public Type getType() {
 		return type;
@@ -26,11 +28,11 @@ public class VideoMedia extends Media {
 		this.type = type;
 	}
 
-	public MediaAlbum getAlbum() {
+	public MediaAlbumEntity getAlbum() {
 		return album;
 	}
 
-	public void setAlbum(MediaAlbum album) {
+	public void setAlbum(MediaAlbumEntity album) {
 		this.album = album;
 	}
 }

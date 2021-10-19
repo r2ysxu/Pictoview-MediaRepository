@@ -1,12 +1,12 @@
 package org.mrn.filemanager;
 
-import org.mrn.jpa.model.album.ImageMedia;
-import org.mrn.jpa.model.album.ImageMedia.Type;
+import org.mrn.jpa.model.album.ImageMediaEntity;
+import org.mrn.jpa.model.album.ImageMediaEntity.Type;
 
 public class ThumbnailFile {
 	private String absoluteFile;
 	private String name;
-	private ImageMedia.Type type;
+	private ImageMediaEntity.Type type;
 
 	public ThumbnailFile(String absoluteFile, String name, String type) {
 		this.absoluteFile = absoluteFile;
@@ -36,11 +36,11 @@ public class ThumbnailFile {
 		this.name = name;
 	}
 
-	public ImageMedia.Type getType() {
+	public ImageMediaEntity.Type getType() {
 		return type;
 	}
 
-	public void setType(ImageMedia.Type type) {
+	public void setType(ImageMediaEntity.Type type) {
 		this.type = type;
 	}
 }

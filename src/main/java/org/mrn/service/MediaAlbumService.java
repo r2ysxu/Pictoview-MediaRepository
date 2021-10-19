@@ -3,14 +3,16 @@ package org.mrn.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.mrn.jpa.model.album.Album;
-import org.mrn.jpa.model.album.ImageMedia;
-import org.mrn.jpa.model.album.MediaAlbum;
+import org.mrn.jpa.model.album.AlbumEntity;
+import org.mrn.jpa.model.album.ImageMediaEntity;
+import org.mrn.jpa.model.album.MediaAlbumEntity;
 import org.mrn.jpa.model.tags.SearchQuery;
-import org.mrn.jpa.model.user.User;
+import org.mrn.jpa.model.user.UserEntity;
 import org.mrn.jpa.repo.AlbumRepo;
 import org.mrn.jpa.repo.ImageMediaRepo;
 import org.mrn.jpa.repo.MediaAlbumRepo;
+import org.mrn.query.model.Album;
+import org.mrn.service.builder.AlbumBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,22 +27,22 @@ public class MediaAlbumService {
 	@Autowired
 	private ImageMediaRepo imageMediaRepo;
 
-	public Iterable<MediaAlbum> searchMediaAlbum(User user, SearchQuery searchQuery, Pageable pageable) {
-		List<Album> albums = albumRepo.searchAlbums(user, searchQuery, pageable);
-		List<Long> ids = albums.stream().map(Album::getId).collect(Collectors.toList());
+	public List<Album> searchMediaAlbum(UserEntity user, SearchQuery searchQuery, Pageable pageable) {
+		List<AlbumEntity> albums = albumRepo.searchAlbums(user, searchQuery, pageable);
+		List<Long> ids = albums.stream().map(AlbumEntity::getId).collect(Collectors.toList());
 
-		return mediaAlbumRepo.findAllById(ids);
+		return AlbumBuilder.buildFrom(mediaAlbumRepo.findAllById(ids));
 	}
 
-	public Iterable<MediaAlbum> listMediaAlbums(User user, Long parentId, Pageable pageable) {
-		if (parentId == null || parentId < 1)
-			return mediaAlbumRepo.findAllByOwner(user, pageable);
-		else
-			return mediaAlbumRepo.findAllByOwnerAndParent_Id(user, parentId, pageable);
+	public List<Album> listMediaAlbums(UserEntity user, Long parentId, Pageable pageable) {
+		Iterable<MediaAlbumEntity> albums;
+		if (parentId == null || parentId < 1) albums = mediaAlbumRepo.findAllByOwner(user, pageable);
+		else albums = mediaAlbumRepo.findAllByOwnerAndParent_Id(user, parentId, pageable);
+		return AlbumBuilder.buildFrom(albums);
 	}
 
-	public List<Long> listImageMedia(User user, Long albumId, Pageable pageable) {
-		List<ImageMedia> imageMedia = imageMediaRepo.findAllByOwnerAndAlbum_Id(user, albumId, pageable);
+	public List<Long> listImageMedia(UserEntity user, Long albumId, Pageable pageable) {
+		List<ImageMediaEntity> imageMedia = imageMediaRepo.findAllByOwnerAndAlbum_Id(user, albumId, pageable);
 		return imageMedia.stream().map(imageMedium -> imageMedium.getId()).collect(Collectors.toList());
 	}
 }

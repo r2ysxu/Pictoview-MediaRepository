@@ -7,8 +7,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.mrn.jpa.model.EntityModel;
+
 @Entity
-public class Tag {
+public class TagEntity implements EntityModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,17 +18,17 @@ public class Tag {
 	@Column(nullable = false)
 	private String name;
 	@ManyToOne
-	private Category category;
+	private CategoryEntity category;
 
-	public Tag() {
+	public TagEntity() {
 	}
 
-	public Tag(Category category, String name) {
+	public TagEntity(CategoryEntity category, String name) {
 		this.category = category;
 		this.name = name;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -38,16 +40,16 @@ public class Tag {
 		return name;
 	}
 
-	public Tag setName(String name) {
+	public TagEntity setName(String name) {
 		this.name = name;
 		return this;
 	}
 
-	public Category getCategory() {
+	public CategoryEntity getCategory() {
 		return category;
 	}
 
-	public Tag setCategory(Category category) {
+	public TagEntity setCategory(CategoryEntity category) {
 		this.category = category;
 		return this;
 	}

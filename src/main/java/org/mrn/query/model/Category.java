@@ -3,15 +3,11 @@ package org.mrn.query.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Category {
+public class Category implements QueryModel {
 
 	private Long id;
 	private String name;
 	private List<Tag> tags;
-	
-	public static Category createCategory(org.mrn.jpa.model.tags.Category category) {
-		return new Category(category.getId(), category.getName());
-	}
 
 	public Category() {
 	}

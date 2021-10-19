@@ -7,10 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import org.mrn.jpa.model.album.Album;
+import org.mrn.jpa.model.EntityModel;
+import org.mrn.jpa.model.album.AlbumEntity;
 
 @Entity
-public class DirectoryAdded {
+public class DirectoryAddedEntity implements EntityModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,17 +19,17 @@ public class DirectoryAdded {
 	@Column
 	private String absolutePath;
 	@OneToOne
-	private Album album;
+	private AlbumEntity album;
 
-	public DirectoryAdded() {
+	public DirectoryAddedEntity() {
 	}
 
-	public DirectoryAdded(String absolutePath, Album album) {
+	public DirectoryAddedEntity(String absolutePath, AlbumEntity album) {
 		this.absolutePath = absolutePath;
 		this.album = album;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -40,11 +41,11 @@ public class DirectoryAdded {
 		this.absolutePath = absolutePath;
 	}
 
-	public Album getAlbum() {
+	public AlbumEntity getAlbum() {
 		return album;
 	}
 
-	public void setAlbum(Album album) {
+	public void setAlbum(AlbumEntity album) {
 		this.album = album;
 	}
 

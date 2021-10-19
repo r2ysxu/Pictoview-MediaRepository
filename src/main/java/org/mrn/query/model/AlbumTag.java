@@ -2,7 +2,7 @@ package org.mrn.query.model;
 
 import java.util.List;
 
-public class AlbumTag {
+public class AlbumTag implements QueryModel {
 	private Long albumId;
 	private List<Category> categories;
 

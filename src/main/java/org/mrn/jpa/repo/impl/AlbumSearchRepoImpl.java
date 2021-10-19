@@ -14,12 +14,12 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.mrn.jpa.model.album.Album;
-import org.mrn.jpa.model.tags.AlbumTag;
-import org.mrn.jpa.model.tags.Category;
+import org.mrn.jpa.model.album.AlbumEntity;
+import org.mrn.jpa.model.tags.AlbumTagEntity;
+import org.mrn.jpa.model.tags.CategoryEntity;
 import org.mrn.jpa.model.tags.SearchQuery;
-import org.mrn.jpa.model.tags.Tag;
-import org.mrn.jpa.model.user.User;
+import org.mrn.jpa.model.tags.TagEntity;
+import org.mrn.jpa.model.user.UserEntity;
 import org.mrn.jpa.repo.AlbumSearchRepo;
 import org.springframework.data.domain.Pageable;
 
@@ -29,14 +29,14 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 	private EntityManager entityManager;
 
 	@Override
-	public List<Album> searchAlbums(User user, SearchQuery searchQuery, Pageable pageable) {
+	public List<AlbumEntity> searchAlbums(UserEntity user, SearchQuery searchQuery, Pageable pageable) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Album> query = cb.createQuery(Album.class);
-		Root<Album> album = query.from(Album.class);
+		CriteriaQuery<AlbumEntity> query = cb.createQuery(AlbumEntity.class);
+		Root<AlbumEntity> album = query.from(AlbumEntity.class);
 
-		Join<Album, AlbumTag> albumTag = album.join("albumTags");
-		Join<AlbumTag, Tag> tagPath = albumTag.join("tag");
-		Join<Tag, Category> categoryPath = tagPath.join("category");
+		Join<AlbumEntity, AlbumTagEntity> albumTag = album.join("albumTags");
+		Join<AlbumTagEntity, TagEntity> tagPath = albumTag.join("tag");
+		Join<TagEntity, CategoryEntity> categoryPath = tagPath.join("category");
 
 		Path<String> tagName = tagPath.get("name");
 		Path<String> categoryName = categoryPath.get("name");

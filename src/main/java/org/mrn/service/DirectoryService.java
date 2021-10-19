@@ -12,15 +12,15 @@ import org.mrn.filemanager.ThumbnailDirectories;
 import org.mrn.filemanager.ThumbnailDirectory;
 import org.mrn.filemanager.ThumbnailDirectoryManager;
 import org.mrn.filemanager.ThumbnailFile;
-import org.mrn.jpa.model.album.Album;
-import org.mrn.jpa.model.album.ImageMedia;
-import org.mrn.jpa.model.album.MediaAlbum;
-import org.mrn.jpa.model.file.DirectoryAdded;
-import org.mrn.jpa.model.tags.AlbumTag;
+import org.mrn.jpa.model.album.AlbumEntity;
+import org.mrn.jpa.model.album.ImageMediaEntity;
+import org.mrn.jpa.model.album.MediaAlbumEntity;
+import org.mrn.jpa.model.file.DirectoryAddedEntity;
+import org.mrn.jpa.model.tags.AlbumTagEntity;
 import org.mrn.jpa.model.tags.Categories;
-import org.mrn.jpa.model.tags.Category;
-import org.mrn.jpa.model.tags.Tag;
-import org.mrn.jpa.model.user.EndUser;
+import org.mrn.jpa.model.tags.CategoryEntity;
+import org.mrn.jpa.model.tags.TagEntity;
+import org.mrn.jpa.model.user.EndUserEntity;
 import org.mrn.jpa.repo.AlbumTagRepo;
 import org.mrn.jpa.repo.CategoryRepo;
 import org.mrn.jpa.repo.DirectoryAddedRepo;
@@ -46,7 +46,7 @@ public class DirectoryService {
 	@Autowired
 	private DirectoryAddedRepo directoryRepo;
 	@Autowired
-	private MediaAlbumRepo imageAlbumRepo;
+	private MediaAlbumRepo mediaAlbumRepo;
 	@Autowired
 	private TagRepo tagRepo;
 	@Autowired
@@ -63,9 +63,9 @@ public class DirectoryService {
 		List<ThumbnailDirectory> subDirectories = thumbnailDirectories.getDirectories();
 		List<String> subDirectoriesAbsolutePaths = thumbnailDirectories.getSubDirectoriesAbsolutePaths();
 
-		List<DirectoryAdded> scannedDirectories = directoryRepo.findAllByAbsolutePathIn(subDirectoriesAbsolutePaths);
+		List<DirectoryAddedEntity> scannedDirectories = directoryRepo.findAllByAbsolutePathIn(subDirectoriesAbsolutePaths);
 		Set<String> scannedAbsolutePaths = new HashSet<>(scannedDirectories.size());
-		for (DirectoryAdded scannedDirectory : scannedDirectories) {
+		for (DirectoryAddedEntity scannedDirectory : scannedDirectories) {
 			scannedAbsolutePaths.add(scannedDirectory.getAbsolutePath());
 		}
 
@@ -78,26 +78,26 @@ public class DirectoryService {
 		return directories;
 	}
 
-	public ScannedDirectory addScannedDirectory(String currentPath, Album album) {
+	public ScannedDirectory addScannedDirectory(String currentPath, AlbumEntity album) {
 		File directory = new File(adminSource + currentPath);
-		directoryRepo.save(new DirectoryAdded(directory.getAbsolutePath(), album));
+		directoryRepo.save(new DirectoryAddedEntity(directory.getAbsolutePath(), album));
 		return new ScannedDirectory(new ThumbnailDirectory(directory.getAbsolutePath(), directory.getName()), true);
 	}
 
-	public List<ImageMedia> addImages(EndUser user, String currentPath, MediaAlbum album) throws IOException {
+	public List<ImageMediaEntity> addImages(EndUserEntity user, String currentPath, MediaAlbumEntity album) throws IOException {
 		ThumbnailDirectoryManager manager = new ThumbnailDirectoryManager(adminSource);
 		List<ThumbnailFile> imageFiles = manager.listImageFiles(currentPath);
-		List<ImageMedia> imageMedia = new ArrayList<>(imageFiles.size());
+		List<ImageMediaEntity> imageMedia = new ArrayList<>(imageFiles.size());
 		for (ThumbnailFile file : imageFiles) {
-			imageMedia.add(new ImageMedia(user, file.getAbsoluteFile(), file.getName(), file.getType(), album));
+			imageMedia.add(new ImageMediaEntity(user, file.getAbsoluteFile(), file.getName(), file.getType(), album));
 		}
-		List<ImageMedia> photos = new ArrayList<>();
+		List<ImageMediaEntity> photos = new ArrayList<>();
 		imageMediaRepo.saveAll(imageMedia).forEach(photos::add);
 		return photos;
 	}
 
-	public Iterable<ImageMedia> createImageThumbnails(MediaAlbum album, List<ImageMedia> images) throws IOException {
-		for (ImageMedia image : images) {
+	public Iterable<ImageMediaEntity> createImageThumbnails(MediaAlbumEntity album, List<ImageMediaEntity> images) throws IOException {
+		for (ImageMediaEntity image : images) {
 			image.setThumbnailSource(
 					adminThumbnailSource + album.getId() + "/" + image.getId() + image.getTypeExtension());
 			AlbumFileManager.createPhotoThumbnail(image.getSource(), image.getThumbnailSource());
@@ -105,53 +105,53 @@ public class DirectoryService {
 		return imageMediaRepo.saveAll(images);
 	}
 
-	public static String generateCoverPhotoFileSource(String base, MediaAlbum album, ImageMedia imageMedia) {
+	public static String generateCoverPhotoFileSource(String base, MediaAlbumEntity album, ImageMediaEntity imageMedia) {
 		return base + album.getId() + "_" + imageMedia.getId() + imageMedia.getTypeExtension();
 	}
 
-	public MediaAlbum setAlbumCoverPhoto(MediaAlbum album) throws IOException {
-		ImageMedia imageMedia = imageMediaRepo.findFirstByAlbumOrderByNameAsc(album);
+	public MediaAlbumEntity setAlbumCoverPhoto(MediaAlbumEntity album) throws IOException {
+		ImageMediaEntity imageMedia = imageMediaRepo.findFirstByAlbumOrderByNameAsc(album);
 		AlbumFileManager.createCoverPhotoFile(imageMedia.getSource(),
 				generateCoverPhotoFileSource(adminCoverSource, album, imageMedia));
 		album.setCoverPhoto(imageMedia);
-		return imageAlbumRepo.save(album);
+		return mediaAlbumRepo.save(album);
 	}
 
-	private Tag parsePublisherTag(String name) {
-		Tag albumPublisher = null;
-		Category publisherCategory = categoryRepo.findByName(Categories.Publisher);
+	private TagEntity parsePublisherTag(String name) {
+		TagEntity albumPublisher = null;
+		CategoryEntity publisherCategory = categoryRepo.findByName(Categories.Publisher);
 		if (name.startsWith("[") && name.indexOf(']') > 1) {
 			String publisherName = name.substring(1, name.lastIndexOf(']'));
 			albumPublisher = tagRepo.findFirstByName(publisherName);
 			if (albumPublisher == null) {
-				albumPublisher = tagRepo.save(new Tag(publisherCategory, publisherName));
+				albumPublisher = tagRepo.save(new TagEntity(publisherCategory, publisherName));
 			}
 		}
 		return albumPublisher;
 	}
 
-	public MediaAlbum addImageDirectory(EndUser user, String currentPath, String name) {
+	public MediaAlbumEntity addImageDirectory(EndUserEntity user, String currentPath, String name) {
 		if (!StringUtils.hasLength(name))
 			return null;
 
-		Tag albumPublisher = parsePublisherTag(name);
+		TagEntity albumPublisher = parsePublisherTag(name);
 		name = name.replaceFirst("^\\[.*\\]", "").trim();
 
 		File currentPathFile = new File(adminSource + currentPath);
 		String parentPath = new File(currentPathFile.getParent()).getAbsolutePath();
 
-		MediaAlbum imageAlbum = new MediaAlbum(user, name, "");
+		MediaAlbumEntity imageAlbum = new MediaAlbumEntity(user, name, "");
 		imageAlbum.setSubtitle(albumPublisher.getName());
-		imageAlbum = imageAlbumRepo.save(imageAlbum);
+		imageAlbum = mediaAlbumRepo.save(imageAlbum);
 
-		DirectoryAdded parentAdded = directoryRepo.findFirstByAbsolutePath(parentPath);
+		DirectoryAddedEntity parentAdded = directoryRepo.findFirstByAbsolutePath(parentPath);
 		if (parentAdded != null) {
 			imageAlbum.setParent(parentAdded.getAlbum());
 		}
 
 		tagRepo.save(albumPublisher.setName(albumPublisher.getName().toLowerCase()));
-		AlbumTag albumPublisherTag = albumTagRepo.save(new AlbumTag(imageAlbum, albumPublisher));
+		AlbumTagEntity albumPublisherTag = albumTagRepo.save(new AlbumTagEntity(imageAlbum, albumPublisher));
 		imageAlbum.addAlbumTag(albumPublisherTag);
-		return imageAlbumRepo.save(imageAlbum);
+		return mediaAlbumRepo.save(imageAlbum);
 	}
 }

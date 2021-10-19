@@ -7,11 +7,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
-import org.mrn.jpa.model.user.User;
+import org.mrn.jpa.model.EntityModel;
+import org.mrn.jpa.model.user.UserEntity;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "mediaid")
-public class ImageMedia extends Media {
+public class ImageMediaEntity extends MediaEntity implements EntityModel {
 	public enum Type {
 		JPG, GIF, PNG
 	};
@@ -21,12 +22,12 @@ public class ImageMedia extends Media {
 	@Column
 	private String thumbnailSource;
 	@ManyToOne
-	private MediaAlbum album;
+	private MediaAlbumEntity album;
 
-	public ImageMedia() {
+	public ImageMediaEntity() {
 	}
 
-	public ImageMedia(User owner, String source, String name, Type type, MediaAlbum album) {
+	public ImageMediaEntity(UserEntity owner, String source, String name, Type type, MediaAlbumEntity album) {
 		super(owner, source, name);
 		this.album = album;
 		this.type = type;
@@ -58,11 +59,11 @@ public class ImageMedia extends Media {
 		this.thumbnailSource = thumbnailSource;
 	}
 
-	public MediaAlbum getAlbum() {
+	public MediaAlbumEntity getAlbum() {
 		return album;
 	}
 
-	public void setAlbum(MediaAlbum album) {
+	public void setAlbum(MediaAlbumEntity album) {
 		this.album = album;
 	}
 }

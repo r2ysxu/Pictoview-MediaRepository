@@ -7,40 +7,41 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import org.mrn.jpa.model.user.EndUser;
-import org.mrn.jpa.model.user.User;
+import org.mrn.jpa.model.EntityModel;
+import org.mrn.jpa.model.user.EndUserEntity;
+import org.mrn.jpa.model.user.UserEntity;
 
 @Entity
-public class Media {
+public class MediaEntity implements EntityModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected long id;
 	@ManyToOne
-	private User owner;
+	private UserEntity owner;
 	@Column(nullable = false)
 	private String name;
 	@Column
 	private String source;
 
-	public Media() {
+	public MediaEntity() {
 	}
 
-	public Media(User owner, String source, String name) {
+	public MediaEntity(UserEntity owner, String source, String name) {
 		this.owner = owner;
 		this.source = source;
 		this.name = name;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public User getOwner() {
+	public UserEntity getOwner() {
 		return owner;
 	}
 
-	public void setOwner(EndUser owner) {
+	public void setOwner(EndUserEntity owner) {
 		this.owner = owner;
 	}
 

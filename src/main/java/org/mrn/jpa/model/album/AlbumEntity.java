@@ -11,11 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.mrn.jpa.model.tags.AlbumTag;
-import org.mrn.jpa.model.user.User;
+import org.mrn.jpa.model.EntityModel;
+import org.mrn.jpa.model.tags.AlbumTagEntity;
+import org.mrn.jpa.model.user.UserEntity;
 
 @Entity
-public abstract class Album {
+public abstract class AlbumEntity implements EntityModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,21 +24,21 @@ public abstract class Album {
 	@Column(nullable = false)
 	private String name;
 	@ManyToOne
-	private User owner;
+	private UserEntity owner;
 	@ManyToOne
-	private Album parent;
+	private AlbumEntity parent;
 	@OneToMany
-	private List<AlbumTag> albumTags;
+	private List<AlbumTagEntity> albumTags;
 
-	protected Album() {
+	protected AlbumEntity() {
 	}
 
-	protected Album(User owner, String name) {
+	protected AlbumEntity(UserEntity owner, String name) {
 		this.owner = owner;
 		this.name = name;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -45,39 +46,39 @@ public abstract class Album {
 		return name;
 	}
 
-	public Album setName(String name) {
+	public AlbumEntity setName(String name) {
 		this.name = name;
 		return this;
 	}
 
-	public User getOwner() {
+	public UserEntity getOwner() {
 		return owner;
 	}
 
-	public Album setOwner(User owner) {
+	public AlbumEntity setOwner(UserEntity owner) {
 		this.owner = owner;
 		return this;
 	}
 
-	public Album getParent() {
+	public AlbumEntity getParent() {
 		return parent;
 	}
 
-	public Album setParent(Album parent) {
+	public AlbumEntity setParent(AlbumEntity parent) {
 		this.parent = parent;
 		return this;
 	}
 
-	public List<AlbumTag> getAlbumTags() {
+	public List<AlbumTagEntity> getAlbumTags() {
 		return albumTags;
 	}
 
-	public Album setAlbumTags(List<AlbumTag> albumTags) {
+	public AlbumEntity setAlbumTags(List<AlbumTagEntity> albumTags) {
 		this.albumTags = albumTags;
 		return this;
 	}
 
-	public Album addAlbumTag(AlbumTag albumTag) {
+	public AlbumEntity addAlbumTag(AlbumTagEntity albumTag) {
 		if (this.albumTags == null)
 			this.albumTags = new ArrayList<>();
 		this.albumTags.add(albumTag);

@@ -2,15 +2,15 @@ package org.mrn.jpa.repo;
 
 import java.util.List;
 
-import org.mrn.jpa.model.album.ImageMedia;
-import org.mrn.jpa.model.album.MediaAlbum;
-import org.mrn.jpa.model.user.User;
+import org.mrn.jpa.model.album.ImageMediaEntity;
+import org.mrn.jpa.model.album.MediaAlbumEntity;
+import org.mrn.jpa.model.user.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface ImageMediaRepo extends PagingAndSortingRepository<ImageMedia, Long> {
-	ImageMedia findByOwnerAndId(User owner, Long id);
-	List<ImageMedia> findAllByOwnerAndAlbum_Id(User owner, Long albumId, Pageable pageable);
-	ImageMedia findByOwnerAndAlbum(User owner, MediaAlbum album);
-	ImageMedia findFirstByAlbumOrderByNameAsc(MediaAlbum album);
+public interface ImageMediaRepo extends PagingAndSortingRepository<ImageMediaEntity, Long> {
+	ImageMediaEntity findByOwnerAndId(UserEntity owner, Long id);
+	List<ImageMediaEntity> findAllByOwnerAndAlbum_Id(UserEntity owner, Long albumId, Pageable pageable);
+	ImageMediaEntity findByOwnerAndAlbum(UserEntity owner, MediaAlbumEntity album);
+	ImageMediaEntity findFirstByAlbumOrderByNameAsc(MediaAlbumEntity album);
 }

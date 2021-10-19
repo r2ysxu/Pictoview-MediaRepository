@@ -1,6 +1,6 @@
 package org.mrn.security;
 
-import org.mrn.jpa.model.user.User;
+import org.mrn.jpa.model.user.UserEntity;
 import org.mrn.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +16,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userService.findByUserName(username);
+		UserEntity user = userService.findByUserName(username);
 		System.out.println("Load User " + user);
 		if (user == null)
 			throw new UsernameNotFoundException("Wrong username or password");

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaRepositories("org.mrn.jpa.repo")
-@EntityScan("org.mrn.jpa.model")
+@EntityScan({"org.mrn.jpa.model", "org.mrn.service.builder"})
 @ComponentScan
 @SpringBootApplication
 public class PvrnApplication {

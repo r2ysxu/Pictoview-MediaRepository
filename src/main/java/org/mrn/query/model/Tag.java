@@ -1,6 +1,6 @@
 package org.mrn.query.model;
 
-public class Tag {
+public class Tag implements QueryModel {
 
 	private Long id;
 	private Long categoryId;
@@ -8,10 +8,6 @@ public class Tag {
 	private Integer relevance;
 
 	public Tag() {}
-
-	public static Tag createTag(org.mrn.jpa.model.tags.Tag tag) {
-		return new Tag(tag.getId(), tag.getCategory().getId(), tag.getName());
-	}
 
 	public Tag(Long id, String value) {
 		this.id = id;

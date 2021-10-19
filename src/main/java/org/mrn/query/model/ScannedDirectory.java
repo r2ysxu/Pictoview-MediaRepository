@@ -2,7 +2,7 @@ package org.mrn.query.model;
 
 import org.mrn.filemanager.ThumbnailDirectory;
 
-public class ScannedDirectory {
+public class ScannedDirectory implements QueryModel {
 	private String path;
 	private String name;
 	private boolean scanned;

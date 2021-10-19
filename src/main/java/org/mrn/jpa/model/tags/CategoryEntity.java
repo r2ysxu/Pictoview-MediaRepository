@@ -9,8 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.mrn.jpa.model.EntityModel;
+
 @Entity
-public class Category {
+public class CategoryEntity implements EntityModel {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,15 +20,15 @@ public class Category {
 	@Column(unique = true, nullable = false)
 	private String name;
 	@OneToMany
-	private List<Tag> tags;
+	private List<TagEntity> tags;
 	
-	public Category() {}
+	public CategoryEntity() {}
 	
-	public Category(String name) {
+	public CategoryEntity(String name) {
 		this.name = name;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -38,11 +40,11 @@ public class Category {
 		this.name = name;
 	}
 
-	public List<Tag> getTags() {
+	public List<TagEntity> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<Tag> tags) {
+	public void setTags(List<TagEntity> tags) {
 		this.tags = tags;
 	}
 }

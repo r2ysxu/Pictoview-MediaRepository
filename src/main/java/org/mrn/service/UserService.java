@@ -2,9 +2,9 @@ package org.mrn.service;
 
 import org.mrn.exceptions.UnauthenticatedUserException;
 import org.mrn.exceptions.UserExistsException;
-import org.mrn.jpa.model.user.EndUser;
+import org.mrn.jpa.model.user.EndUserEntity;
 import org.mrn.jpa.model.user.NewUser;
-import org.mrn.jpa.model.user.User;
+import org.mrn.jpa.model.user.UserEntity;
 import org.mrn.jpa.repo.EndUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,15 +26,15 @@ public class UserService {
 		return (UserDetails) principal;
 	}
 
-	public EndUser findByUserName(String username) {
+	public EndUserEntity findByUserName(String username) {
 		return endUsersRepo.findByUsername(username);
 	}
 
-	public EndUser registerNewUser(NewUser newUser) throws UserExistsException {
-		User user = endUsersRepo.findByUsername(newUser.getUsername());
+	public EndUserEntity registerNewUser(NewUser newUser) throws UserExistsException {
+		UserEntity user = endUsersRepo.findByUsername(newUser.getUsername());
 		if (user != null)
 			throw new UserExistsException(newUser.getUsername());
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		return endUsersRepo.save(EndUser.create(newUser.getUsername(), encoder.encode(newUser.getPassword())));
+		return endUsersRepo.save(EndUserEntity.create(newUser.getUsername(), encoder.encode(newUser.getPassword())));
 	}
 }

@@ -8,44 +8,45 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import org.mrn.jpa.model.album.Album;
+import org.mrn.jpa.model.EntityModel;
+import org.mrn.jpa.model.album.AlbumEntity;
 
 @Entity
-public class AlbumTag {
+public class AlbumTagEntity implements EntityModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected long id;
 	@OneToOne(cascade = CascadeType.ALL)
-	private Tag tag;
+	private TagEntity tag;
 	@OneToOne(cascade = CascadeType.ALL)
-	private Album album;
+	private AlbumEntity album;
 	@Column
 	private int revalance;
 	
-	public AlbumTag() {}
+	public AlbumTagEntity() {}
 	
-	public AlbumTag(Album album, Tag tag) {
+	public AlbumTagEntity(AlbumEntity album, TagEntity tag) {
 		this.album = album;
 		this.tag = tag;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public Tag getTag() {
+	public TagEntity getTag() {
 		return tag;
 	}
 
-	public void setTag(Tag tag) {
+	public void setTag(TagEntity tag) {
 		this.tag = tag;
 	}
 
-	public Album getAlbum() {
+	public AlbumEntity getAlbum() {
 		return album;
 	}
 
-	public void setAlbum(Album album) {
+	public void setAlbum(AlbumEntity album) {
 		this.album = album;
 	}
 
