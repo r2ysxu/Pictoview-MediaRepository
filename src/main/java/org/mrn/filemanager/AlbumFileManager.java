@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.google.common.io.Files;
+import org.apache.commons.io.FilenameUtils;
 
 public class AlbumFileManager {
 
@@ -21,7 +21,7 @@ public class AlbumFileManager {
 	}
 
 	private static void createMediumPhoto(File sourceFile, File destinationFile) throws IOException {
-		String ext = Files.getFileExtension(sourceFile.getName());
+		String ext = FilenameUtils.getExtension(sourceFile.getName());
 		BufferedImage scaledImageBuffer = scaleImageRatio(sourceFile, 800, 600);
 		ImageIO.write(scaledImageBuffer, ext, destinationFile);
 	}
@@ -67,7 +67,7 @@ public class AlbumFileManager {
 
 	public static void createPhotoThumbnail(String source, String destination) throws IOException {
 		File sourceFile = new File(source);
-		String ext = Files.getFileExtension(source);
+		String ext = FilenameUtils.getExtension(source);
 		File thumbnailFile = new File(destination);
 		if (!thumbnailFile.getParentFile().exists())
 			thumbnailFile.getParentFile().mkdirs();

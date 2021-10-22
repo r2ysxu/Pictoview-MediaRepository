@@ -3,36 +3,30 @@ package org.mrn.jpa.model.album;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 import org.mrn.jpa.model.EntityModel;
+import org.mrn.jpa.model.user.UserEntity;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "mediaid")
 public class VideoMediaEntity extends MediaEntity implements EntityModel {
-	public enum Type {
-		MP4
-	};
 
 	@Enumerated(EnumType.ORDINAL)
-	private Type type;
-	@ManyToOne
-	private MediaAlbumEntity album;
-
-	public Type getType() {
-		return type;
-	}
-
-	public void setType(Type type) {
+	private MediaType type;
+	
+	public VideoMediaEntity() {}
+	
+	public VideoMediaEntity(UserEntity owner, String source, String name, MediaType type, MediaAlbumEntity album) {
+		super(owner, source, name, album);
 		this.type = type;
 	}
 
-	public MediaAlbumEntity getAlbum() {
-		return album;
+	public MediaType getType() {
+		return type;
 	}
 
-	public void setAlbum(MediaAlbumEntity album) {
-		this.album = album;
+	public void setType(MediaType type) {
+		this.type = type;
 	}
 }

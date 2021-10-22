@@ -23,14 +23,16 @@ public class MediaEntity implements EntityModel {
 	private String name;
 	@Column
 	private String source;
+	@ManyToOne
+	private MediaAlbumEntity album;
 
-	public MediaEntity() {
-	}
+	public MediaEntity() {}
 
-	public MediaEntity(UserEntity owner, String source, String name) {
+	public MediaEntity(UserEntity owner, String source, String name, MediaAlbumEntity album) {
 		this.owner = owner;
 		this.source = source;
 		this.name = name;
+		this.album = album;
 	}
 
 	public Long getId() {
@@ -59,5 +61,17 @@ public class MediaEntity implements EntityModel {
 
 	public void setSource(String source) {
 		this.source = source;
+	}
+
+	public MediaAlbumEntity getAlbum() {
+		return album;
+	}
+
+	public void setAlbum(MediaAlbumEntity album) {
+		this.album = album;
+	}
+
+	public void setOwner(UserEntity owner) {
+		this.owner = owner;
 	}
 }

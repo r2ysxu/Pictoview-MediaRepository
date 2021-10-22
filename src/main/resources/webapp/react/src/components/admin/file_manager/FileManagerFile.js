@@ -4,9 +4,9 @@ import './FileManager.css';
 
 async function postImageDirectories(path, name) {
     const data = { path, name };
-    const listDirectoryRequest = fetch('/admin/files/add/image', {
+    const listDirectoryRequest = fetch('/admin/files/add', {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)

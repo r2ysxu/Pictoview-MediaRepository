@@ -50,15 +50,6 @@ public class MediaAlbumController extends BaseController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/album/photos/list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Long> listPhotos(@RequestParam(name = "albumId") Long albumId,
-			@RequestParam(name = "page") Integer page) throws UnauthenticatedUserException {
-		EndUserEntity user = getUser();
-		Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.unsorted());
-		return mediaAlbumService.listImageMedia(user, albumId, pageable);
-	}
-
-	@ResponseBody
 	@GetMapping(value = "/album/tag/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	public AlbumTag listAlbumTags(@RequestParam(name = "albumId") Long albumId) {
 		return tagService.listAlbumTags(albumId);

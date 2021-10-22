@@ -7,12 +7,6 @@ import ImageView from './image_full_view/ImageView';
 import { selectAlbums, loadMoreImages } from '../../../../model/reducers/albumSlice';
 import './ImageMedia.css';
 
-async function listImages(page, albumId) {
-    if (albumId < 0) return [];
-    let searchParams = new URLSearchParams({page, albumId});
-    return fetch('/album/image/photos/list?' + searchParams.toString()).then( response => response.json());
-}
-
 function ImageMedia({albumId}) {
     const dispatch = useDispatch();
     const { imageIds } = useSelector(selectAlbums);

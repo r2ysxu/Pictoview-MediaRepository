@@ -11,7 +11,13 @@ export const get_searchAlbums = async (query) => {
 export const get_listAlbumImages = async (page, albumId) => {
     if (albumId <= 0) return [];
     const searchParams = new URLSearchParams({page, albumId});
-    return fetch('/album/photos/list?' + searchParams.toString()).then( response => response.json());
+    return fetch('/album/images/list?' + searchParams.toString()).then( response => response.json());
+}
+
+export const get_listAlbumVideos = async (page, albumId) => {
+    if (albumId <= 0) return [];
+    const searchParams = new URLSearchParams({page, albumId});
+    return fetch('/album/videos/list?' + searchParams.toString()).then( response => response.json());
 }
 
 export const get_listAlbumTags = async(albumId) => {

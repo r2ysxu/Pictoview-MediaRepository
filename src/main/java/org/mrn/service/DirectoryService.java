@@ -15,6 +15,7 @@ import org.mrn.filemanager.ThumbnailFile;
 import org.mrn.jpa.model.album.AlbumEntity;
 import org.mrn.jpa.model.album.ImageMediaEntity;
 import org.mrn.jpa.model.album.MediaAlbumEntity;
+import org.mrn.jpa.model.album.VideoMediaEntity;
 import org.mrn.jpa.model.file.DirectoryAddedEntity;
 import org.mrn.jpa.model.tags.AlbumTagEntity;
 import org.mrn.jpa.model.tags.Categories;
@@ -27,6 +28,7 @@ import org.mrn.jpa.repo.DirectoryAddedRepo;
 import org.mrn.jpa.repo.ImageMediaRepo;
 import org.mrn.jpa.repo.MediaAlbumRepo;
 import org.mrn.jpa.repo.TagRepo;
+import org.mrn.jpa.repo.VideoMediaRepo;
 import org.mrn.query.model.ScannedDirectory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,6 +57,8 @@ public class DirectoryService {
 	private AlbumTagRepo albumTagRepo;
 	@Autowired
 	private ImageMediaRepo imageMediaRepo;
+	@Autowired
+	private VideoMediaRepo videoMediaRepo;
 
 	public List<ScannedDirectory> getScannedFiles(String currentPath) {
 		ThumbnailDirectoryManager manager = new ThumbnailDirectoryManager(adminSource);
@@ -94,6 +98,18 @@ public class DirectoryService {
 		List<ImageMediaEntity> photos = new ArrayList<>();
 		imageMediaRepo.saveAll(imageMedia).forEach(photos::add);
 		return photos;
+	}
+	
+	public List<VideoMediaEntity> addVideos(EndUserEntity user, String currentPath, MediaAlbumEntity album) throws IOException {
+		ThumbnailDirectoryManager manager = new ThumbnailDirectoryManager(adminSource);
+		List<ThumbnailFile> videoFiles = manager.listVideoFiles(currentPath);
+		List<VideoMediaEntity> videoMedia = new ArrayList<>(videoFiles.size());
+		for (ThumbnailFile file : videoFiles) {
+			videoMedia.add(new VideoMediaEntity(user, file.getAbsoluteFile(), file.getName(), file.getType(), album));
+		}
+		List<VideoMediaEntity> videos = new ArrayList<>();
+		videoMediaRepo.saveAll(videoMedia).forEach(videos::add);
+		return videos;
 	}
 
 	public Iterable<ImageMediaEntity> createImageThumbnails(MediaAlbumEntity album, List<ImageMediaEntity> images) throws IOException {

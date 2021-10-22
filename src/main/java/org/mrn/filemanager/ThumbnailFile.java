@@ -1,22 +1,23 @@
 package org.mrn.filemanager;
 
-import org.mrn.jpa.model.album.ImageMediaEntity;
-import org.mrn.jpa.model.album.ImageMediaEntity.Type;
+import org.mrn.jpa.model.album.MediaType;
 
 public class ThumbnailFile {
 	private String absoluteFile;
 	private String name;
-	private ImageMediaEntity.Type type;
+	private MediaType type;
 
 	public ThumbnailFile(String absoluteFile, String name, String type) {
 		this.absoluteFile = absoluteFile;
 		this.name = name;
 		if ("JPG".equalsIgnoreCase(type) || "JPEG".equalsIgnoreCase(type)) {
-			this.type = Type.JPG;
+			this.type = MediaType.JPG;
 		} else if ("PNG".equalsIgnoreCase(type)) {
-			this.type = Type.PNG;
+			this.type = MediaType.PNG;
 		} else if ("GIF".equalsIgnoreCase(type)) {
-			this.type = Type.GIF;
+			this.type = MediaType.GIF;
+		} else if ("MP4".equalsIgnoreCase(type)) {
+			this.type = MediaType.MP4;
 		}
 	}
 
@@ -36,11 +37,11 @@ public class ThumbnailFile {
 		this.name = name;
 	}
 
-	public ImageMediaEntity.Type getType() {
+	public MediaType getType() {
 		return type;
 	}
 
-	public void setType(ImageMediaEntity.Type type) {
+	public void setType(MediaType type) {
 		this.type = type;
 	}
 }

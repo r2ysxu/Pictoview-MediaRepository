@@ -14,6 +14,7 @@ public class ThumbnailDirectoryManager {
 	private String rootDirectoryPath;
 
 	private static Set<String> imageExtensions = new HashSet<>(List.of("jpg", "jpeg", "png", "gif"));
+	private static Set<String> videoExtensions = new HashSet<>(List.of("mp4"));
 
 	public ThumbnailDirectoryManager(String rootDirectoryPath) {
 		this.rootDirectoryPath = rootDirectoryPath;
@@ -54,5 +55,21 @@ public class ThumbnailDirectoryManager {
 			}
 		}
 		return imageFiles;
+	}
+	
+	public List<ThumbnailFile> listVideoFiles(String currentPath) {
+		File current = new File(rootDirectoryPath + currentPath);
+		List<File> subFiles = Arrays.asList(current.listFiles());
+
+		List<ThumbnailFile> videoFiles = new ArrayList<>();
+		for (File file : subFiles) {
+			if (file.isFile() && FilenameUtils.isExtension(file.getAbsolutePath(), videoExtensions)) {
+				String absolutePath = file.getAbsolutePath();
+				ThumbnailFile thumbnailFile = new ThumbnailFile(absolutePath, file.getName(),
+						FilenameUtils.getExtension(absolutePath));
+				videoFiles.add(thumbnailFile);
+			}
+		}
+		return videoFiles;
 	}
 }

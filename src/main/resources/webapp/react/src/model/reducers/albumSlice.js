@@ -1,17 +1,24 @@
 import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { get_fetchAlbums, get_searchAlbums, get_listAlbumImages, get_listAlbumTags } from '../apis/album_apis';
+import { get_fetchAlbums, get_searchAlbums, get_listAlbumImages, get_listAlbumVideos, get_listAlbumTags } from '../apis/album_apis';
 import { post_tagAlbum } from '../apis/tag_apis.js';
 
-const pendingImageRequests = new Set();
+const pendingMoreRequests = new Set();
 
 const initialState = {
     albumId: 0,
+
     albums: [],
     albumsPage: 0,
     albumsHasMore: true,
+
     imageIds: [],
     imageIdsPage: 0,
     imageIdsHasMore: true,
+
+    videoIds: [],
+    videoIdsPage: 0,
+    videoIdsHasMore: true,
+
     isLoading: false,
 }
 
@@ -27,9 +34,10 @@ export const searchAlbums = createAsyncThunk('album/search', async (query) => {
 });
 
 export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async (albumId) => {
-    pendingImageRequests.clear();
+    pendingMoreRequests.clear();
     const albums = await get_fetchAlbums(0, albumId);
     const imageIds = await get_listAlbumImages(0, albumId);
+    const videoIds = await get_listAlbumVideos(0, albumId);
     return {
         albumId,
         albums,
@@ -38,6 +46,9 @@ export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async (albumI
         imageIds,
         imageIdsPage: 0,
         imageIdsHasMore: true,
+        videoIds,
+        videoIdsPage: 0,
+        videoIdsHasMore: true,
     };
 });
 
@@ -48,6 +59,16 @@ export const loadMoreImages = createAsyncThunk('album/load/image/more', async (_
         imageIdsPage: currentState.imageIdsPage + 1,
         moreImages,
         imageIdsHasMore: moreImages && moreImages.length > 0
+    }
+});
+
+export const loadMoreVideos = createAsyncThunk('album/load/video/more', async (_value, thunkAPI) => {
+    const currentState = thunkAPI.getState().album;
+    const moreVideos = await get_listAlbumVideos(currentState.videoIdsPage + 1, currentState.albumId);
+    return {
+        videoIdsPage: currentState.videoIdsPage + 1,
+        moreVideos,
+        videoIdsHasMore: moreVideos && moreVideos.length > 0
     }
 });
 
@@ -97,24 +118,35 @@ export const albumSlice = createSlice({
                 Object.assign(state, action.payload);
                 state.isLoading = false;
             }).addCase(loadMoreImages.fulfilled, (state, action) => {
-                if (pendingImageRequests.has(action.meta.requestId)) {
+                if (pendingMoreRequests.has(action.meta.requestId)) {
                     state.imageIdsHasMore = action.payload.imageIdsHasMore;
                     state.imageIdsPage = action.payload.imageIdsPage;
                     state.imageIds.push(...action.payload.moreImages || []);
-                    pendingImageRequests.delete(action.meta.requestId);
+                    pendingMoreRequests.delete(action.meta.requestId);
                 }
                 state.isLoading = false;
             }).addCase(loadMoreImages.pending, (state, action) => {
-                pendingImageRequests.add(action.meta.requestId);
+                pendingMoreRequests.add(action.meta.requestId);
                 state.isLoading = true;
             }).addCase(loadMoreImages.rejected, (state, action) => {
                 state.isLoading = false;
+            }).addCase(loadMoreVideos.pending, (state, action) => {
+                pendingMoreRequests.add(action.meta.requestId);
+                state.isLoading = true;
+            }).addCase(loadMoreVideos.rejected, (state, action) => {
+                state.isLoading = false;
+            }).addCase(loadMoreVideos.fulfilled, (state, action) => {
+                if (pendingMoreRequests.has(action.meta.requestId)) {
+                    state.videoIdsHasMore = action.payload.videoIdsHasMore;
+                    state.videoIdsPage = action.payload.videoIdsPage;
+                    state.videoIds.push(...action.payload.moreVideos || []);
+                    pendingMoreRequests.delete(action.meta.requestId);
+                }
             }).addCase(loadAlbumTags.fulfilled, (state, action) => {
                 state.albums[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
             }).addCase(updateCategoryTags.fulfilled, (state, action) => {
                 state.albums[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
             }).addCase(addCategory.fulfilled, (state, action) => {
-                console.log('action', action.payload);
                 state.albums[action.payload.currentAlbumIndex].tags.categories.push(action.payload.newCategory);
             });
     },

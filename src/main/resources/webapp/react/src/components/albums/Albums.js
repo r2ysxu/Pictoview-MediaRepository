@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAlbums, loadCurrentAlbumInfo, loadMoreImages } from '../../model/reducers/albumSlice';
 import Album from './album/Album';
 import ImageMedia from './media/image_media/ImageMedia';
+import VideoMedia from './media/video_media/VideoMedia';
 import './Albums.css';
 
 function Albums({albumHistory, setAlbumHistory}) {
@@ -44,6 +45,7 @@ function Albums({albumHistory, setAlbumHistory}) {
                     />)}
                 </div>
                 <ImageMedia albumId={albumId} />
+                <VideoMedia albumId={albumId} />
             </div>
         </>
     );

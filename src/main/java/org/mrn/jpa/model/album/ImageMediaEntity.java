@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 import org.mrn.jpa.model.EntityModel;
@@ -13,27 +12,20 @@ import org.mrn.jpa.model.user.UserEntity;
 @Entity
 @PrimaryKeyJoinColumn(name = "mediaid")
 public class ImageMediaEntity extends MediaEntity implements EntityModel {
-	public enum Type {
-		JPG, GIF, PNG
-	};
-
 	@Enumerated(EnumType.ORDINAL)
-	private Type type;
+	private MediaType type;
 	@Column
 	private String thumbnailSource;
-	@ManyToOne
-	private MediaAlbumEntity album;
 
 	public ImageMediaEntity() {
 	}
 
-	public ImageMediaEntity(UserEntity owner, String source, String name, Type type, MediaAlbumEntity album) {
-		super(owner, source, name);
-		this.album = album;
+	public ImageMediaEntity(UserEntity owner, String source, String name, MediaType type, MediaAlbumEntity album) {
+		super(owner, source, name, album);
 		this.type = type;
 	}
 
-	public Type getType() {
+	public MediaType getType() {
 		return type;
 	}
 	
@@ -47,7 +39,7 @@ public class ImageMediaEntity extends MediaEntity implements EntityModel {
 		}
 	}
 
-	public void setType(Type type) {
+	public void setType(MediaType type) {
 		this.type = type;
 	}
 
@@ -57,13 +49,5 @@ public class ImageMediaEntity extends MediaEntity implements EntityModel {
 
 	public void setThumbnailSource(String thumbnailSource) {
 		this.thumbnailSource = thumbnailSource;
-	}
-
-	public MediaAlbumEntity getAlbum() {
-		return album;
-	}
-
-	public void setAlbum(MediaAlbumEntity album) {
-		this.album = album;
 	}
 }
