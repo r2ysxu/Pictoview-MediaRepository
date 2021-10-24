@@ -1,0 +1,32 @@
+.menubar_container {
+	height: 100%;
+	padding-left: 15px;
+}
+
+.menubar_icon {
+	margin: 5px;
+	padding: 5px 0 5px 0;
+}
+
+
+.searchbar_chevron_icon {
+	height: 50px;
+    width: 50px;
+}
+
+.menubar_content {
+	position: fixed;
+	left: 0;
+	top: 66px;
+	background-color: rgba(17,17,17, 1.0);
+	padding: 5px 0 5px 0;
+	height: 100%;
+}
+
+.menubar_child {
+	padding: 5px 15px 5px 15px;
+}
+
+.menubar_child:hover {
+	background-color: rgb(86 127 230 / 75%)
+}

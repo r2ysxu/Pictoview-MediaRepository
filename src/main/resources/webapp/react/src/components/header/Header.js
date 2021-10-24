@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import LoginForm from '../login/LoginForm';
 import Searchbar from '../searchbar/Searchbar';
+import MenuBar from '../menubar/MenuBar';
 import './Header.css';
 
 async function fetchUserProfile() {
@@ -21,6 +22,7 @@ const hasProfile = (userProfile) => {
 
 function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit}) {
     const [userProfile, setUserProfile] = useState(null);
+    const [selectedIV, setSelectedIV] = useState(0);
 
     useEffect(()=> {
         fetchUserProfile().then(data => {
@@ -36,6 +38,10 @@ function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit}) {
             {!hasProfile(userProfile) && <LoginForm onLoggedIn={setLoggedIn} />}
             {hasProfile(userProfile) && 
                 <Searchbar 
+                    sideContent={
+                        <MenuBar>
+                        </MenuBar>
+                    }
                     searchInput={searchInput}
                     onSearchChange={onSearchChange}
                     onSearch={onSearchSubmit} />}

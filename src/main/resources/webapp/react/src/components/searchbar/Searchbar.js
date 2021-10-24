@@ -1,10 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
-import SideSelector from '../side_selector/SideSelector';
 import './Searchbar.css';
 
-function Searchbar({onSearch, searchInput, onSearchChange}) {
-    const [selectedIV, setSelectedIV] = useState(0);
+function Searchbar({onSearch, searchInput, onSearchChange, sideContent}) {
 
     const onSubmit = (event) => {
         event.preventDefault();
@@ -16,10 +14,7 @@ function Searchbar({onSearch, searchInput, onSearchChange}) {
 
     return (
         <div className="searchbar">
-            <SideSelector selectedIndex={selectedIV} onSelect={setSelectedIV}>
-                <img className="searchbar_iv_icon" src="/assets/icons/image.svg" alt="" />
-                <img className="searchbar_iv_icon" src="/assets/icons/film.svg" alt="" />
-            </SideSelector>
+            {sideContent}
             <form className="searchbar_context" onSubmit={onSubmit}>
                 <input className="searchbar_input_text"
                     type="text"
