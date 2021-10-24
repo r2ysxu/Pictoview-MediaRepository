@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { searchAlbums } from '../model/reducers/albumSlice';
 import Header from '../components/header/Header';
-import Albums from '../components/albums/Albums';
+import AlbumsContainer from '../components/albums/AlbumsContainer';
 import Container from '../components/container/Container';
 
 function AlbumPage(props) {
@@ -24,7 +24,7 @@ function AlbumPage(props) {
                 onSearchChange={setSearchInput}
                 onSearchSubmit={onSearch} />
             <Container isLoggedIn={loggedIn}>
-                <Albums
+                <AlbumsContainer
                     albumHistory={albumHistory}
                     setAlbumHistory={setAlbumHistory} />
             </Container>
