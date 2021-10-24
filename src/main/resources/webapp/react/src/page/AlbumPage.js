@@ -10,7 +10,7 @@ function AlbumPage(props) {
     const dispatch = useDispatch();
     const [loggedIn, setLoggedIn] = useState(false);
     const [searchInput, setSearchInput] = useState('');
-    const [albumHistory, setAlbumHistory] = useState([0]);
+    const [albumHistory, setAlbumHistory] = useState([{id: 0, name: ""}]);
 
     const onSearch = (query) => {
         dispatch(searchAlbums(query));

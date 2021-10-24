@@ -6,24 +6,20 @@ import SubAlbums from './subalbums/SubAlbums';
 import ImageMedia from './media/image_media/ImageMedia';
 import VideoMedia from './media/video_media/VideoMedia';
 import TabSelector from '../tab_selector/TabSelector';
+import Breadcrumbs from '../breadcrumbs/Breadcrumbs';
 import './AlbumsContainer.css';
 
 function AlbumsContainer({albumHistory, setAlbumHistory}) {
     const dispatch = useDispatch();
     const { albumId } = useSelector(selectAlbums);
 
-    const changeCurrentAlbum = (newAlbumId) => {
-        dispatch(loadCurrentAlbumInfo(newAlbumId));
-        setAlbumHistory([...albumHistory, newAlbumId]);
+    const changeAlbum = (id) => {
+        dispatch(loadCurrentAlbumInfo(id));
     }
 
-    const removeAlbumHistory = () => {
-        if (albumHistory.length > 1) {
-            albumHistory.pop();
-            const lastAlbumId = albumHistory[albumHistory.length - 1];
-            setAlbumHistory(albumHistory);
-            dispatch(loadCurrentAlbumInfo(lastAlbumId));
-        }
+    const changeCurrentAlbum = ({id, name}) => {
+        changeAlbum(id);
+        setAlbumHistory([...albumHistory, {id, name}]);
     }
 
     useEffect(()=> {
@@ -32,15 +28,21 @@ function AlbumsContainer({albumHistory, setAlbumHistory}) {
     }, [dispatch, albumId]);
 
     return (
-        <TabSelector tabs={[
+        <TabSelector
+            tabs={[
                 {label: "Albums"},
                 {label: "Images"},
                 {label: "Videos"},
                 {label: "Music", disabled: true},
-            ]}>
-            <SubAlbums
-                removeAlbumHistory={removeAlbumHistory}
-                changeCurrentAlbum={changeCurrentAlbum}/>
+            ]}
+            headerContent={
+                <Breadcrumbs
+                  initHistory={{id: 0, name: ""}}
+                  path={albumHistory}
+                  setHistory={setAlbumHistory}
+                  onChange={changeAlbum} />
+            }>
+            <SubAlbums changeCurrentAlbum={changeCurrentAlbum}/>
             <ImageMedia albumId={albumId} />
             <VideoMedia albumId={albumId} />
         </TabSelector>

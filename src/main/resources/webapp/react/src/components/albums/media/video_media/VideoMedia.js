@@ -20,7 +20,6 @@ function VideoMedia({albumId}) {
 
     return (
         <div>
-            {videoIds.length > 0 && <div><span className="video_media_prompt_text">Videos</span></div>}
             <ScrollLoader isLoading={isLoading} loadMore={loadMore} height={50} hasMore={hasMore}>
                 <div className="image_media_list">
                     {videoIds.map( (videoId, index) =>

@@ -21,7 +21,6 @@ function ImageMedia({albumId}) {
 
     return (
         <div>
-            {imageIds.length > 0 && <div><span className="image_media_prompt_text">Images</span></div>}
             <ScrollLoader isLoading={isLoading} loadMore={loadMore} height={50} hasMore={hasMore}>
                 <div className="image_media_list">
                     {imageIds.map( (imageId, index) =>

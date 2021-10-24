@@ -12,7 +12,7 @@ function TabSelector({headerContent, tabs, children}) {
             </div>
             <div className="tab_selector_tabs">
                 {tabs.map( (tab, index) => 
-                    <div className={"tab_selector_button " + 
+                    <div key={index} className={"tab_selector_button " + 
                             (tab.disabled === true ? "tab_selector_button_disabled " : " ") +
                             (selectedTabIndex === index ? "tab_selector_button_selected " : " ")}
                       onClick={() => {
@@ -24,7 +24,7 @@ function TabSelector({headerContent, tabs, children}) {
             </div>
             <div className="tab_selector_content">
                 {children.map( (child, index) => {
-                    return <div style={{display: index === selectedTabIndex ? 'block' : 'none'}}>{child}</div>
+                    return <div key={index} style={{display: index === selectedTabIndex ? 'block' : 'none'}}>{child}</div>
                 } )}
             </div>
         </div>

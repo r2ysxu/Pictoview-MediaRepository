@@ -29,7 +29,7 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
                 <h2>{album.name}</h2>
             </div>
             <div className="album_center_container">
-                <div className="album_wrapper" onClick={() => onChangeAlbum(album.id)}>
+                <div className="album_wrapper" onClick={() => onChangeAlbum({id: album.id, name: album.name})}>
                     <img className="album_image" src={'/album/image/cover?albumid=' + album.id} alt="" />
                 </div>
                 {showMoreInfo && <div className="album_info_container">
