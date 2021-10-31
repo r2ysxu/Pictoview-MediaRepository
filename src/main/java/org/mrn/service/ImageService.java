@@ -6,10 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import org.mrn.exceptions.AlbumNotFound;
-import org.mrn.jpa.model.album.MediaAlbumEntity;
+import org.mrn.jpa.model.album.AlbumEntity;
 import org.mrn.jpa.model.album.ImageMediaEntity;
 import org.mrn.jpa.model.user.UserEntity;
-import org.mrn.jpa.repo.MediaAlbumRepo;
+import org.mrn.jpa.repo.AlbumRepo;
 import org.mrn.jpa.repo.ImageMediaRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,12 +22,12 @@ public class ImageService {
 	private String adminCoverSource;
 
 	@Autowired
-	private MediaAlbumRepo imageAlbumRepo;
+	private AlbumRepo imageAlbumRepo;
 	@Autowired
 	private ImageMediaRepo imageMediaRepo;
 
 	public InputStream fetchCoverPhotoStream(UserEntity owner, Long albumId) throws FileNotFoundException, AlbumNotFound {
-		MediaAlbumEntity album = imageAlbumRepo.findByOwnerAndId(owner, albumId);
+		AlbumEntity album = imageAlbumRepo.findByOwnerAndId(owner, albumId);
 		if (album == null)
 			throw new AlbumNotFound(owner, albumId);
 		ImageMediaEntity imageMedia = imageMediaRepo.findFirstByAlbumOrderByNameAsc(album);

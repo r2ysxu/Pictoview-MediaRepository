@@ -24,11 +24,11 @@ public class MediaEntity implements EntityModel {
 	@Column
 	private String source;
 	@ManyToOne
-	private MediaAlbumEntity album;
+	private AlbumEntity album;
 
 	public MediaEntity() {}
 
-	public MediaEntity(UserEntity owner, String source, String name, MediaAlbumEntity album) {
+	public MediaEntity(UserEntity owner, String source, String name, AlbumEntity album) {
 		this.owner = owner;
 		this.source = source;
 		this.name = name;
@@ -63,11 +63,11 @@ public class MediaEntity implements EntityModel {
 		this.source = source;
 	}
 
-	public MediaAlbumEntity getAlbum() {
+	public AlbumEntity getAlbum() {
 		return album;
 	}
 
-	public void setAlbum(MediaAlbumEntity album) {
+	public void setAlbum(AlbumEntity album) {
 		this.album = album;
 	}
 

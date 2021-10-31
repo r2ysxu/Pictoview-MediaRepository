@@ -14,7 +14,7 @@ import org.mrn.jpa.model.user.UserEntity;
 import org.mrn.query.model.MediaItem;
 import org.mrn.query.model.PageItems;
 import org.mrn.service.ImageService;
-import org.mrn.service.MediaAlbumService;
+import org.mrn.service.AlbumService;
 import org.mrn.utils.ImageStreamUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +36,7 @@ public class ImageController extends BaseController {
 	@Autowired
 	private ImageService imageService;
 	@Autowired
-	private MediaAlbumService mediaAlbumService;
+	private AlbumService mediaAlbumService;
 
 	@ResponseBody
 	@GetMapping(value = "/album/images/list", produces = MediaType.APPLICATION_JSON_VALUE)

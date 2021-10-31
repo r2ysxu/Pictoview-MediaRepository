@@ -18,12 +18,17 @@ const initialState = {
     isLoading: false,
 }
 
-export const searchAlbums = createAsyncThunk('album/search', async (query) => {
-    const albums = await get_searchAlbums(query);
+export const searchAlbums = createAsyncThunk('album/search', async (query, thunkAPI) => {
+    const currentState = thunkAPI.getState().album;
+    const page = 0;
+    const albums = await get_searchAlbums(page, query);
     return {
         albumId: 0,
-        albums,
+        albums: albums.items,
         albumsPage: 0,
+        albumsTotal: albums.pageInfo.total,
+        images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
+        videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
     };
 });
 

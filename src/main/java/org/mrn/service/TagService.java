@@ -8,13 +8,13 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.mrn.jpa.model.album.MediaAlbumEntity;
+import org.mrn.jpa.model.album.AlbumEntity;
 import org.mrn.jpa.model.tags.AlbumTagEntity;
 import org.mrn.jpa.model.tags.CategoryEntity;
 import org.mrn.jpa.model.tags.TagEntity;
+import org.mrn.jpa.repo.AlbumRepo;
 import org.mrn.jpa.repo.AlbumTagRepo;
 import org.mrn.jpa.repo.CategoryRepo;
-import org.mrn.jpa.repo.MediaAlbumRepo;
 import org.mrn.jpa.repo.TagRepo;
 import org.mrn.query.model.AlbumTag;
 import org.mrn.query.model.Category;
@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TagService {
 
 	@Autowired
-	private MediaAlbumRepo imageAlbumRepo;
+	private AlbumRepo imageAlbumRepo;
 	@Autowired
 	private CategoryRepo categoryRepo;
 	@Autowired
@@ -72,7 +72,7 @@ public class TagService {
 
 	@Transactional
 	public void tagAlbum(AlbumTag albumTag) {
-		MediaAlbumEntity imageAlbum = imageAlbumRepo.findById(albumTag.getAlbumId()).get();
+		AlbumEntity imageAlbum = imageAlbumRepo.findById(albumTag.getAlbumId()).get();
 		Set<Long> categoryIds = albumTag.getCategories().stream().map(Category::getId).collect(Collectors.toSet());
 		List<TagEntity> tags = persistTags(albumTag);
 

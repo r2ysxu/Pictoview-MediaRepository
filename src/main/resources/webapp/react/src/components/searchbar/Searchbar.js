@@ -6,7 +6,6 @@ function Searchbar({onSearch, searchInput, onSearchChange, sideContent}) {
 
     const onSubmit = (event) => {
         event.preventDefault();
-        console.log(searchInput);
         onSearch(searchInput);
         onSearchChange('');
         return false;

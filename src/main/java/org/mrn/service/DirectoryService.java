@@ -14,7 +14,6 @@ import org.mrn.filemanager.ThumbnailDirectoryManager;
 import org.mrn.filemanager.ThumbnailFile;
 import org.mrn.jpa.model.album.AlbumEntity;
 import org.mrn.jpa.model.album.ImageMediaEntity;
-import org.mrn.jpa.model.album.MediaAlbumEntity;
 import org.mrn.jpa.model.album.VideoMediaEntity;
 import org.mrn.jpa.model.file.DirectoryAddedEntity;
 import org.mrn.jpa.model.tags.AlbumTagEntity;
@@ -22,11 +21,11 @@ import org.mrn.jpa.model.tags.Categories;
 import org.mrn.jpa.model.tags.CategoryEntity;
 import org.mrn.jpa.model.tags.TagEntity;
 import org.mrn.jpa.model.user.EndUserEntity;
+import org.mrn.jpa.repo.AlbumRepo;
 import org.mrn.jpa.repo.AlbumTagRepo;
 import org.mrn.jpa.repo.CategoryRepo;
 import org.mrn.jpa.repo.DirectoryAddedRepo;
 import org.mrn.jpa.repo.ImageMediaRepo;
-import org.mrn.jpa.repo.MediaAlbumRepo;
 import org.mrn.jpa.repo.TagRepo;
 import org.mrn.jpa.repo.VideoMediaRepo;
 import org.mrn.query.model.ScannedDirectory;
@@ -48,7 +47,7 @@ public class DirectoryService {
 	@Autowired
 	private DirectoryAddedRepo directoryRepo;
 	@Autowired
-	private MediaAlbumRepo mediaAlbumRepo;
+	private AlbumRepo mediaAlbumRepo;
 	@Autowired
 	private TagRepo tagRepo;
 	@Autowired
@@ -88,7 +87,7 @@ public class DirectoryService {
 		return new ScannedDirectory(new ThumbnailDirectory(directory.getAbsolutePath(), directory.getName()), true);
 	}
 
-	public List<ImageMediaEntity> addImages(EndUserEntity user, String currentPath, MediaAlbumEntity album) throws IOException {
+	public List<ImageMediaEntity> addImages(EndUserEntity user, String currentPath, AlbumEntity album) throws IOException {
 		ThumbnailDirectoryManager manager = new ThumbnailDirectoryManager(adminSource);
 		List<ThumbnailFile> imageFiles = manager.listImageFiles(currentPath);
 		List<ImageMediaEntity> imageMedia = new ArrayList<>(imageFiles.size());
@@ -100,7 +99,7 @@ public class DirectoryService {
 		return photos;
 	}
 	
-	public List<VideoMediaEntity> addVideos(EndUserEntity user, String currentPath, MediaAlbumEntity album) throws IOException {
+	public List<VideoMediaEntity> addVideos(EndUserEntity user, String currentPath, AlbumEntity album) throws IOException {
 		ThumbnailDirectoryManager manager = new ThumbnailDirectoryManager(adminSource);
 		List<ThumbnailFile> videoFiles = manager.listVideoFiles(currentPath);
 		List<VideoMediaEntity> videoMedia = new ArrayList<>(videoFiles.size());
@@ -112,7 +111,7 @@ public class DirectoryService {
 		return videos;
 	}
 
-	public Iterable<ImageMediaEntity> createImageThumbnails(MediaAlbumEntity album, List<ImageMediaEntity> images) throws IOException {
+	public Iterable<ImageMediaEntity> createImageThumbnails(AlbumEntity album, List<ImageMediaEntity> images) throws IOException {
 		for (ImageMediaEntity image : images) {
 			image.setThumbnailSource(
 					adminThumbnailSource + album.getId() + "/" + image.getId() + image.getTypeExtension());
@@ -121,11 +120,11 @@ public class DirectoryService {
 		return imageMediaRepo.saveAll(images);
 	}
 
-	public static String generateCoverPhotoFileSource(String base, MediaAlbumEntity album, ImageMediaEntity imageMedia) {
+	public static String generateCoverPhotoFileSource(String base, AlbumEntity album, ImageMediaEntity imageMedia) {
 		return base + album.getId() + "_" + imageMedia.getId() + imageMedia.getTypeExtension();
 	}
 
-	public MediaAlbumEntity setAlbumCoverPhoto(MediaAlbumEntity album) throws IOException {
+	public AlbumEntity setAlbumCoverPhoto(AlbumEntity album) throws IOException {
 		ImageMediaEntity imageMedia = imageMediaRepo.findFirstByAlbumOrderByNameAsc(album);
 		AlbumFileManager.createCoverPhotoFile(imageMedia.getSource(),
 				generateCoverPhotoFileSource(adminCoverSource, album, imageMedia));
@@ -146,7 +145,7 @@ public class DirectoryService {
 		return albumPublisher;
 	}
 
-	public MediaAlbumEntity addImageDirectory(EndUserEntity user, String currentPath, String name) {
+	public AlbumEntity addImageDirectory(EndUserEntity user, String currentPath, String name) {
 		if (!StringUtils.hasLength(name))
 			return null;
 
@@ -156,7 +155,7 @@ public class DirectoryService {
 		File currentPathFile = new File(adminSource + currentPath);
 		String parentPath = new File(currentPathFile.getParent()).getAbsolutePath();
 
-		MediaAlbumEntity imageAlbum = new MediaAlbumEntity(user, name, "");
+		AlbumEntity imageAlbum = new AlbumEntity(user, name, "");
 		imageAlbum.setSubtitle(albumPublisher.getName());
 		imageAlbum = mediaAlbumRepo.save(imageAlbum);
 

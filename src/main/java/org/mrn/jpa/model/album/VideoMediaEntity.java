@@ -17,7 +17,7 @@ public class VideoMediaEntity extends MediaEntity implements EntityModel {
 	
 	public VideoMediaEntity() {}
 	
-	public VideoMediaEntity(UserEntity owner, String source, String name, MediaType type, MediaAlbumEntity album) {
+	public VideoMediaEntity(UserEntity owner, String source, String name, MediaType type, AlbumEntity album) {
 		super(owner, source, name, album);
 		this.type = type;
 	}

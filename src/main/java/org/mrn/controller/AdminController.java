@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import org.mrn.exceptions.UnauthenticatedUserException;
+import org.mrn.jpa.model.album.AlbumEntity;
 import org.mrn.jpa.model.album.ImageMediaEntity;
-import org.mrn.jpa.model.album.MediaAlbumEntity;
 import org.mrn.jpa.model.user.EndUserEntity;
 import org.mrn.query.model.ScannedDirectory;
 import org.mrn.service.DirectoryService;
@@ -47,7 +47,7 @@ public class AdminController extends BaseController {
 	public ScannedDirectory addImageAlbum(@RequestBody Path currentPath)
 			throws UnauthenticatedUserException, IOException {
 		EndUserEntity user = getUser();
-		MediaAlbumEntity mediaAlbum = directoryService.addImageDirectory(user, currentPath.getPath(), currentPath.getName());
+		AlbumEntity mediaAlbum = directoryService.addImageDirectory(user, currentPath.getPath(), currentPath.getName());
 		List<ImageMediaEntity> imageMedia = directoryService.addImages(user, currentPath.getPath(), mediaAlbum);
 		directoryService.createImageThumbnails(mediaAlbum, imageMedia);
 		directoryService.addVideos(user, currentPath.getPath(), mediaAlbum);

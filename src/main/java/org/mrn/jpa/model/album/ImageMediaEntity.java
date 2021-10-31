@@ -20,7 +20,7 @@ public class ImageMediaEntity extends MediaEntity implements EntityModel {
 	public ImageMediaEntity() {
 	}
 
-	public ImageMediaEntity(UserEntity owner, String source, String name, MediaType type, MediaAlbumEntity album) {
+	public ImageMediaEntity(UserEntity owner, String source, String name, MediaType type, AlbumEntity album) {
 		super(owner, source, name, album);
 		this.type = type;
 	}

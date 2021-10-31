@@ -4,7 +4,7 @@ import org.mrn.exceptions.UnauthenticatedUserException;
 import org.mrn.jpa.model.user.EndUserEntity;
 import org.mrn.query.model.MediaItem;
 import org.mrn.query.model.PageItems;
-import org.mrn.service.MediaAlbumService;
+import org.mrn.service.AlbumService;
 import org.mrn.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -27,7 +27,7 @@ public class VideoController extends BaseController {
 	@Autowired
 	private VideoService videoService;
 	@Autowired
-	private MediaAlbumService mediaAlbumService;
+	private AlbumService mediaAlbumService;
 
 	@ResponseBody
 	@GetMapping(value = "/album/videos/list", produces = MediaType.APPLICATION_JSON_VALUE)

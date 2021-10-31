@@ -1,17 +1,14 @@
 package org.mrn.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.mrn.jpa.model.album.AlbumEntity;
 import org.mrn.jpa.model.album.ImageMediaEntity;
-import org.mrn.jpa.model.album.MediaAlbumEntity;
 import org.mrn.jpa.model.album.VideoMediaEntity;
 import org.mrn.jpa.model.tags.SearchQuery;
 import org.mrn.jpa.model.user.UserEntity;
 import org.mrn.jpa.repo.AlbumRepo;
 import org.mrn.jpa.repo.ImageMediaRepo;
-import org.mrn.jpa.repo.MediaAlbumRepo;
 import org.mrn.jpa.repo.VideoMediaRepo;
 import org.mrn.query.model.Album;
 import org.mrn.query.model.MediaItem;
@@ -26,26 +23,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MediaAlbumService {
+public class AlbumService {
 
 	@Autowired
-	private AlbumRepo albumRepo;
-	@Autowired
-	private MediaAlbumRepo mediaAlbumRepo;
+	private AlbumRepo mediaAlbumRepo;
 	@Autowired
 	private ImageMediaRepo imageMediaRepo;
 	@Autowired
 	private VideoMediaRepo videoMediaRepo;
 
-	public List<Album> searchMediaAlbum(UserEntity user, SearchQuery searchQuery, Pageable pageable) {
-		List<AlbumEntity> albums = albumRepo.searchAlbums(user, searchQuery, pageable);
-		List<Long> ids = albums.stream().map(AlbumEntity::getId).collect(Collectors.toList());
-
-		return AlbumBuilder.buildFrom(mediaAlbumRepo.findAllById(ids));
+	public PageItems<Album> searchMediaAlbum(UserEntity user, SearchQuery searchQuery, Pageable pageable) {
+		Page<AlbumEntity> albums = mediaAlbumRepo.searchAlbums(user, searchQuery, pageable);
+		return new PageItemBuilder<Album, AlbumEntity>().build(albums, new AlbumBuilder());
 	}
 
 	public List<Album> listMediaAlbums(UserEntity user, Long parentId, Pageable pageable) {
-		Iterable<MediaAlbumEntity> albums;
+		Iterable<AlbumEntity> albums;
 		if (parentId == null || parentId < 1) albums = mediaAlbumRepo.findAllByOwner(user, pageable);
 		else albums = mediaAlbumRepo.findAllByOwnerAndParent_Id(user, parentId, pageable);
 		return AlbumBuilder.buildFrom(albums);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,7 +17,7 @@ import org.mrn.jpa.model.tags.AlbumTagEntity;
 import org.mrn.jpa.model.user.UserEntity;
 
 @Entity
-public abstract class AlbumEntity implements EntityModel {
+public class AlbumEntity implements EntityModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +30,16 @@ public abstract class AlbumEntity implements EntityModel {
 	private AlbumEntity parent;
 	@OneToMany
 	private List<AlbumTagEntity> albumTags;
+	@Column
+	private String subtitle;
+	@Column
+	private String description;
+	@Column
+	private String metaType;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private ImageMediaEntity coverPhoto;
+	@OneToMany
+	private List<MediaEntity> media;
 
 	protected AlbumEntity() {
 	}
@@ -36,6 +47,11 @@ public abstract class AlbumEntity implements EntityModel {
 	protected AlbumEntity(UserEntity owner, String name) {
 		this.owner = owner;
 		this.name = name;
+	}
+	
+	public AlbumEntity(UserEntity owner, String name, String description) {
+		this(owner, name);
+		this.description = description;
 	}
 
 	public Long getId() {
@@ -66,6 +82,51 @@ public abstract class AlbumEntity implements EntityModel {
 
 	public AlbumEntity setParent(AlbumEntity parent) {
 		this.parent = parent;
+		return this;
+	}
+
+	public String getSubtitle() {
+		return subtitle;
+	}
+
+	public AlbumEntity setSubtitle(String subtitle) {
+		this.subtitle = subtitle;
+		return this;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public AlbumEntity setDescription(String description) {
+		this.description = description;
+		return this;
+	}
+
+	public String getMetaType() {
+		return metaType;
+	}
+
+	public AlbumEntity setMetaType(String metaType) {
+		this.metaType = metaType;
+		return this;
+	}
+
+	public ImageMediaEntity getCoverPhoto() {
+		return coverPhoto;
+	}
+
+	public AlbumEntity setCoverPhoto(ImageMediaEntity coverPhoto) {
+		this.coverPhoto = coverPhoto;
+		return this;
+	}
+
+	public List<MediaEntity> getMedia() {
+		return media;
+	}
+
+	public AlbumEntity setMedia(List<MediaEntity> media) {
+		this.media = media;
 		return this;
 	}
 

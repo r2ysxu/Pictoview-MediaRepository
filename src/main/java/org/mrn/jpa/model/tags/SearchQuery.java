@@ -1,7 +1,6 @@
 package org.mrn.jpa.model.tags;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +23,6 @@ public class SearchQuery {
 	public static SearchQuery parse(String query) {
 		Pattern splitSpaceRegex = Pattern.compile(" (?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)");
 		String[] tokens = query.split(splitSpaceRegex.pattern());
-		System.out.println(Arrays.asList(tokens));
 		return new SearchQuery(tokens);
 	}
 
@@ -56,7 +54,6 @@ public class SearchQuery {
 				names.add(token);
 			}
 		}
-		System.out.println("map " + tags);
 		this.name = String.join(SPACE_DELIMITER, names);
 	}
 
