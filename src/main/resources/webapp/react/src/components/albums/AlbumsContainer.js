@@ -24,7 +24,6 @@ function AlbumsContainer({albumHistory, setAlbumHistory}) {
 
     useEffect(()=> {
         dispatch(loadCurrentAlbumInfo(albumId));
-        dispatch(loadMoreImages({page: 1, albumId}));
     }, [dispatch, albumId]);
 
     const tabs = [
