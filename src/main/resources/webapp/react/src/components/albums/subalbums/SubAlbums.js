@@ -13,7 +13,7 @@ function SubAlbums({changeCurrentAlbum}) {
     return (
         <div className="albums_container">
             <div className="albums_albums_container">
-                {albums.map( album => <Album
+                {(albums.items || []).map( album => <Album
                     key={album.id}
                     album={album}
                     onChangeAlbum={changeCurrentAlbum}

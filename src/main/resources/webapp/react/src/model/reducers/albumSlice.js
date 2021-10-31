@@ -6,12 +6,7 @@ const pendingMoreRequests = new Set();
 
 const initialState = {
     albumId: 0,
-
-    albums: [],
-    albumsPage: 0,
-    albumsTotal: 0,
-    albumsHasMore: true,
-
+    albums: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
     images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
     videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
 
@@ -24,11 +19,7 @@ export const searchAlbums = createAsyncThunk('album/search', async (query, thunk
     const albums = await get_searchAlbums(page, query);
     return {
         albumId: 0,
-        albums: albums.items,
-        albumsPage: 0,
-        albumsTotal: albums.pageInfo.total,
-        images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
-        videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
+        albums
     };
 });
 
@@ -40,11 +31,15 @@ export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async (albumI
     return {
         albumId,
         albums,
-        albumPage: 0,
-        albumsHasMore: true,
         images,
         videos,
     };
+});
+
+export const loadMoreAlbums = createAsyncThunk('album/load', async (albumId, thunkAPI) => {
+    const currentState = thunkAPI.getState().album;
+    const albumsPage = await get_fetchAlbums(currentState.albums.pageInfo.page + 1, albumId);
+    return { albumsPage }
 });
 
 export const loadMoreImages = createAsyncThunk('album/load/image/more', async (_value, thunkAPI) => {
@@ -96,10 +91,12 @@ export const albumSlice = createSlice({
     reducers: {},
     extraReducers(builder) {
         builder
-            .addCase(loadCurrentAlbumInfo.pending, (state,  action) => {
-            }).addCase(loadCurrentAlbumInfo.fulfilled, (state, action) => {
-                Object.assign(state, action.payload);
+              .addCase(loadCurrentAlbumInfo.fulfilled, (state, action) => {
+                Object.assign(state,action.payload);
                 state.isLoading = false;
+            }).addCase(loadCurrentAlbumInfo.pending, (state,  action) => {
+                pendingMoreRequests.add(action.meta.requestId);
+                state.isLoading = true;
             }).addCase(searchAlbums.fulfilled, (state, action) => {
                 Object.assign(state, action.payload);
                 state.isLoading = false;

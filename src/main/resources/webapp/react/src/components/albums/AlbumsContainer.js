@@ -11,7 +11,7 @@ import './AlbumsContainer.css';
 
 function AlbumsContainer({albumHistory, setAlbumHistory}) {
     const dispatch = useDispatch();
-    const { albumId, images, videos } = useSelector(selectAlbums);
+    const { albumId, albums, images, videos } = useSelector(selectAlbums);
 
     const changeAlbum = (id) => {
         dispatch(loadCurrentAlbumInfo(id));
@@ -28,7 +28,7 @@ function AlbumsContainer({albumHistory, setAlbumHistory}) {
     }, [dispatch, albumId]);
 
     const tabs = [
-        {label: "Albums"},
+        {label: "Albums", badgeLabel: albums.pageInfo.total},
         {label: "Images", badgeLabel: images.pageInfo.total},
         {label: "Videos", badgeLabel: videos.pageInfo.total},
         {label: "Music", disabled: true},

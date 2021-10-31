@@ -1,7 +1,5 @@
 package org.mrn.controller;
 
-import java.util.List;
-
 import org.mrn.exceptions.UnauthenticatedUserException;
 import org.mrn.jpa.model.tags.SearchQuery;
 import org.mrn.jpa.model.user.EndUserEntity;
@@ -43,7 +41,7 @@ public class AlbumController extends BaseController {
 
 	@ResponseBody
 	@GetMapping(value = "/album/list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Album> listAlbums(@RequestParam(name = "parentId") Long parentId, @RequestParam(name = "page") Integer page)
+	public PageItems<Album> listAlbums(@RequestParam(name = "parentId") Long parentId, @RequestParam(name = "page") Integer page)
 			throws UnauthenticatedUserException {
 		EndUserEntity user = getUser();
 		Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.unsorted());

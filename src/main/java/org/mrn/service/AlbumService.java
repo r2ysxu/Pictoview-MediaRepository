@@ -1,7 +1,5 @@
 package org.mrn.service;
 
-import java.util.List;
-
 import org.mrn.jpa.model.album.AlbumEntity;
 import org.mrn.jpa.model.album.ImageMediaEntity;
 import org.mrn.jpa.model.album.VideoMediaEntity;
@@ -37,11 +35,11 @@ public class AlbumService {
 		return new PageItemBuilder<Album, AlbumEntity>().build(albums, new AlbumBuilder());
 	}
 
-	public List<Album> listMediaAlbums(UserEntity user, Long parentId, Pageable pageable) {
-		Iterable<AlbumEntity> albums;
+	public PageItems<Album> listMediaAlbums(UserEntity user, Long parentId, Pageable pageable) {
+		Page<AlbumEntity> albums;
 		if (parentId == null || parentId < 1) albums = mediaAlbumRepo.findAllByOwner(user, pageable);
 		else albums = mediaAlbumRepo.findAllByOwnerAndParent_Id(user, parentId, pageable);
-		return AlbumBuilder.buildFrom(albums);
+		return new PageItemBuilder<Album, AlbumEntity>().build(albums, new AlbumBuilder());
 	}
 
 	public PageItems<MediaItem> listImageMedia(UserEntity user, Long albumId, Pageable pageable) {
