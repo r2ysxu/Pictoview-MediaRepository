@@ -8,13 +8,13 @@ import '../AlbumsContainer.css';
 
 const Tab = { Album: 'Album', Images: 'Images', Video: 'Video', Music: 'Music' };
 
-function SubAlbums({changeCurrentAlbum}) {
+function SubAlbums({albumId, changeCurrentAlbum}) {
     const dispatch = useDispatch();
     const { albums } = useSelector(selectAlbums);
     const isLoading = useSelector((state) => state.album.isLoading);
 
     const loadMore = () => {
-        if (!isLoading) dispatch(loadMoreAlbums());
+        if (!isLoading) dispatch(loadMoreAlbums({albumId, page: albums.pageInfo.page + 1}));
     }
 
     return (

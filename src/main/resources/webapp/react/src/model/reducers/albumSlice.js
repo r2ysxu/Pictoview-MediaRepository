@@ -36,21 +36,18 @@ export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async (albumI
     };
 });
 
-export const loadMoreAlbums = createAsyncThunk('album/load', async (albumId, thunkAPI) => {
-    const currentState = thunkAPI.getState().album;
-    const albumsPage = await get_fetchAlbums(currentState.albums.pageInfo.page + 1, albumId);
+export const loadMoreAlbums = createAsyncThunk('album/load', async ({albumId, page}) => {
+    const albumsPage = await get_fetchAlbums(page, albumId);
     return { albumsPage }
 });
 
-export const loadMoreImages = createAsyncThunk('album/load/image/more', async (_value, thunkAPI) => {
-    const currentState = thunkAPI.getState().album;
-    const imagesPage = await get_listAlbumImages(currentState.images.pageInfo.page + 1, currentState.albumId);
+export const loadMoreImages = createAsyncThunk('album/load/image/more', async ({albumId, page}) => {
+    const imagesPage = await get_listAlbumImages(page, albumId);
     return { imagesPage };
 });
 
-export const loadMoreVideos = createAsyncThunk('album/load/video/more', async (_value, thunkAPI) => {
-    const currentState = thunkAPI.getState().album;
-    const videosPage = await get_listAlbumVideos(currentState.videos.pageInfo.page + 1, currentState.albumId);
+export const loadMoreVideos = createAsyncThunk('album/load/video/more', async ({albumId, page}) => {
+    const videosPage = await get_listAlbumVideos(page, albumId);
     return { videosPage }
 });
 

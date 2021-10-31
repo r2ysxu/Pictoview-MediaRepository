@@ -13,7 +13,7 @@ function VideoMedia({albumId}) {
     const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
 
     const loadMore = () => {
-        if (!isLoading) dispatch(loadMoreVideos());
+        if (!isLoading) dispatch(loadMoreVideos({albumId, page: videos.pageInfo.page + 1}));
     }
 
     return (

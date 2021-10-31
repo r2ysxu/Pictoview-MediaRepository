@@ -43,7 +43,7 @@ function AlbumsContainer({albumHistory, setAlbumHistory}) {
                   setHistory={setAlbumHistory}
                   onChange={changeAlbum} />
             }>
-            <SubAlbums changeCurrentAlbum={changeCurrentAlbum}/>
+            <SubAlbums albumId={albumId} changeCurrentAlbum={changeCurrentAlbum}/>
             <ImageMedia albumId={albumId} />
             <VideoMedia albumId={albumId} />
         </TabSelector>

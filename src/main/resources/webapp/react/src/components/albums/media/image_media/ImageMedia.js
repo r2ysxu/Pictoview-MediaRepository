@@ -14,7 +14,7 @@ function ImageMedia({albumId}) {
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
     const loadMore = () => {
-        if (!isLoading) dispatch(loadMoreImages());
+        if (!isLoading) dispatch(loadMoreImages({albumId, page: images.pageInfo.page + 1}));
     }
 
     return (
