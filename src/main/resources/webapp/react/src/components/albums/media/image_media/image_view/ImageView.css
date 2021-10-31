@@ -3,13 +3,9 @@
 }
 
 .image_view_image_container {
-	position: fixed;
-	height: 100%;
-    top: calc(50% + 66px);
-    left: 0;
-    right: 0;
-    margin: 0;
-    text-align: center;
+    position: relative;
+    height: 100%;
+    width: 100%;
 }
 
 .image_view_image {

@@ -27,14 +27,16 @@ function AlbumsContainer({albumHistory, setAlbumHistory}) {
         dispatch(loadMoreImages({page: 1, albumId}));
     }, [dispatch, albumId]);
 
+    const tabs = [
+        {label: "Albums"},
+        {label: "Images", badgeLabel: images.pageInfo.total},
+        {label: "Videos", badgeLabel: videos.pageInfo.total},
+        {label: "Music", disabled: true},
+    ]
+
     return (
         <TabSelector
-            tabs={[
-                {label: "Albums"},
-                {label: "Images", badgeLabel: images.pageInfo.total},
-                {label: "Videos", badgeLabel: videos.pageInfo.total},
-                {label: "Music", disabled: true},
-            ]}
+            tabs={tabs}
             headerContent={
                 <Breadcrumbs
                   initHistory={{id: 0, name: ""}}

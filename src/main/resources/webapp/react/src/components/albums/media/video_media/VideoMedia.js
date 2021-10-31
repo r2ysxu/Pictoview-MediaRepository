@@ -22,7 +22,7 @@ function VideoMedia({albumId}) {
                 <div className="image_media_list">
                     {videos.items.map( (video, index) =>
                         <div key={video.id} className="video_media_container" onClick={() => {setSelectedVideoIndex(index)} }>
-                            <img src="/assets/icons/film.svg" alt={'video ' + video.id} title={video.name} />
+                            <img src="/assets/icons/play-circle.svg" alt={'video ' + video.id} title={video.name} />
                         </div>
                 )}
                 </div>

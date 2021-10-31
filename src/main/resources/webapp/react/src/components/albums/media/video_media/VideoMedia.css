@@ -1,0 +1,21 @@
+.video_media_container {
+	position: relative;
+	height: 150px;
+	width: 150px;
+	margin: 15px;
+	background-color: rgba(255,255,255,60%);
+}
+
+.video_media_container > img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	margin: auto;
+	height: 100px;
+}
+
+.video_media_container > img:hover {
+	filter: invert(50%);
+}
