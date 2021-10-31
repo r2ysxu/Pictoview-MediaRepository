@@ -1,9 +1,9 @@
 package org.mrn.controller;
 
-import java.util.List;
-
 import org.mrn.exceptions.UnauthenticatedUserException;
 import org.mrn.jpa.model.user.EndUserEntity;
+import org.mrn.query.model.MediaItem;
+import org.mrn.query.model.PageItems;
 import org.mrn.service.MediaAlbumService;
 import org.mrn.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class VideoController extends BaseController {
 
 	@ResponseBody
 	@GetMapping(value = "/album/videos/list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Long> listVideos(@RequestParam(name = "albumId") Long albumId,
+	public PageItems<MediaItem> listVideos(@RequestParam(name = "albumId") Long albumId,
 			@RequestParam(name = "page") Integer page) throws UnauthenticatedUserException {
 		EndUserEntity user = getUser();
 		Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.unsorted());

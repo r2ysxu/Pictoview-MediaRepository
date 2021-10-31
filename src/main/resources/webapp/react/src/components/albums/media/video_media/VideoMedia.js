@@ -8,10 +8,8 @@ import './VideoMedia.css';
 
 function VideoMedia({albumId}) {
     const dispatch = useDispatch();
-    const { videoIds } = useSelector(selectAlbums);
+    const { videos } = useSelector(selectAlbums);
     const isLoading = useSelector((state) => state.album.isLoading);
-    const hasMore = useSelector((state) => state.album.videoIdsHasMore);
-    const [page, setPage] = useState(0);
     const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
 
     const loadMore = () => {
@@ -20,17 +18,17 @@ function VideoMedia({albumId}) {
 
     return (
         <div>
-            <ScrollLoader isLoading={isLoading} loadMore={loadMore} height={50} hasMore={hasMore}>
+            <ScrollLoader isLoading={isLoading} loadMore={loadMore} height={50} hasMore={videos.pageInfo.hasNext}>
                 <div className="image_media_list">
-                    {videoIds.map( (videoId, index) =>
-                        <div key={videoId} className="video_media_container" onClick={() => {setSelectedVideoIndex(index)} }>
-                            <img src="/assets/icons/film.svg" alt={'video ' + videoId} />
+                    {videos.items.map( (video, index) =>
+                        <div key={video.id} className="video_media_container" onClick={() => {setSelectedVideoIndex(index)} }>
+                            <img src="/assets/icons/film.svg" alt={'video ' + video.id} title={video.name} />
                         </div>
                 )}
                 </div>
             </ScrollLoader>
             <VideoView
-                videoIds={videoIds}
+                videoItems={videos.items}
                 selectedIndex={selectedVideoIndex}
                 onSelectIndex={setSelectedVideoIndex} />
         </div>

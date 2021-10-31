@@ -14,8 +14,14 @@ import org.mrn.jpa.repo.ImageMediaRepo;
 import org.mrn.jpa.repo.MediaAlbumRepo;
 import org.mrn.jpa.repo.VideoMediaRepo;
 import org.mrn.query.model.Album;
+import org.mrn.query.model.MediaItem;
+import org.mrn.query.model.PageItems;
 import org.mrn.service.builder.AlbumBuilder;
+import org.mrn.service.builder.ImageMediaItemBuilder;
+import org.mrn.service.builder.PageItemBuilder;
+import org.mrn.service.builder.VideoMediaItemBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -45,13 +51,13 @@ public class MediaAlbumService {
 		return AlbumBuilder.buildFrom(albums);
 	}
 
-	public List<Long> listImageMedia(UserEntity user, Long albumId, Pageable pageable) {
-		List<ImageMediaEntity> imageMedia = imageMediaRepo.findAllByOwnerAndAlbum_Id(user, albumId, pageable);
-		return imageMedia.stream().map(image -> image.getId()).collect(Collectors.toList());
+	public PageItems<MediaItem> listImageMedia(UserEntity user, Long albumId, Pageable pageable) {
+		Page<ImageMediaEntity> imageMedia = imageMediaRepo.findAllByOwnerAndAlbum_Id(user, albumId, pageable);
+		return new PageItemBuilder<MediaItem, ImageMediaEntity>().build(imageMedia, new ImageMediaItemBuilder());
 	}
-	
-	public List<Long> listVideoMedia(UserEntity user, Long albumId, Pageable pageable) {
-		List<VideoMediaEntity> videoMedia = videoMediaRepo.findAllByOwnerAndAlbum_Id(user, albumId, pageable);
-		return videoMedia.stream().map(video -> video.getId()).collect(Collectors.toList());
+
+	public PageItems<MediaItem> listVideoMedia(UserEntity user, Long albumId, Pageable pageable) {
+		Page<VideoMediaEntity> videoMedia = videoMediaRepo.findAllByOwnerAndAlbum_Id(user, albumId, pageable);
+		return new PageItemBuilder<MediaItem, VideoMediaEntity>().build(videoMedia, new VideoMediaItemBuilder());
 	}
 }

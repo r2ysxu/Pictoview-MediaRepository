@@ -3,7 +3,6 @@ package org.mrn.controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
@@ -12,6 +11,8 @@ import org.mrn.exceptions.AlbumNotFound;
 import org.mrn.exceptions.UnauthenticatedUserException;
 import org.mrn.jpa.model.user.EndUserEntity;
 import org.mrn.jpa.model.user.UserEntity;
+import org.mrn.query.model.MediaItem;
+import org.mrn.query.model.PageItems;
 import org.mrn.service.ImageService;
 import org.mrn.service.MediaAlbumService;
 import org.mrn.utils.ImageStreamUtils;
@@ -39,7 +40,7 @@ public class ImageController extends BaseController {
 
 	@ResponseBody
 	@GetMapping(value = "/album/images/list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Long> listPhotos(@RequestParam(name = "albumId") Long albumId,
+	public PageItems<MediaItem> listPhotos(@RequestParam(name = "albumId") Long albumId,
 			@RequestParam(name = "page") Integer page) throws UnauthenticatedUserException {
 		EndUserEntity user = getUser();
 		Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.unsorted());

@@ -2,7 +2,7 @@ import React from 'react';
 import ImageViewControls from './image_view_controls/ImageViewControls';
 import './ImageView.css';
 
-function ImageView({imageIds, selectedIndex, onSelectIndex}) {
+function ImageView({imageItems, selectedIndex, onSelectIndex}) {
 
 	const onCloseModal = () => {
 		onSelectIndex(null);
@@ -12,9 +12,9 @@ function ImageView({imageIds, selectedIndex, onSelectIndex}) {
 		<div className="image_view_container">
 			<div className="image_view_image_container">
 	            <div className="image_view_container_modal" onClick={onCloseModal}></div>
-				<img className="image_view_image" src={'/album/image/full?mediaid=' + imageIds[selectedIndex]} />
+				<img className="image_view_image" src={'/album/image/full?mediaid=' + imageItems[selectedIndex].id} alt={imageItems[selectedIndex].name} title={imageItems[selectedIndex]} />
 	        </div>
-	        <ImageViewControls imageCount={imageIds.length} selectedIndex={selectedIndex} onIndexChange={onSelectIndex} />
+	        <ImageViewControls imageCount={imageItems.length} selectedIndex={selectedIndex} onIndexChange={onSelectIndex} />
 		</div> : <div />
 	);
 }
