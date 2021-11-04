@@ -4,6 +4,7 @@ import { createAlbum } from '../../../model/reducers/albumSlice';
 import ToggleButton from '../../widgets/toggle_button/ToggleButton';
 import TextField from '../../widgets/text_field/TextField';
 import NewAlbumUploader from './NewAlbumUploader';
+import '../../widgets/common/Common.css';
 
 function CreateAlbum({onNextStep, fromMetadata, setAlbumId}) {
     const [newAlbum, setNewAlbum] = useState({
@@ -27,7 +28,7 @@ function CreateAlbum({onNextStep, fromMetadata, setAlbumId}) {
                 <TextField label="Publisher" value={newAlbum.publisher} onChange={(event) => setNewAlbum({...newAlbum, publisher: event.target.value})} />
                 <textarea className="text_field" placeholder="Description" value={newAlbum.description} onChange={(event) => setNewAlbum({...newAlbum, description: event.target.value})} />
             </div>}
-            <button onClick={onSubmit}>Create</button>
+            <button className="button_form_submit" onClick={onSubmit}>Create</button>
         </div>
     );
 }

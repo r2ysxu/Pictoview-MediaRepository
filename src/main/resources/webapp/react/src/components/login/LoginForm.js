@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useState } from 'react';
 import TextField from '../widgets/text_field/TextField';
 import './Login.css';
+import '../widgets/common/Common.css';
 
 const emptyUser = {username: '', password: ''};
 
@@ -50,7 +51,7 @@ function LoginForm({onLoggedIn}) {
 		        		label="Password"
 		        		name="password" value={user.password}
 		        		onChange={e => setUser({ ...user, password: e.target.value})} />
-		        	<button className="login_form_button" type="submit">Log in</button>
+		        	<button className="button_form_submit" type="submit">Log in</button>
 		        </div>
 			</form>
 			<div className="login_form_additional_login_options">
