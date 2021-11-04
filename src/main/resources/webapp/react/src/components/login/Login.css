@@ -14,22 +14,6 @@
 	transition: all 0.2s ease-in-out 0s;
 }
 
-.login_form_container input {
-	width: 100%;
-    padding: 10px 12px;
-    background-color: transparent;
-    line-height: 18px;
-    font-size: 16px;
-    border: none;
-    border-radius: 4px;
-    box-shadow: 0 0 1px 0px #404040bf;
-    margin-bottom: 15px;
-}
-
-.login_form_container input::placeholder {
-	color: #c8cccf;
-}
-
 .login_form_error {
     color: #b70707;
     margin:  15px 15px;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { useState } from 'react';
+import TextField from '../widgets/text_field/TextField';
 import './Login.css';
 
 const emptyUser = {username: '', password: ''};
@@ -41,10 +42,12 @@ function LoginForm({onLoggedIn}) {
 			</div>
 			<form name="loginForm" onSubmit={handleSubmit}>
 		        <div>
-		        	<input type="text" placeholder="Username"
+		        	<TextField
+		        		label="Username"
 		        		 name="username" value={user.username}
 		        		 onChange={e => setUser({ ...user, username: e.target.value})} />
-		        	<input type="password" placeholder="Password"
+		        	<TextField type="password"
+		        		label="Password"
 		        		name="password" value={user.password}
 		        		onChange={e => setUser({ ...user, password: e.target.value})} />
 		        	<button className="login_form_button" type="submit">Log in</button>
