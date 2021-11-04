@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import ClipLoader from "react-spinners/ClipLoader";
-import FileManagerFile from './FileManagerFile'
+import FileManagerFile from './FileManagerFile';
 import './FileManager.css';
 
 async function fetchDirectories(path) {

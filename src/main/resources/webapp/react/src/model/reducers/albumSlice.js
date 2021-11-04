@@ -1,5 +1,5 @@
 import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { get_fetchAlbums, get_searchAlbums, get_listAlbumImages, get_listAlbumVideos, get_listAlbumTags } from '../apis/album_apis';
+import { get_fetchAlbums, get_searchAlbums, get_listAlbumImages, get_listAlbumVideos, get_listAlbumTags, post_createAlbum, post_uploadAlbum } from '../apis/album_apis';
 import { post_tagAlbum } from '../apis/tag_apis.js';
 
 const pendingMoreRequests = new Set();
@@ -11,6 +11,19 @@ const initialState = {
     videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
 
     isLoading: false,
+}
+
+export const createAlbum = async ({name, publisher, description}) => {
+    return await post_createAlbum({
+        name,
+        publisher,
+        description,
+        coverId: null,
+    });
+}
+
+export const uploadAlbumFile = async ({albumId, file, fromMetadata}) => {
+    return await post_uploadAlbum(albumId, file, fromMetadata);
 }
 
 export const searchAlbums = createAsyncThunk('album/search', async (query, thunkAPI) => {

@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.mrn.filemanager.AlbumFileManager;
+import org.mrn.filemanager.AlbumFileUtils;
 import org.mrn.filemanager.ThumbnailDirectories;
 import org.mrn.filemanager.ThumbnailDirectory;
 import org.mrn.filemanager.ThumbnailDirectoryManager;
@@ -115,7 +115,7 @@ public class DirectoryService {
 		for (ImageMediaEntity image : images) {
 			image.setThumbnailSource(
 					adminThumbnailSource + album.getId() + "/" + image.getId() + image.getTypeExtension());
-			AlbumFileManager.createPhotoThumbnail(image.getSource(), image.getThumbnailSource());
+			AlbumFileUtils.createPhotoThumbnail(image.getSource(), image.getThumbnailSource());
 		}
 		return imageMediaRepo.saveAll(images);
 	}
@@ -126,7 +126,7 @@ public class DirectoryService {
 
 	public AlbumEntity setAlbumCoverPhoto(AlbumEntity album) throws IOException {
 		ImageMediaEntity imageMedia = imageMediaRepo.findFirstByAlbumOrderByNameAsc(album);
-		AlbumFileManager.createCoverPhotoFile(imageMedia.getSource(),
+		AlbumFileUtils.createCoverPhotoFile(imageMedia.getSource(),
 				generateCoverPhotoFileSource(adminCoverSource, album, imageMedia));
 		album.setCoverPhoto(imageMedia);
 		return mediaAlbumRepo.save(album);

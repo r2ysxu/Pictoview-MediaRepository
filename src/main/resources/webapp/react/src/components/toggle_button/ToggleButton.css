@@ -1,0 +1,71 @@
+.toggle_button_container {
+    font-size: 18px;
+    height: 1.2em;
+    min-width: 140px;
+    padding: 5px 15px;
+    user-select: none;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.toggle_button_label {
+    margin-right: 15px;
+}
+
+.toggle_button_switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 100%;
+    float: right;
+}
+
+.toggle_button_switch input[type=checkbox] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle_button_switch label {
+
+}
+
+.toggle_button_slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	-webkit-transition: .4s;
+	transition: .4s;
+    border-radius: 25px;
+}
+
+.toggle_button_slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 1px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.toggle_button_switch input:checked + .gs_toggle_button_slider {
+  background-color: #2196F3;
+}
+
+.toggle_button_switch input:focus + .gs_toggle_button_slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+.toggle_button_switch input:checked + .gs_toggle_button_slider:before {
+  -webkit-transform: translateX(10px);
+  -ms-transform: translateX(10px);
+  transform: translateX(10px);
+}

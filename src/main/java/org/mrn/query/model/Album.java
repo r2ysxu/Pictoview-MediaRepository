@@ -8,7 +8,8 @@ public class Album implements QueryModel {
 	private String description;
 	private Long coverPhotoId;
 
-	public Album() {}
+	public Album() {
+	}
 
 	public Album(Long id, String name, String description, String subtitle, Long coverPhotoId) {
 		this.id = id;
@@ -57,4 +58,5 @@ public class Album implements QueryModel {
 	public void setCoverPhotoId(Long coverPhotoId) {
 		this.coverPhotoId = coverPhotoId;
 	}
+
 }

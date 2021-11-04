@@ -44,8 +44,7 @@ public class AdminController extends BaseController {
 
 	@ResponseBody
 	@PostMapping(value = "/admin/files/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ScannedDirectory addImageAlbum(@RequestBody Path currentPath)
-			throws UnauthenticatedUserException, IOException {
+	public ScannedDirectory addImageAlbum(@RequestBody Path currentPath) throws UnauthenticatedUserException, IOException {
 		EndUserEntity user = getUser();
 		AlbumEntity mediaAlbum = directoryService.addImageDirectory(user, currentPath.getPath(), currentPath.getName());
 		List<ImageMediaEntity> imageMedia = directoryService.addImages(user, currentPath.getPath(), mediaAlbum);

@@ -51,8 +51,7 @@ public class ImageController extends BaseController {
 	@RequestMapping(value = "/album/image/cover", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
 	public void fetchAlbumCoverPhoto(@RequestParam("albumid") long albumId, OutputStream responseOutput)
 			throws UnauthenticatedUserException, FileNotFoundException, IOException, AlbumNotFound {
-		if (albumId == 0)
-			return;
+		if (albumId == 0) return;
 		UserEntity user = getUser();
 		// Get Image
 		ImageInputStream is = ImageIO.createImageInputStream(imageService.fetchCoverPhotoStream(user, albumId));
@@ -63,8 +62,7 @@ public class ImageController extends BaseController {
 	@GetMapping(value = "/album/image/thumbnail", produces = MediaType.IMAGE_JPEG_VALUE)
 	public void fetchThumbnailPhoto(@RequestParam("mediaid") long mediaId, OutputStream responseOutput)
 			throws UnauthenticatedUserException, FileNotFoundException, IOException, AlbumNotFound {
-		if (mediaId == 0)
-			return;
+		if (mediaId == 0) return;
 		UserEntity user = getUser();
 		ImageInputStream is = ImageIO.createImageInputStream(imageService.fetchImageThumbnailStream(user, mediaId));
 		ImageStreamUtils.writeImageStreamToResponse(is, responseOutput);
@@ -74,8 +72,7 @@ public class ImageController extends BaseController {
 	@GetMapping(value = "/album/image/full", produces = MediaType.IMAGE_JPEG_VALUE)
 	public void fetchFullPhoto(@RequestParam("mediaid") long mediaId, OutputStream responseOutput)
 			throws UnauthenticatedUserException, FileNotFoundException, IOException, AlbumNotFound {
-		if (mediaId == 0)
-			return;
+		if (mediaId == 0) return;
 		UserEntity user = getUser();
 		// Get Image
 		ImageInputStream is = ImageIO.createImageInputStream(imageService.fetchImageStream(user, mediaId));

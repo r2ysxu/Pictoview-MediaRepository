@@ -8,10 +8,12 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.mrn.exceptions.AlbumNotFound;
 import org.mrn.jpa.model.album.AlbumEntity;
 import org.mrn.jpa.model.tags.AlbumTagEntity;
 import org.mrn.jpa.model.tags.CategoryEntity;
 import org.mrn.jpa.model.tags.TagEntity;
+import org.mrn.jpa.model.user.EndUserEntity;
 import org.mrn.jpa.repo.AlbumRepo;
 import org.mrn.jpa.repo.AlbumTagRepo;
 import org.mrn.jpa.repo.CategoryRepo;
@@ -52,14 +54,19 @@ public class TagService {
 		return AlbumTagBuilder.buildFrom(albumId, albumTagRepo.findAllByAlbum_Id(albumId));
 	}
 
-	private List<TagEntity> persistTags(AlbumTag albumTag) {
+	private List<TagEntity> persistTags(List<Category> categories) {
 		List<Long> existingTagIds = new ArrayList<>();
 		List<TagEntity> newTags = new ArrayList<>();
-		for (Category categoryQuery : albumTag.getCategories()) {
+		for (Category categoryQuery : categories) {
 			CategoryEntity category = categoryRepo.findById(categoryQuery.getId()).get();
 			for (Tag tagQuery : categoryQuery.getTags()) {
 				if (tagQuery.getId() == null) {
-					newTags.add(new TagEntity(category, tagQuery.getValue()));
+					TagEntity tag = tagRepo.findByNameAndCategory(tagQuery.getValue(), category);
+					if (tag == null) {
+						newTags.add(new TagEntity(category, tagQuery.getValue()));
+					} else {
+						tagQuery.setId(tag.getId());
+					}
 				} else {
 					existingTagIds.add(tagQuery.getId());
 				}
@@ -71,12 +78,13 @@ public class TagService {
 	}
 
 	@Transactional
-	public void tagAlbum(AlbumTag albumTag) {
-		AlbumEntity imageAlbum = imageAlbumRepo.findById(albumTag.getAlbumId()).get();
-		Set<Long> categoryIds = albumTag.getCategories().stream().map(Category::getId).collect(Collectors.toSet());
-		List<TagEntity> tags = persistTags(albumTag);
+	public void tagAlbum(EndUserEntity user, Long albumId, List<Category> categories) throws AlbumNotFound {
+		AlbumEntity imageAlbum = imageAlbumRepo.findByOwnerAndId(user, albumId);
+		if (imageAlbum == null) throw new AlbumNotFound(user, albumId);
+		Set<Long> categoryIds = categories.stream().map(Category::getId).collect(Collectors.toSet());
+		List<TagEntity> tags = persistTags(categories);
 
-		Map<Long, AlbumTagEntity> existingAlbumTags = albumTagRepo.findAllByAlbum_Id(albumTag.getAlbumId()).stream()
+		Map<Long, AlbumTagEntity> existingAlbumTags = albumTagRepo.findAllByAlbum_Id(albumId).stream()
 				.filter(existingAlbumTag -> categoryIds.contains(existingAlbumTag.getTag().getCategory().getId()))
 				.collect(Collectors.toMap(existingAlbumTag -> existingAlbumTag.getTag().getId(), Function.identity()));
 

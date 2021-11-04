@@ -1,11 +1,13 @@
 .login_form_container {
     font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei", 华文细黑, STHeiti, MingLiu;
 	position: fixed;
-	right: 0;
+    left: 0;
+    right: 0;
 	top: 66px;
 	background-color: #fff;
-	width: 370px;
+	width: 50%;
 	height: 280px;
+    margin: auto;
     border-radius: 0px 0px 0px 4px;
     padding: 20px 40px;
     box-shadow: 0 3px 7px 0 rgb(0 0 0 / 35%);

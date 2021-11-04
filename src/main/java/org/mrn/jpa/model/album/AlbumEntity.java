@@ -48,9 +48,15 @@ public class AlbumEntity implements EntityModel {
 		this.owner = owner;
 		this.name = name;
 	}
-	
+
 	public AlbumEntity(UserEntity owner, String name, String description) {
 		this(owner, name);
+		this.description = description;
+	}
+
+	public AlbumEntity(UserEntity owner, String name, String subtitle, String description) {
+		this(owner, name);
+		this.subtitle = subtitle;
 		this.description = description;
 	}
 

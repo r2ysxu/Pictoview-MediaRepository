@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mrn.jpa.model.album.AlbumEntity;
+import org.mrn.jpa.model.album.ImageMediaEntity;
 import org.mrn.query.model.Album;
 
 public class AlbumBuilder implements ModelBuilder<Album, AlbumEntity> {
@@ -26,7 +27,8 @@ public class AlbumBuilder implements ModelBuilder<Album, AlbumEntity> {
 
 	@Override
 	public Album build(AlbumEntity entity) {
+		ImageMediaEntity coverPhoto = entity.getCoverPhoto();
 		return new Album(entity.getId(), entity.getName(), entity.getDescription(), entity.getSubtitle(),
-				entity.getCoverPhoto().getId());
+				coverPhoto == null ? 0 : coverPhoto.getId());
 	}
 }

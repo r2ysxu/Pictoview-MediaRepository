@@ -26,13 +26,18 @@ public class ImageService {
 	@Autowired
 	private ImageMediaRepo imageMediaRepo;
 
+	public static String generateCoverPhotoPath(String base, AlbumEntity album, ImageMediaEntity imageMedia) {
+		return base + album.getId() + "_" + imageMedia.getId() + imageMedia.getTypeExtension();
+	}
+
 	public InputStream fetchCoverPhotoStream(UserEntity owner, Long albumId) throws FileNotFoundException, AlbumNotFound {
 		AlbumEntity album = imageAlbumRepo.findByOwnerAndId(owner, albumId);
-		if (album == null)
-			throw new AlbumNotFound(owner, albumId);
-		ImageMediaEntity imageMedia = imageMediaRepo.findFirstByAlbumOrderByNameAsc(album);
+		if (album == null) throw new AlbumNotFound(owner, albumId);
+		if (album.getCoverPhoto() == null) return null;
+		ImageMediaEntity imageMedia = imageMediaRepo.findByOwnerAndId(owner, album.getCoverPhoto().getId());
+		if (imageMedia == null) return null;
 		return new FileInputStream(
-				new File(DirectoryService.generateCoverPhotoFileSource(adminCoverSource, album, imageMedia)));
+				new File(generateCoverPhotoPath(adminCoverSource, album, imageMedia)));
 	}
 
 	public InputStream fetchImageThumbnailStream(UserEntity owner, Long mediaId) throws FileNotFoundException {

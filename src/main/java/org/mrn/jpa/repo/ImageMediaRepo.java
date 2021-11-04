@@ -11,5 +11,6 @@ public interface ImageMediaRepo extends PagingAndSortingRepository<ImageMediaEnt
 	ImageMediaEntity findByOwnerAndId(UserEntity owner, Long id);
 	Page<ImageMediaEntity> findAllByOwnerAndAlbum_Id(UserEntity owner, Long albumId, Pageable pageable);
 	ImageMediaEntity findByOwnerAndAlbum(UserEntity owner, AlbumEntity album);
+	ImageMediaEntity findFirstByAlbumAndName(AlbumEntity album, String name);
 	ImageMediaEntity findFirstByAlbumOrderByNameAsc(AlbumEntity album);
 }

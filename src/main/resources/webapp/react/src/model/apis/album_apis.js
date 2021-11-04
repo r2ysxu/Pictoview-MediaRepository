@@ -25,3 +25,23 @@ export const get_listAlbumTags = async(albumId) => {
     const searchParams = new URLSearchParams({albumId});
     return fetch('/album/tag/list?' + searchParams.toString()).then( response => response.json());
 }
+
+export const post_createAlbum = async(album) => {
+    return fetch('/album/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(album),
+    }).then( response => response.json());
+}
+
+export const post_uploadAlbum = async(albumId, file, fromMetadata) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('albumId', albumId);
+    formData.append('fromMetadata', fromMetadata);
+    return fetch('/album/files/upload', {
+        method: 'POST',
+        headers: { 'enctype': 'multipart/form-data' },
+        body: formData,
+    }).then( response => response.json());
+}
