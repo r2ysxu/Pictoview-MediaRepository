@@ -2,10 +2,10 @@ import React from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { searchAlbums } from '../model/reducers/albumSlice';
+import Modal from '../components/widgets/modal/Modal';
+import Container from '../components/widgets/container/Container';
 import Header from '../components/header/Header';
-import Modal from '../components/modal/Modal';
 import AlbumsContainer from '../components/albums/AlbumsContainer';
-import Container from '../components/container/Container';
 import NewAlbum from '../components/albums/new_album/NewAlbum';
 
 function AlbumPage(props) {

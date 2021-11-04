@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAlbums, loadMoreAlbums } from '../../../model/reducers/albumSlice';
-import ScrollLoader from '../../scroll_loader/ScrollLoader';
+import ScrollLoader from '../../widgets/scroll_loader/ScrollLoader';
 import Album from '../album/Album';
 import '../AlbumsContainer.css';
 

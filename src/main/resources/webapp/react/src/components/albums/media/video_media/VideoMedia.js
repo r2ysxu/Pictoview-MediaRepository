@@ -1,8 +1,8 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import ScrollLoader from '../../../scroll_loader/ScrollLoader';
 import { selectAlbums, loadMoreVideos } from '../../../../model/reducers/albumSlice';
+import ScrollLoader from '../../../widgets/scroll_loader/ScrollLoader';
 import VideoView from './video_view/VideoView';
 import './VideoMedia.css';
 

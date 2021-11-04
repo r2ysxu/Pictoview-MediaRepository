@@ -1,8 +1,8 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import LoginForm from '../login/LoginForm';
-import Searchbar from '../searchbar/Searchbar';
-import MenuBar from '../menubar/MenuBar';
+import Searchbar from '../widgets/searchbar/Searchbar';
+import MenuBar from '../widgets/menubar/MenuBar';
 import './Header.css';
 
 async function fetchUserProfile() {

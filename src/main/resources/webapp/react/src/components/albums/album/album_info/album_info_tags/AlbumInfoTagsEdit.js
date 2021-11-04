@@ -2,8 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateCategoryTags } from '../../../../../model/reducers/albumSlice';
-import Tokenizer from '../../../../tokenizer/Tokenizer';
 import { get_searchTags, post_tagAlbum } from '../../../../../model/apis/tag_apis.js';
+import Tokenizer from '../../../../widgets/tokenizer/Tokenizer';
 import './album_info_tags_view/AlbumInfoTagsView.css';
 
 function AlbumInfoTagEdit({albumId, category, onClose}) {

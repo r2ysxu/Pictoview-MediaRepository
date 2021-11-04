@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { createAlbum } from '../../../model/reducers/albumSlice';
-import ToggleButton from '../../toggle_button/ToggleButton';
+import ToggleButton from '../../widgets/toggle_button/ToggleButton';
 import NewAlbumUploader from './NewAlbumUploader';
 import CreateAlbum from './CreateAlbum';
 
