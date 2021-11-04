@@ -31,3 +31,15 @@
 .button_form_submit:hover {
     background-color: #3d4b6a;
 }
+
+.button_form_submit:disabled,
+button_form_submit[disabled] {
+    background-color: #b9b9b9;
+    box-shadow: inset 1px 3px 10px 0px #404040bf;
+}
+
+.button_form_loader {
+    display: inline-block;
+    margin-top: 5px;
+    margin-left: 10px;
+}

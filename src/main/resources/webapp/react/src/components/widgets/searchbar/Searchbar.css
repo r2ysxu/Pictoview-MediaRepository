@@ -6,6 +6,7 @@
 .searchbar_iv_icon {
 	height: 50px;
     width: 50px;
+    filter:  invert(60%);
 }
 
 .searchbar_context {

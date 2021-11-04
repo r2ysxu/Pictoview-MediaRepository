@@ -56,15 +56,15 @@
     border-radius: 50%;
 }
 
-.toggle_button_switch input:checked + .gs_toggle_button_slider {
+.toggle_button_switch input:checked + .toggle_button_slider {
   background-color: #2196F3;
 }
 
-.toggle_button_switch input:focus + .gs_toggle_button_slider {
+.toggle_button_switch input:focus + .toggle_button_slider {
   box-shadow: 0 0 1px #2196F3;
 }
 
-.toggle_button_switch input:checked + .gs_toggle_button_slider:before {
+.toggle_button_switch input:checked + .toggle_button_slider:before {
   -webkit-transform: translateX(10px);
   -ms-transform: translateX(10px);
   transform: translateX(10px);

@@ -6,7 +6,7 @@ import Modal from '../components/widgets/modal/Modal';
 import Container from '../components/widgets/container/Container';
 import Header from '../components/header/Header';
 import AlbumsContainer from '../components/albums/AlbumsContainer';
-import NewAlbum from '../components/albums/new_album/NewAlbum';
+import CreateAlbum from '../components/albums/new_album/CreateAlbum';
 
 function AlbumPage(props) {
     const dispatch = useDispatch();
@@ -32,10 +32,9 @@ function AlbumPage(props) {
                 onSearchSubmit={onSearch} />
             <Container isLoggedIn={loggedIn}>
                 <Modal
-                    content={<NewAlbum onDone={hideNewAlbumModal} />}
+                    content={<CreateAlbum onDone={hideNewAlbumModal} />}
                     isShown={showNewAlbumModal}
                     onHide={hideNewAlbumModal} />
-
                 <AlbumsContainer
                     albumHistory={albumHistory}
                     setAlbumHistory={setAlbumHistory} />
