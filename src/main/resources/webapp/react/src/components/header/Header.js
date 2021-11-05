@@ -35,7 +35,11 @@ function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit}) {
 
     return (
         <div className="header">
-            {!hasProfile(userProfile) && <LoginForm onLoggedIn={setLoggedIn} />}
+            {!hasProfile(userProfile) && 
+                <>
+                    <div className="searchbar searchbar_context"></div>
+                    <LoginForm onLoggedIn={setLoggedIn} />
+                </>}
             {hasProfile(userProfile) && 
                 <Searchbar 
                     sideContent={

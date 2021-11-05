@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { useState } from 'react';
 import TextField from '../widgets/text_field/TextField';
+import Modal from '../widgets/modal/Modal';
 import './Login.css';
 import '../widgets/common/Common.css';
 
@@ -37,27 +38,29 @@ function LoginForm({onLoggedIn}) {
 	}
 
 	return (
-		<div className="login_form_container login_form_float_out">
-			<div className="login_form_error">
-				{ loginErrors ? <span>Invalid Username/password</span> : <span/>}
+		<Modal isShown={true} content={
+			<div className="">
+				<div className="login_form_error">
+					{ loginErrors ? <span>Invalid Username/password</span> : <span/>}
+				</div>
+				<form name="loginForm" onSubmit={handleSubmit}>
+			        <div>
+			        	<TextField
+			        		label="Username"
+			        		 name="username" value={user.username}
+			        		 onChange={e => setUser({ ...user, username: e.target.value})} />
+			        	<TextField type="password"
+			        		label="Password"
+			        		name="password" value={user.password}
+			        		onChange={e => setUser({ ...user, password: e.target.value})} />
+			        	<button className="button_form_submit" type="submit">Log in</button>
+			        </div>
+				</form>
+				<div className="login_form_additional_login_options">
+					<Link to="">Forgot Password?</Link>
+				</div>
 			</div>
-			<form name="loginForm" onSubmit={handleSubmit}>
-		        <div>
-		        	<TextField
-		        		label="Username"
-		        		 name="username" value={user.username}
-		        		 onChange={e => setUser({ ...user, username: e.target.value})} />
-		        	<TextField type="password"
-		        		label="Password"
-		        		name="password" value={user.password}
-		        		onChange={e => setUser({ ...user, password: e.target.value})} />
-		        	<button className="button_form_submit" type="submit">Log in</button>
-		        </div>
-			</form>
-			<div className="login_form_additional_login_options">
-				<Link to="">Forgot Password?</Link>
-			</div>
-		</div>
+		} />
 	);
 }
 

@@ -1,13 +1,14 @@
 import React from 'react';
 import './Modal.css';
 
-function Modal({content, isShown, onHide}) {
+function Modal({content, isShown, onHide = null}) {
+    const noCancel = onHide === null;
     return isShown ?
         <div className="modal_container">
             <div className="modal_background" onClick={onHide} />
-            <div className="modal_dialog">
+            <div className="modal_dialog modal_dialog_float_out">
                 <div className="modal_header">
-                    <img src="/assets/icons/x.svg" onClick={onHide} />
+                    {!noCancel && <img src="/assets/icons/x.svg" onClick={onHide} />}
                 </div>
                 <div className="modal_content">
                     {content}

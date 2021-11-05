@@ -10,10 +10,10 @@
 .modal_background {
 	position: fixed;
 	left: 0;
-	top: 0;
+	top: 66px;
 	height: 100%;
 	width: 100%;
-	background-color: rgb(0 0 0 / 80%);
+	background-color: rgb(0 0 0 / 50%);
 }
 
 .modal_dialog {
@@ -40,4 +40,24 @@
 
 .modal_content {
     padding: 20px 40px;
+}
+
+.modal_dialog_float_out {
+    animation-name: float_out;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    -webkit-animation-name: float_out;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: 1;
+    -moz-animation-name: float_out;
+    -moz-animation-duration: 1s;
+    -moz-animation-timing-function: ease-in-out;
+    -moz-animation-iteration-count: 1;
+}
+
+@keyframes float_out {
+    from {transform:translate(0px, -500px);}
+    to {transform: translate(0px, 0px);}
 }
