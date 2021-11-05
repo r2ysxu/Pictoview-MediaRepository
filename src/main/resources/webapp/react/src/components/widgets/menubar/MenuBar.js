@@ -4,6 +4,7 @@ import './MenuBar.css';
 
 function MenuBar({children, selectedIndex, onSelect}) {
     const [showExpand, setShowExpand] = useState(false);
+    console.log("menubar", children)
     return (
         <div className="menubar_container">
             <div className="menubar_icon" onClick={() => setShowExpand(!showExpand)}>

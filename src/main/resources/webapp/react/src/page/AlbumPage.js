@@ -13,7 +13,7 @@ function AlbumPage(props) {
     const [loggedIn, setLoggedIn] = useState(false);
     const [searchInput, setSearchInput] = useState('');
     const [albumHistory, setAlbumHistory] = useState([{id: 0, name: ""}]);
-    const [showNewAlbumModal, setShowNewAlbumModal] = useState(true);
+    const [showNewAlbumModal, setShowNewAlbumModal] = useState(false);
 
     const onSearch = (query) => {
         dispatch(searchAlbums(query));
@@ -29,7 +29,8 @@ function AlbumPage(props) {
                 setLoggedIn={setLoggedIn}
                 searchInput={searchInput}
                 onSearchChange={setSearchInput}
-                onSearchSubmit={onSearch} />
+                onSearchSubmit={onSearch}
+                setShowNewAlbumModal={setShowNewAlbumModal} />
             <Container isLoggedIn={loggedIn}>
                 <Modal
                     content={<CreateAlbum onDone={hideNewAlbumModal} />}

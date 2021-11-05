@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import LoginForm from '../login/LoginForm';
 import Searchbar from '../widgets/searchbar/Searchbar';
 import MenuBar from '../widgets/menubar/MenuBar';
+import MenuItem from '../widgets/menu_item/MenuItem';
 import './Header.css';
 
 async function fetchUserProfile() {
@@ -20,7 +21,7 @@ const hasProfile = (userProfile) => {
     return userProfile !== null && userProfile !== undefined && userProfile.username && userProfile.username !== "";
 }
 
-function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit}) {
+function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit, setShowNewAlbumModal}) {
     const [userProfile, setUserProfile] = useState(null);
     const [selectedIV, setSelectedIV] = useState(0);
 
@@ -44,6 +45,9 @@ function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit}) {
                 <Searchbar 
                     sideContent={
                         <MenuBar>
+                            <MenuItem label={<img src="/assets/icons/house.svg" alt="" />} tooltip="Home" onClick={() => {window.location.replace("/")}} />
+                            <MenuItem label={<img src="/assets/icons/journal-album.svg" alt="" />} tooltip="Albums" onClick={() => {window.location.replace("/album")}} />
+                            <MenuItem label={<img src="/assets/icons/folder-plus.svg" alt="" />} tooltip="New Album" onClick={() => {setShowNewAlbumModal(true)}} />
                         </MenuBar>
                     }
                     searchInput={searchInput}
