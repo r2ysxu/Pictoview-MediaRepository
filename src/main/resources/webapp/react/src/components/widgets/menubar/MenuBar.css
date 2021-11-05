@@ -14,19 +14,29 @@
     width: 50px;
 }
 
-.menubar_content {
+.menubar_content_container {
 	position: fixed;
 	left: 0;
 	top: 66px;
 	background-color: rgba(17,17,17, 1.0);
 	padding: 25px 0 5px 0;
+	height: calc(100% - 96px);
+}
+
+.menubar_content {
+	position: relative;
 	height: 100%;
 }
 
 .menubar_child {
-	padding: 5px 15px 5px 15px;
+	padding: 10px 15px 10px 15px;
 }
 
 .menubar_child:hover {
 	background-color: rgb(86 127 230 / 75%)
+}
+
+.menubar_bottom_content {
+	position: absolute;
+	bottom: 0;
 }

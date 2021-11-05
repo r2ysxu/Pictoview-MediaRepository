@@ -47,7 +47,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 					resp.setStatus(200);
 				})
 			.and()
-				.logout().logoutUrl("/logout").logoutSuccessUrl("/")
+				.logout().logoutUrl("/logout").logoutSuccessHandler((req, resp, auth) -> {
+					resp.setStatus(200);
+				})
 			.and().cors().and().csrf().disable();
 		//@formatter:on
 	}
