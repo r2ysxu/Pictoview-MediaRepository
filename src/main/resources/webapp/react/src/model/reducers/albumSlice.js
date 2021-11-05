@@ -67,8 +67,8 @@ export const loadMoreVideos = createAsyncThunk('album/load/video/more', async ({
 export const loadAlbumTags = createAsyncThunk('album/load/tags', async(albumId, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
     const tags = await get_listAlbumTags(albumId);
-    const currentAlbumIndex = currentState.albums.findIndex(album => album.id === albumId);
-    const currentAlbum = {...currentState.albums[currentAlbumIndex], tags };
+    const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
+    const currentAlbum = {...currentState.albums.items[currentAlbumIndex], tags };
     return {
         currentAlbumIndex,
         currentAlbum,
@@ -78,8 +78,8 @@ export const loadAlbumTags = createAsyncThunk('album/load/tags', async(albumId, 
 export const updateCategoryTags = createAsyncThunk('album/tags/update', async({albumId, categories}, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
     const tags = await post_tagAlbum({albumId, categories});
-    const currentAlbumIndex = currentState.albums.findIndex(album => album.id === albumId);
-    const currentAlbum = {...currentState.albums[currentAlbumIndex], tags };
+    const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
+    const currentAlbum = {...currentState.albums.items[currentAlbumIndex], tags };
     return {
         currentAlbumIndex,
         currentAlbum,
@@ -88,7 +88,7 @@ export const updateCategoryTags = createAsyncThunk('album/tags/update', async({a
 
 export const addCategory = createAsyncThunk('/album/tags/category/new', async ({albumId, newCategory}, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
-    const currentAlbumIndex = currentState.albums.findIndex(album => album.id === albumId);
+    const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
     return {
         currentAlbumIndex,
         newCategory
@@ -134,11 +134,11 @@ export const albumSlice = createSlice({
                     pendingMoreRequests.delete(action.meta.requestId);
                 }
             }).addCase(loadAlbumTags.fulfilled, (state, action) => {
-                state.albums[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
+                state.albums.items[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
             }).addCase(updateCategoryTags.fulfilled, (state, action) => {
-                state.albums[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
+                state.albums.items[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
             }).addCase(addCategory.fulfilled, (state, action) => {
-                state.albums[action.payload.currentAlbumIndex].tags.categories.push(action.payload.newCategory);
+                state.albums.items[action.payload.currentAlbumIndex].tags.categories.push(action.payload.newCategory);
             });
     },
 });
