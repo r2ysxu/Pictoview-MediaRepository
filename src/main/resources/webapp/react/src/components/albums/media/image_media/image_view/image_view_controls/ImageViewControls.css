@@ -2,6 +2,7 @@
     position: absolute;
     text-align: center;
     width: 100%;
+    bottom: 25px;
 }
 
 .image_view_controls_container > img {
