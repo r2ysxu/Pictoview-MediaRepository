@@ -3,12 +3,14 @@ package org.mrn.controller;
 import java.io.IOException;
 
 import org.mrn.exceptions.AlbumNotFound;
+import org.mrn.exceptions.InvalidMediaAlbumException;
 import org.mrn.exceptions.UnauthenticatedUserException;
 import org.mrn.filemanager.AlbumDirectory;
 import org.mrn.jpa.model.tags.SearchQuery;
 import org.mrn.jpa.model.user.EndUserEntity;
 import org.mrn.query.model.Album;
 import org.mrn.query.model.AlbumTag;
+import org.mrn.query.model.CoverImage;
 import org.mrn.query.model.NewAlbumInfo;
 import org.mrn.query.model.PageItems;
 import org.mrn.service.AlbumService;
@@ -84,7 +86,7 @@ public class AlbumController extends BaseController {
 				album.getDescription());
 	}
 
-	@PostMapping(value = "/album/files/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/album/update/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public Boolean uploadAlbumMedia(@RequestParam("file") MultipartFile file, @RequestParam("albumId") Long albumId,
 			@RequestParam("fromMetadata") Boolean fromMetadata)
 			throws UnauthenticatedUserException, IllegalStateException, IOException, AlbumNotFound {
@@ -100,5 +102,12 @@ public class AlbumController extends BaseController {
 			mediaAlbumService.setFirstAlbumCoverPhoto(user, albumId);
 		}
 		return true;
+	}
+
+	@ResponseBody
+	@PostMapping(value = "/album/update/cover", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Album updateCoverId(@RequestBody CoverImage coverImage)
+			throws AlbumNotFound, InvalidMediaAlbumException, UnauthenticatedUserException {
+		return mediaAlbumService.setCoverPhotoById(getUser(), coverImage.getAlbumId(), coverImage.getImageId());
 	}
 }

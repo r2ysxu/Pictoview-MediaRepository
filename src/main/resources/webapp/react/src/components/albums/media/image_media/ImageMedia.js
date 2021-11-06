@@ -30,6 +30,7 @@ function ImageMedia({albumId}) {
                 </div>
             </ScrollLoader>
             <ImageView
+                albumId={albumId}
                 imageItems={images.items}
                 selectedIndex={selectedImageIndex}
                 onSelectIndex={setSelectedImageIndex} />

@@ -39,9 +39,17 @@ export const post_uploadAlbum = async(albumId, file, fromMetadata) => {
     formData.append('file', file);
     formData.append('albumId', albumId);
     formData.append('fromMetadata', fromMetadata);
-    return fetch('/album/files/upload', {
+    return fetch('/album/update/upload', {
         method: 'POST',
         headers: { 'enctype': 'multipart/form-data' },
         body: formData,
+    }).then( response => response.json());
+}
+
+export const post_changeAlbumCover = async(albumId, imageId) => {
+    return fetch('/album/update/cover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({albumId, imageId}),
     }).then( response => response.json());
 }

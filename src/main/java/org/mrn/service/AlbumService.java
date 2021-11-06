@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mrn.exceptions.AlbumNotFound;
+import org.mrn.exceptions.InvalidMediaAlbumException;
 import org.mrn.filemanager.AlbumDirectory;
 import org.mrn.filemanager.AlbumFileUtils;
 import org.mrn.filemanager.AlbumMediaFile;
@@ -42,7 +43,7 @@ public class AlbumService {
 	private String adminThumbnailSource;
 	@Value("${app.admin.main.cover.source}")
 	private String adminCoverSource;
-	
+
 	private static final String ALBUMS_DIRECTORY = "albums/";
 	private static final String ZIPPED_DIRECTORY = "zips/";
 
@@ -109,17 +110,19 @@ public class AlbumService {
 
 	public List<MediaEntity> createMediaFromFile(EndUserEntity user, Long albumId, AlbumDirectory albumDirectory)
 			throws AlbumNotFound, IOException {
-		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow( () -> new AlbumNotFound(user, albumId));
+		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
 		List<ImageMediaEntity> imageMedia = new ArrayList<>();
 		List<VideoMediaEntity> videoMedia = new ArrayList<>();
 		for (AlbumMediaFile file : albumDirectory.getMediaFiles()) {
-			switch(file.getType()) {
+			switch (file.getType()) {
 			case IMAGE:
-				ImageMediaEntity image = new ImageMediaEntity(user, file.getAbsolutePath(), file.getName(), file.getMediaType(), albumEntity);
+				ImageMediaEntity image = new ImageMediaEntity(user, file.getAbsolutePath(), file.getName(), file.getMediaType(),
+						albumEntity);
 				imageMedia.add(image);
 				break;
 			case VIDEO:
-				videoMedia.add(new VideoMediaEntity(user, file.getAbsolutePath(), file.getName(), file.getMediaType(), albumEntity));
+				videoMedia.add(
+						new VideoMediaEntity(user, file.getAbsolutePath(), file.getName(), file.getMediaType(), albumEntity));
 				break;
 			default:
 			}
@@ -137,7 +140,7 @@ public class AlbumService {
 	}
 
 	public AlbumEntity setCoverPhotoByName(EndUserEntity user, Long albumId, String name) throws IOException, AlbumNotFound {
-		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow( () -> new AlbumNotFound(user, albumId));
+		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
 		ImageMediaEntity imageMedia = imageMediaRepo.findFirstByAlbumAndName(albumEntity, name);
 		if (imageMedia == null) return null;
 		AlbumFileUtils.createCoverPhotoFile(imageMedia.getSource(),
@@ -146,8 +149,18 @@ public class AlbumService {
 		return mediaAlbumRepo.save(albumEntity);
 	}
 
+	public Album setCoverPhotoById(EndUserEntity user, Long albumId, Long imageId)
+			throws AlbumNotFound, InvalidMediaAlbumException {
+		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
+		ImageMediaEntity imageMedia = imageMediaRepo.findByOwnerAndId(user, imageId);
+		if (imageMedia == null || imageMedia.getAlbum().getId() != albumEntity.getId())
+			throw new InvalidMediaAlbumException(albumId, imageId);
+		albumEntity.setCoverPhoto(imageMedia);
+		return new AlbumBuilder().build(mediaAlbumRepo.save(albumEntity));
+	}
+
 	public AlbumEntity setFirstAlbumCoverPhoto(EndUserEntity user, Long albumId) throws IOException, AlbumNotFound {
-		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow( () -> new AlbumNotFound(user, albumId));
+		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
 		ImageMediaEntity imageMedia = imageMediaRepo.findFirstByAlbumOrderByNameAsc(albumEntity);
 		if (imageMedia == null) return null;
 		AlbumFileUtils.createCoverPhotoFile(imageMedia.getSource(),

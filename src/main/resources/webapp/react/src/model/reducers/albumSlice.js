@@ -1,5 +1,14 @@
 import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { get_fetchAlbums, get_searchAlbums, get_listAlbumImages, get_listAlbumVideos, get_listAlbumTags, post_createAlbum, post_uploadAlbum } from '../apis/album_apis';
+import { 
+    get_fetchAlbums,
+    get_searchAlbums,
+    get_listAlbumImages,
+    get_listAlbumVideos,
+    get_listAlbumTags,
+    post_createAlbum,
+    post_uploadAlbum,
+    post_changeAlbumCover
+} from '../apis/album_apis';
 import { post_tagAlbum } from '../apis/tag_apis.js';
 
 const pendingMoreRequests = new Set();
@@ -24,7 +33,11 @@ export const createAlbum = async ({name, publisher, description}) => {
 
 export const uploadAlbumFile = async ({albumId, file, fromMetadata}) => {
     return await post_uploadAlbum(albumId, file, fromMetadata);
-}
+};
+
+export const updateCoverImage = async ({albumId, imageId}) => {
+    return await post_changeAlbumCover(albumId, imageId);
+};
 
 export const searchAlbums = createAsyncThunk('album/search', async (query, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
@@ -64,7 +77,7 @@ export const loadMoreVideos = createAsyncThunk('album/load/video/more', async ({
     return { videosPage }
 });
 
-export const loadAlbumTags = createAsyncThunk('album/load/tags', async(albumId, thunkAPI) => {
+export const loadAlbumTags = createAsyncThunk('album/load/tags', async (albumId, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
     const tags = await get_listAlbumTags(albumId);
     const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
@@ -75,7 +88,7 @@ export const loadAlbumTags = createAsyncThunk('album/load/tags', async(albumId, 
     }
 });
 
-export const updateCategoryTags = createAsyncThunk('album/tags/update', async({albumId, categories}, thunkAPI) => {
+export const updateCategoryTags = createAsyncThunk('album/tags/update', async ({albumId, categories}, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
     const tags = await post_tagAlbum({albumId, categories});
     const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
