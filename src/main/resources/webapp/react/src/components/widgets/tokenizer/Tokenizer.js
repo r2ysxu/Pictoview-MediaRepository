@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import './Tokenizer.css';
 
 /* Token : [{ id: ID, value: String}] */
-function Tokenizer({title, tokens, setTokens, autoCompleteValues, onAutoComplete, onRemove, onSave, onDiscard}) {
+function Tokenizer({title, tokens, setTokens, autoCompleteValues, onAutoComplete, onRemove, onSave, onClose}) {
     const inputRef = useRef(null);
     const [tagValue, setTagValue] = useState('');
 
@@ -11,26 +11,36 @@ function Tokenizer({title, tokens, setTokens, autoCompleteValues, onAutoComplete
         inputRef.current.focus();
     }, []);
 
-    const onEnterPressed = (event) => {
-        if (event.charCode === 13) {
-            let token;
-            if (autoCompleteValues &&
-              autoCompleteValues.length &&
-              autoCompleteValues[0].value === tagValue) {
-                token = autoCompleteValues[0];
-            } else {
-               token = { id: null, value: tagValue };
-            }
-            if (tagValue.trim().length && !tokens.some( token => token.value === tagValue )) {
-                setTokens([...tokens, token]);
-            }
-            setTagValue('');
-            onAutoComplete('');
+    const onAddToken = () => {
+        let token;
+        if (autoCompleteValues &&
+          autoCompleteValues.length &&
+          autoCompleteValues[0].value === tagValue) {
+            token = autoCompleteValues[0];
+        } else {
+           token = { id: null, value: tagValue };
         }
+        if (tagValue.trim().length && !tokens.some( token => token.value === tagValue )) {
+            setTokens([...tokens, token]);
+        }
+        setTagValue('');
+        onAutoComplete('');
+    }
+
+    const onEnterPressed = (event) => {
+        if (event.charCode === 13 && !event.shiftKey) { // Enter
+            onAddToken();
+        } else if (event.charCode === 13 && event.shiftKey) { // Shift + Enter
+            onSave();
+            onDiscardPressed(event);
+        } else if (event.charCode === 96) { // `
+            onDiscardPressed(event);
+        }
+        console.log(event.charCode)
     }
 
     const onDiscardPressed = (event) => {
-        onDiscard(event);
+        onClose(event);
         setTagValue('');
         setTokens([]);
     }

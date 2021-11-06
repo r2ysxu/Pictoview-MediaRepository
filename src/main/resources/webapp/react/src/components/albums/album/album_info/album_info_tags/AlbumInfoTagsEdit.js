@@ -33,10 +33,6 @@ function AlbumInfoTagEdit({albumId, category, onClose}) {
         }));
     }
 
-    const onDiscard = () => {
-        onClose();
-    }
-
     const onRemoveTag = (tagIndex) => {
         setTags(tags.splice(tagIndex, 1));
     }
@@ -50,7 +46,7 @@ function AlbumInfoTagEdit({albumId, category, onClose}) {
             onAutoComplete={onAutoComplete}
             onRemove={onRemoveTag}
             onSave={onSave}
-            onDiscard={onDiscard} />
+            onClose={onClose} />
     );
 }
 
