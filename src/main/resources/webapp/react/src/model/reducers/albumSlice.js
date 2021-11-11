@@ -4,6 +4,7 @@ import {
     get_searchAlbums,
     get_listAlbumImages,
     get_listAlbumVideos,
+    get_listAlbumAudios,
     get_listAlbumTags,
     post_createAlbum,
     post_uploadAlbum,
@@ -18,6 +19,7 @@ const initialState = {
     albums: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
     images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
     videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
+    audios: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
 
     isLoading: false,
 }
@@ -54,17 +56,19 @@ export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async (albumI
     const albums = await get_fetchAlbums(0, albumId);
     const images = await get_listAlbumImages(0, albumId);
     const videos = await get_listAlbumVideos(0, albumId);
+    const audios = await get_listAlbumAudios(0, albumId);
     return {
         albumId,
         albums,
         images,
         videos,
+        audios,
     };
 });
 
 export const loadMoreAlbums = createAsyncThunk('album/load', async ({albumId, page}) => {
     const albumsPage = await get_fetchAlbums(page, albumId);
-    return { albumsPage }
+    return { albumsPage };
 });
 
 export const loadMoreImages = createAsyncThunk('album/load/image/more', async ({albumId, page}) => {
@@ -74,7 +78,12 @@ export const loadMoreImages = createAsyncThunk('album/load/image/more', async ({
 
 export const loadMoreVideos = createAsyncThunk('album/load/video/more', async ({albumId, page}) => {
     const videosPage = await get_listAlbumVideos(page, albumId);
-    return { videosPage }
+    return { videosPage };
+});
+
+export const loadMoreAudio = createAsyncThunk('album/load/audio/more', async({albumId, page}) => {
+    const audiosPage = await get_listAlbumAudios(page, albumId);
+    return { audiosPage };
 });
 
 export const loadAlbumTags = createAsyncThunk('album/load/tags', async (albumId, thunkAPI) => {
@@ -144,6 +153,17 @@ export const albumSlice = createSlice({
                 if (pendingMoreRequests.has(action.meta.requestId)) {
                     state.videos.pageInfo = action.payload.videosPage.pageInfo;
                     state.videos.items.push(...action.payload.videosPage.items || []);
+                    pendingMoreRequests.delete(action.meta.requestId);
+                }
+            }).addCase(loadMoreAudio.pending, (state, action) => {
+                pendingMoreRequests.add(action.meta.requestId);
+                state.isLoading = true;
+            }).addCase(loadMoreAudio.rejected, (state, action) => {
+                state.isLoading = false;
+            }).addCase(loadMoreAudio.fulfilled, (state, action) => {
+                if (pendingMoreRequests.has(action.meta.requestId)) {
+                    state.audios.pageInfo = action.payload.audiosPage.pageInfo;
+                    state.audios.items.push(...action.payload.audiosPage.items || []);
                     pendingMoreRequests.delete(action.meta.requestId);
                 }
             }).addCase(loadAlbumTags.fulfilled, (state, action) => {

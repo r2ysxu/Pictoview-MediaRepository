@@ -20,7 +20,7 @@ function ImageMedia({albumId}) {
     return (
         <div>
             <ScrollLoader isLoading={isLoading} loadMore={loadMore} height={50} hasMore={images.pageInfo.hasNext}>
-                <div className="image_media_list">
+                <div className="album_media_list">
                     {images.items.map( (image, index) =>
                         <ImagePhoto 
                             key={index}

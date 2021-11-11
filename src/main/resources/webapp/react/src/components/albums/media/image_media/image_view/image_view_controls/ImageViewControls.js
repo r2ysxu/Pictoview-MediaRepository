@@ -24,6 +24,7 @@ function ImageViewControls({imageCount, selectedIndex, onIndexChange, onChangeCo
         } else if (event.keyCode === 39 || event.keyCode === 40) { // Up or Down Arrow
             onIndexChange(null);
         }
+        event.preventDefault();
     }, [selectedIndex, onIndexChange]);
 
     useEffect( () => {

@@ -1,6 +1,11 @@
 .albums_container {
 }
 
+.album_media_list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .albums_albums_container {
     display: flex;
     flex-wrap: wrap;

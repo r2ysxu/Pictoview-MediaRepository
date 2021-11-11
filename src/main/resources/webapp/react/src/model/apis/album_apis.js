@@ -20,6 +20,12 @@ export const get_listAlbumVideos = async (page, albumId) => {
     return fetch('/album/videos/list?' + searchParams.toString()).then( response => response.json());
 }
 
+export const get_listAlbumAudios = async (page, albumId) => {
+    if (albumId <= 0) return { items: [], pageInfo: { page: 0, total: 0, hasNext: false } };
+    const searchParams = new URLSearchParams({page, albumId});
+    return fetch('/album/audio/list?' + searchParams.toString()).then( response => response.json());
+}
+
 export const get_listAlbumTags = async(albumId) => {
     if (albumId <= 0) return {};
     const searchParams = new URLSearchParams({albumId});

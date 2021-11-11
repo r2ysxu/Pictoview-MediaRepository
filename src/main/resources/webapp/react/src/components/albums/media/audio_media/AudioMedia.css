@@ -1,0 +1,23 @@
+.audio_media_container {
+	width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.audio_media_info_container {
+	margin-left: 15px;
+	display: flex;
+	width: 80%;
+}
+
+.audio_media_play_button {
+	margin-right: 15px;
+}
+
+.audio_media_play_button:hover {
+	filter: hue-rotate(90deg);
+}
+
+.adio_view_audio_content {
+	
+}

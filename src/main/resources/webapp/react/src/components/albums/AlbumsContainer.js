@@ -6,12 +6,13 @@ import TabSelector from '../widgets/tab_selector/TabSelector';
 import SubAlbums from './subalbums/SubAlbums';
 import ImageMedia from './media/image_media/ImageMedia';
 import VideoMedia from './media/video_media/VideoMedia';
+import AudioMedia from './media/audio_media/AudioMedia';
 import Breadcrumbs from '../breadcrumbs/Breadcrumbs';
 import './AlbumsContainer.css';
 
 function AlbumsContainer({albumHistory, setAlbumHistory}) {
     const dispatch = useDispatch();
-    const { albumId, albums, images, videos } = useSelector(selectAlbums);
+    const { albumId, albums, images, videos , audios} = useSelector(selectAlbums);
 
     const changeAlbum = (id) => {
         dispatch(loadCurrentAlbumInfo(id));
@@ -30,7 +31,7 @@ function AlbumsContainer({albumHistory, setAlbumHistory}) {
         {label: "Albums", badgeLabel: albums.pageInfo.total},
         {label: "Images", badgeLabel: images.pageInfo.total},
         {label: "Videos", badgeLabel: videos.pageInfo.total},
-        {label: "Music", disabled: true},
+        {label: "Music",  badgeLabel: audios.pageInfo.total},
     ]
 
     return (
@@ -46,6 +47,7 @@ function AlbumsContainer({albumHistory, setAlbumHistory}) {
             <SubAlbums albumId={albumId} changeCurrentAlbum={changeCurrentAlbum}/>
             <ImageMedia albumId={albumId} />
             <VideoMedia albumId={albumId} />
+            <AudioMedia albumId={albumId} />
         </TabSelector>
     );
 }
