@@ -52,6 +52,14 @@ export const post_uploadAlbum = async(albumId, file, fromMetadata) => {
     }).then( response => response.json());
 }
 
+export const post_updateAlbum = async(album) => {
+    return fetch('/album/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(album),
+    }).then( response => response.json());
+}
+
 export const post_changeAlbumCover = async(albumId, imageId) => {
     return fetch('/album/update/cover', {
         method: 'POST',

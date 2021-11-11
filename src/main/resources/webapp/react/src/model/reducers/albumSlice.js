@@ -8,7 +8,8 @@ import {
     get_listAlbumTags,
     post_createAlbum,
     post_uploadAlbum,
-    post_changeAlbumCover
+    post_updateAlbum,
+    post_changeAlbumCover,
 } from '../apis/album_apis';
 import { post_tagAlbum } from '../apis/tag_apis.js';
 
@@ -37,9 +38,20 @@ export const uploadAlbumFile = async ({albumId, file, fromMetadata}) => {
     return await post_uploadAlbum(albumId, file, fromMetadata);
 };
 
-export const updateCoverImage = async ({albumId, imageId}) => {
+export const updateAlbum = createAsyncThunk('album/update/info', async(updatedAlbum, thunkAPI) => {
+    const currentState = thunkAPI.getState().album;
+    const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === updatedAlbum.id);
+    const tags = await get_listAlbumTags(updatedAlbum.id);
+    const currentAlbum = {...await post_updateAlbum(updatedAlbum), tags };
+    return {
+        currentAlbumIndex,
+        currentAlbum,
+    }
+});
+
+export const updateCoverImage = createAsyncThunk('album/update/cover', async ({albumId, imageId}) => {
     return await post_changeAlbumCover(albumId, imageId);
-};
+});
 
 export const searchAlbums = createAsyncThunk('album/search', async (query, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
@@ -166,6 +178,8 @@ export const albumSlice = createSlice({
                     state.audios.items.push(...action.payload.audiosPage.items || []);
                     pendingMoreRequests.delete(action.meta.requestId);
                 }
+            }).addCase(updateAlbum.fulfilled, (state, action) => {
+                state.albums.items[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
             }).addCase(loadAlbumTags.fulfilled, (state, action) => {
                 state.albums.items[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
             }).addCase(updateCategoryTags.fulfilled, (state, action) => {

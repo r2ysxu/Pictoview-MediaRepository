@@ -4,7 +4,6 @@
     margin: 5px 5px;
     box-shadow: 4px 5px 2px 0px rgba(0, 0, 0, 0.25);
     -webkit-transition: all 0.4s ease;
-    margin: 15px;
 }
 
 .album_container p {
@@ -25,11 +24,10 @@
 .album_container h4 {
     color: #848484;
     margin: 0 0 0 1em;
-    font-size: 10pt;
+    font-size: 0.8em;
 }
 
 .album_title {
-    padding-top: 5px;
     padding-left: 10px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -67,13 +65,15 @@
 .album_wrapper {
     height: 100%;
     width: 100%;
+    position: relative;
+    box-shadow: 0px 5px 5px 2px rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid #9c9c9c;
+    background-color: #000;
+    text-align: center;
 }
 
 .album_image {
-    position: relative;
     max-height: 300px;
-    box-shadow: 0px 5px 5px 2px rgba(0, 0, 0, 0.25);
-    border-bottom: 1px solid #9c9c9c;
 }
 
 .album_info_container {
@@ -84,4 +84,62 @@
     background-color: rgba(0,0,0, 0.8);
     color: #fff;
     cursor: default;
+}
+
+.album_info_edit_icon {
+    filter: invert(42%);
+    margin-top: 5px;
+    margin-right: 10px;
+    height: 10pt;
+    width: 10pt;
+    float: right;
+}
+
+.album_text_field {
+    font-style: italic;
+    color: #fff;
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+}
+
+.album_name_text_field {
+    font-size: 1.5em;
+    width: calc(100% - 15px);
+    margin: 10px 0 5px 0;
+    line-height: 18px;
+    color: #fff;
+}
+
+.album_info_description_text {
+    color: #fff;
+    width: calc(100% - 35px);
+    background-color: transparent;
+    border-radius: 4px;
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+.album_publisher_text_field {
+    color: #848484;
+    margin-left: 10px;
+    width: calc(100% - 20px);
+}
+
+.album_edit_submit {
+    display: block;
+    width: calc(100% - 10px);
+    border: 1px solid #3b4354;
+    background-color: #229327;
+    color: #fff;
+    border-radius: 4px;
+    line-height: 1.4em;
+    text-align: center;
+    font-size: 18px;
+    outline: none;
+    margin: 0 5px 0 5px;
+}
+
+.album_edit_submit:hover {
+    background-color: #27cb2f;
 }
