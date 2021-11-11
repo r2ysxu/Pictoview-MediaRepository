@@ -14,9 +14,9 @@ public class VideoMediaEntity extends MediaEntity implements EntityModel {
 
 	@Enumerated(EnumType.ORDINAL)
 	private MediaType type;
-	
+
 	public VideoMediaEntity() {}
-	
+
 	public VideoMediaEntity(UserEntity owner, String source, String name, MediaType type, AlbumEntity album) {
 		super(owner, source, name, album);
 		this.type = type;

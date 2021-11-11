@@ -1,6 +1,5 @@
 package org.mrn.utils;
 
-import org.mrn.query.model.Album;
 import org.mrn.query.model.NewAlbumInfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;

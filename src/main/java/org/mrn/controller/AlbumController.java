@@ -29,6 +29,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
+
 @RestController
 public class AlbumController extends BaseController {
 
@@ -89,7 +92,7 @@ public class AlbumController extends BaseController {
 	@PostMapping(value = "/album/update/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public Boolean uploadAlbumMedia(@RequestParam("file") MultipartFile file, @RequestParam("albumId") Long albumId,
 			@RequestParam("fromMetadata") Boolean fromMetadata)
-			throws UnauthenticatedUserException, IllegalStateException, IOException, AlbumNotFound {
+			throws UnauthenticatedUserException, IllegalStateException, IOException, AlbumNotFound, UnsupportedTagException, InvalidDataException {
 		EndUserEntity user = getUser();
 		AlbumDirectory albumDirectory = mediaAlbumService.uploadAlbumMedia(user, albumId, file, fromMetadata);
 		mediaAlbumService.createMediaFromFile(user, albumId, albumDirectory);

@@ -5,7 +5,7 @@ import org.mrn.jpa.model.album.MediaType;
 
 public class AlbumMediaFile {
 	public enum Type {
-		IMAGE, VIDEO, MUSIC
+		IMAGE, VIDEO, AUDIO
 	};
 
 	private String name;

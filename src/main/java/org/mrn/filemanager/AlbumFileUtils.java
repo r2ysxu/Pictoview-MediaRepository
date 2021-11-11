@@ -23,10 +23,15 @@ import org.apache.commons.io.FilenameUtils;
 import org.mrn.filemanager.AlbumMediaFile.Type;
 import org.mrn.jpa.model.album.MediaType;
 
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
+
 public class AlbumFileUtils {
 
 	private static final String INFO_FILE = "albuminfo.json";
 	private static Set<String> imageExtensions = new HashSet<>(List.of("jpg", "jpeg", "png", "gif"));
+	private static Set<String> audioExtensions = new HashSet<>(List.of("mp3"));
 	private static Set<String> videoExtensions = new HashSet<>(List.of("mp4"));
 
 	public static boolean createAlbumDirectory(String path) {
@@ -145,21 +150,38 @@ public class AlbumFileUtils {
 			albumMediaFile.setType(Type.IMAGE);
 		} else if (FilenameUtils.isExtension(file.getName(), videoExtensions)) {
 			albumMediaFile.setType(Type.VIDEO);
+		} else if(FilenameUtils.isExtension(file.getName(), audioExtensions)) {
+			albumMediaFile.setType(Type.AUDIO);
 		} else {
 			return null;
 		}
 		return albumMediaFile;
 	}
 
+	public static AudioMediaFile parseAudioFile(String filePath) throws IOException, UnsupportedTagException, InvalidDataException {
+		Mp3File mp3File = new Mp3File(filePath);
+		Integer track;
+		try {
+			track = Integer.parseInt(mp3File.getId3v2Tag().getTrack());
+		} catch(Exception ex) {
+			track = 0;
+		}
+		return new AudioMediaFile()
+				.setTitle(mp3File.getId3v1Tag().getTitle())
+				.setArtist(mp3File.getId3v2Tag().getArtist())
+				.setGenre(mp3File.getId3v1Tag().getGenreDescription())
+				.setTrackNumber(track);
+	}
+
 	public static AlbumDirectory generateAlbumFolder(String filePath, Boolean loadMetadata) throws IOException {
 		AlbumDirectory albumFolder = new AlbumDirectory(filePath);
 		File albumFile = new File(filePath);
+		if (loadMetadata) albumFolder.setInfoJson(FileUtils.readFileToString(new File(filePath + "/" + INFO_FILE), "UTF-8"));
 		List<File> subFiles = Arrays.asList(albumFile.listFiles());
 		for (File file : subFiles) {
 			if (file.isDirectory()) {
 				albumFolder.addAlbumDirectory(generateAlbumFolder(file.getAbsolutePath(), loadMetadata));
-			} else if (INFO_FILE.equals(file.getName()) && loadMetadata) {
-				albumFolder.setInfoJson(FileUtils.readFileToString(file, "UTF-8"));
+			} else if (INFO_FILE.equals(file.getName())) {
 			} else {
 				AlbumMediaFile mediaFile = generateAlbumMediaFile(file);
 				if (mediaFile != null) albumFolder.addMediaFile(mediaFile);

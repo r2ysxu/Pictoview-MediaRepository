@@ -11,5 +11,4 @@ public interface VideoMediaRepo extends PagingAndSortingRepository<VideoMediaEnt
 	VideoMediaEntity findByOwnerAndId(UserEntity owner, Long id);
 	Page<VideoMediaEntity> findAllByOwnerAndAlbum_Id(UserEntity owner, Long albumId, Pageable pageable);
 	VideoMediaEntity findByOwnerAndAlbum(UserEntity owner, AlbumEntity album);
-	VideoMediaEntity findFirstByAlbumOrderByNameAsc(AlbumEntity album);
 }
