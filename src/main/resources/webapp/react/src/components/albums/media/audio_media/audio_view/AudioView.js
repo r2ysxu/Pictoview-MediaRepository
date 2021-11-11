@@ -4,7 +4,7 @@ import './AudioView.css';
 
 function AudioView({audioItems, selectedIndex, onSelectIndex}) {
 
-    return ((selectedIndex != null && selectedIndex >= 0) ?
+    return ((selectedIndex != null && selectedIndex >= 0 && audioItems[selectedIndex]) ?
         <div className="audio_view_container">
             <div className="audio_view_audio_info">
             </div>

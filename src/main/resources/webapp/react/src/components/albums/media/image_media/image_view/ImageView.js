@@ -18,7 +18,7 @@ function ImageView({albumId, imageItems, selectedIndex, onSelectIndex}) {
         }
     }
 
-    return ((selectedIndex != null && selectedIndex >= 0) ?
+    return ((selectedIndex != null && selectedIndex >= 0 && imageItems[selectedIndex]) ?
         <div className="image_view_container">
             <div className="image_view_content">
                 <div className="image_view_container_modal" onClick={onCloseModal}></div>

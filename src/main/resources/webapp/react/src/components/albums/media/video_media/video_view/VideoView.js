@@ -8,7 +8,7 @@ function VideoView({videoItems, selectedIndex, onSelectIndex}) {
         onSelectIndex(null);
     }
 
-    return ((selectedIndex != null && selectedIndex >= 0) ?
+    return ((selectedIndex != null && selectedIndex >= 0 && videoItems[selectedIndex]) ?
         <div className="video_view_container">
             <div className="video_view_container_modal" onClick={onCloseModal}>
                 <div className="video_view_video_container">
