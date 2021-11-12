@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 
 function ScrollLoader({isLoading, children, loadMore, hasMore, height}) {
 
@@ -28,7 +28,7 @@ function ScrollLoader({isLoading, children, loadMore, hasMore, height}) {
         loadUntilScrollable();
         window.addEventListener('scroll', onScrollLoad);
         return () => window.removeEventListener('scroll', onScrollLoad);
-    }, [onScrollLoad, isLoading]);
+    });
 
     return (
         <>{children}</>

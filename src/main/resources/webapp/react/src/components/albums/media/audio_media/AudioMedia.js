@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAlbums, loadMoreAudio } from '../../../../model/reducers/albumSlice';
 import ScrollLoader from '../../../widgets/scroll_loader/ScrollLoader';

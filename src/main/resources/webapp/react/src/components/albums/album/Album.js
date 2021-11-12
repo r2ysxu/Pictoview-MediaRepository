@@ -34,10 +34,6 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
         setEditing(false);
     }
 
-    const startEdit = () => {
-        setEditing(true);
-    }
-
     return (
         <div className="album_container">
             <div className="album_title">

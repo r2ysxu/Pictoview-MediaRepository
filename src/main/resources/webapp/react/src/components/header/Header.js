@@ -13,17 +13,11 @@ const hasProfile = (userProfile) => {
 
 function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit, setShowNewAlbumModal}) {
     const [userProfile, setUserProfile] = useState(null);
-    const [selectedIV, setSelectedIV] = useState(0);
 
     const onLogout = () => {
         get_logout().then(() => {
             window.location.replace('/');
         });
-    }
-
-    const onLogin = () => {
-        setLoggedIn(true);
-        window.location.reload();
     }
 
     useEffect(()=> {

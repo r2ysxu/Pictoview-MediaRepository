@@ -8,7 +8,7 @@ function Modal({content, isShown, onHide = null}) {
             <div className="modal_background" onClick={onHide} />
             <div className="modal_dialog modal_dialog_float_out">
                 <div className="modal_header">
-                    {!noCancel && <img src="/assets/icons/x.svg" onClick={onHide} />}
+                    {!noCancel && <img src="/assets/icons/x.svg" alt="close" onClick={onHide} />}
                 </div>
                 <div className="modal_content">
                     {content}

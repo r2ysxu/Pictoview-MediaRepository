@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 import './Searchbar.css';
 
 function Searchbar({onSearch, searchInput, onSearchChange, sideContent}) {

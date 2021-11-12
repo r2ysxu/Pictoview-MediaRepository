@@ -1,7 +1,7 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAlbums, loadCurrentAlbumInfo, loadMoreImages } from '../../model/reducers/albumSlice';
+import { selectAlbums, loadCurrentAlbumInfo } from '../../model/reducers/albumSlice';
 import TabSelector from '../widgets/tab_selector/TabSelector';
 import SubAlbums from './subalbums/SubAlbums';
 import ImageMedia from './media/image_media/ImageMedia';

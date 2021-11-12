@@ -11,7 +11,7 @@ function Dropdown({selectedValue, onSelect, values, placeholder, width}) {
         <div className="dropdown_container">
             <div className="dropdown_selector_container" style={{ width, minWidth: width }}
               onClick={() => setShowSelector(!showSelector)}>
-                <img className="dropdown_icon" src="/assets/icons/chevron-down.svg" />
+                <img className="dropdown_icon" src="/assets/icons/chevron-down.svg" alt="dropdown" />
                 {selectedValueItem === null ?
                     <span className="dropdown_selector_placeholder_text"><i>{placeholder}</i></span> :
                     <span>{selectedValueItem.name}</span>

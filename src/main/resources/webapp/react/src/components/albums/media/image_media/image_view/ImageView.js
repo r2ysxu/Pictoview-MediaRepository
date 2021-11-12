@@ -1,5 +1,5 @@
 import React from 'react';
-import { selectAlbums, loadMoreImages, updateCoverImage } from '../../../../../model/reducers/albumSlice';
+import { updateCoverImage } from '../../../../../model/reducers/albumSlice';
 import ImageViewControls from './image_view_controls/ImageViewControls';
 import './ImageView.css';
 

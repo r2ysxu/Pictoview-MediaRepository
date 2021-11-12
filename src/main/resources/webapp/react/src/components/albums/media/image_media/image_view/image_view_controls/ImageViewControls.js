@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import './ImageViewControls.css';
 
 function ImageViewControls({imageCount, selectedIndex, onIndexChange, onChangeCoverImage}) {
@@ -16,7 +16,7 @@ function ImageViewControls({imageCount, selectedIndex, onIndexChange, onChangeCo
         onIndexChange(null);
     }
 
-    const useKeyControls = useCallback( event => {
+    const useKeyControls = (event) => {
         if (event.keyCode === 39) { // Left Arrow
             onPrevIndex();
         } else if (event.keyCode === 37) { // Right Arrow
@@ -25,12 +25,12 @@ function ImageViewControls({imageCount, selectedIndex, onIndexChange, onChangeCo
             onIndexChange(null);
         }
         event.preventDefault();
-    }, [selectedIndex, onIndexChange]);
+    };
 
     useEffect( () => {
         document.addEventListener('keyup', useKeyControls);
         return () => document.removeEventListener('keyup', useKeyControls);
-    }, [useKeyControls]);
+    });
 
     return (
         <>

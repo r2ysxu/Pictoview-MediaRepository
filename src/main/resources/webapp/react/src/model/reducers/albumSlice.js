@@ -54,7 +54,6 @@ export const updateCoverImage = createAsyncThunk('album/update/cover', async ({a
 });
 
 export const searchAlbums = createAsyncThunk('album/search', async (query, thunkAPI) => {
-    const currentState = thunkAPI.getState().album;
     const page = 0;
     const albums = await get_searchAlbums(page, query);
     return {

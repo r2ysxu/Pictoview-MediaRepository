@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { searchAlbums } from '../model/reducers/albumSlice';
 import Modal from '../components/widgets/modal/Modal';
 import Container from '../components/widgets/container/Container';

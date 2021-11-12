@@ -1,12 +1,9 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAlbums, loadMoreAlbums } from '../../../model/reducers/albumSlice';
 import ScrollLoader from '../../widgets/scroll_loader/ScrollLoader';
 import Album from '../album/Album';
 import '../AlbumsContainer.css';
-
-const Tab = { Album: 'Album', Images: 'Images', Video: 'Video', Music: 'Music' };
 
 function SubAlbums({albumId, changeCurrentAlbum}) {
     const dispatch = useDispatch();

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import './VideoView.css';
 
 function VideoView({videoItems, selectedIndex, onSelectIndex}) {
