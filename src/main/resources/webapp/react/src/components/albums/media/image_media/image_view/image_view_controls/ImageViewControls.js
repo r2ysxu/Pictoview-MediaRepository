@@ -37,9 +37,10 @@ function ImageViewControls({imageCount, selectedIndex, onIndexChange, onChangeCo
             <div className="image_view_update_controls_container">
                 <img className="image_view_controls_icons image_view_controls_icons_medium"
                     src="/assets/icons/journal-richtext.svg" alt=""
-                    onClick={() => {
+                    onClick={(event) => {
                         onChangeCoverImage();
                         onIndexChange(null);
+                        event.preventDefault();
                     }} />
             </div>
             <div className="image_view_controls_container">

@@ -1,20 +1,21 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { updateCoverImage } from '../../../../../model/reducers/albumSlice';
 import ImageViewControls from './image_view_controls/ImageViewControls';
 import './ImageView.css';
 
 function ImageView({albumId, imageItems, selectedIndex, onSelectIndex}) {
-
+    const dispatch = useDispatch();
     const onCloseModal = () => {
         onSelectIndex(null);
     }
 
     const onChangeCoverImage = () => {
         if (imageItems[selectedIndex] !== null) {
-            updateCoverImage({
+            dispatch(updateCoverImage({
                 albumId,
                 imageId: imageItems[selectedIndex].id
-            });
+            }));
         }
     }
 
