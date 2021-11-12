@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { get_userProfile, get_logout } from '../../model/apis/user_apis';
-import LoginForm from '../login/LoginForm';
+import HomeBanner from '../home_banner/HomeBanner';
 import Searchbar from '../widgets/searchbar/Searchbar';
 import MenuBar from '../widgets/menubar/MenuBar';
 import MenuItem from '../widgets/menu_item/MenuItem';
@@ -21,6 +21,11 @@ function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit, setSh
         });
     }
 
+    const onLogin = () => {
+        setLoggedIn(true);
+        window.location.reload();
+    }
+
     useEffect(()=> {
         get_userProfile().then(data => {
             if (hasProfile(data) && !hasProfile(userProfile)) {
@@ -32,13 +37,8 @@ function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit, setSh
 
     return (
         <div className="header">
-            {!hasProfile(userProfile) && 
-                <>
-                    <div className="searchbar searchbar_context"></div>
-                    <LoginForm onLoggedIn={setLoggedIn} />
-                </>}
-            {hasProfile(userProfile) && 
-                <Searchbar 
+            {!hasProfile(userProfile) && <HomeBanner />}
+            {hasProfile(userProfile) && <Searchbar
                     sideContent={
                         <MenuBar lastItem={
                             <MenuItem label={<img src="/assets/icons/box-arrow-up.svg" alt="" />} tooltip="Logout" onClick={onLogout} />

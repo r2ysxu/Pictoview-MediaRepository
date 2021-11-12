@@ -30,7 +30,6 @@ function LoginForm({onLoggedIn}) {
 			setUser(emptyUser);
 			if (response.status === 200) {
 				onLoggedIn();
-				window.location.reload();
 			} else if (response.status === 201) {
 				setLoginErrors(true);
 			}
