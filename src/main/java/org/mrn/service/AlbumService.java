@@ -232,11 +232,13 @@ public class AlbumService {
 	}
 
 	public Album setCoverPhotoById(EndUserEntity user, Long albumId, Long imageId)
-			throws AlbumNotFound, InvalidMediaAlbumException {
+			throws AlbumNotFound, InvalidMediaAlbumException, IOException {
 		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
 		ImageMediaEntity imageMedia = imageMediaRepo.findByOwnerAndId(user, imageId);
 		if (imageMedia == null || imageMedia.getAlbum().getId() != albumEntity.getId())
 			throw new InvalidMediaAlbumException(albumId, imageId);
+		AlbumFileUtils.createCoverPhotoFile(imageMedia.getSource(),
+				ImageService.generateCoverPhotoPath(adminCoverSource, albumEntity, imageMedia));
 		albumEntity.setCoverPhoto(imageMedia);
 		return new AlbumBuilder().build(mediaAlbumRepo.save(albumEntity));
 	}

@@ -110,7 +110,7 @@ public class AlbumController extends BaseController {
 	@ResponseBody
 	@PostMapping(value = "/album/update/cover", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Album updateCoverId(@RequestBody CoverImage coverImage)
-			throws AlbumNotFound, InvalidMediaAlbumException, UnauthenticatedUserException {
+			throws AlbumNotFound, InvalidMediaAlbumException, UnauthenticatedUserException, IOException {
 		return mediaAlbumService.setCoverPhotoById(getUser(), coverImage.getAlbumId(), coverImage.getImageId());
 	}
 }
