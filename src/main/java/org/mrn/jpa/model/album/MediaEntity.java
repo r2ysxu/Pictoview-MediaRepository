@@ -1,13 +1,17 @@
 package org.mrn.jpa.model.album;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.mrn.jpa.model.EntityModel;
+import org.mrn.jpa.model.tags.MediaTagEntity;
 import org.mrn.jpa.model.user.EndUserEntity;
 import org.mrn.jpa.model.user.UserEntity;
 
@@ -25,6 +29,8 @@ public class MediaEntity implements EntityModel {
 	private String source;
 	@ManyToOne
 	private AlbumEntity album;
+	@OneToMany
+	private List<MediaTagEntity> mediaTags;
 
 	public MediaEntity() {}
 
@@ -74,4 +80,13 @@ public class MediaEntity implements EntityModel {
 	public void setOwner(UserEntity owner) {
 		this.owner = owner;
 	}
+
+	public List<MediaTagEntity> getMediaTags() {
+		return mediaTags;
+	}
+
+	public void setMediaTags(List<MediaTagEntity> mediaTags) {
+		this.mediaTags = mediaTags;
+	}
+
 }

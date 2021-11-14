@@ -3,7 +3,6 @@ package org.mrn.configs;
 import org.mrn.security.CustomUserDetailService;
 import org.mrn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,15 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	UserService userService;
-	
-	@Value("${app.login.success.url}")
-	private String loginSuccessUrl;
-	
-	@Value("${app.login.failure.url}")
-	private String loginFailureUrl;
 
 	@Autowired
 	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
