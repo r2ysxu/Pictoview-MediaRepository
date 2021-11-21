@@ -10,10 +10,10 @@ public class NewAlbumInfo implements QueryModel {
 	private String description;
 	private String coverPhotoName;
 	private Integer rating;
+	private String metaType;
 	private List<Category> categories;
 
-	public NewAlbumInfo() {
-	}
+	public NewAlbumInfo() {}
 
 	public NewAlbumInfo(String name, String description, String subtitle, String coverPhotoName, Integer rating) {
 		this.name = name;
@@ -62,6 +62,14 @@ public class NewAlbumInfo implements QueryModel {
 
 	public void setRating(Integer rating) {
 		this.rating = rating;
+	}
+
+	public String getMetaType() {
+		return metaType;
+	}
+
+	public void setMetaType(String metaType) {
+		this.metaType = metaType;
 	}
 
 	public List<Category> getCategories() {

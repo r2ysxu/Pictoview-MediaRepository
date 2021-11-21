@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadAlbumTags, updateAlbum, updateAlbumRating } from '../../../model/reducers/albumSlice';
+import { loadAlbumTags, updateAlbum } from '../../../model/reducers/albumSlice';
 import AlbumInfoTagView from './album_info/album_info_tags/album_info_tags_view/AlbumInfoTagsView';
 import './Album.css';
 

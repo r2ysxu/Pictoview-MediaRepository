@@ -50,6 +50,12 @@ public class AlbumController extends BaseController {
 		Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.unsorted());
 		return mediaAlbumService.searchMediaAlbum(user, SearchQuery.parse(searchString), pageable);
 	}
+	
+	@ResponseBody
+	@GetMapping(value = "/album/get", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Album getAlbum(@RequestParam("albumId") Long albumId) throws AlbumNotFound, UnauthenticatedUserException {
+		return mediaAlbumService.fetchMediaAlbum(getUser(), albumId);
+	}
 
 	@ResponseBody
 	@GetMapping(value = "/album/list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -86,7 +92,7 @@ public class AlbumController extends BaseController {
 	public Album updateAlbum(@RequestBody Album album) throws UnauthenticatedUserException, AlbumNotFound {
 		EndUserEntity user = getUser();
 		return mediaAlbumService.updateAlbum(user, album.getId(), album.getName(), album.getPublisher(),
-				album.getDescription(), album.getRating());
+				album.getDescription(), album.getRating(), album.getMetaType());
 	}
 
 	@PostMapping(value = "/album/update/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -98,7 +104,9 @@ public class AlbumController extends BaseController {
 		mediaAlbumService.createMediaFromFile(user, albumId, albumDirectory);
 		if (fromMetadata) {
 			NewAlbumInfo newAlbum = AlbumInfoParserUtil.loadAlbumInfoFromJson(albumDirectory.getInfoJson());
-			mediaAlbumService.updateAlbum(user, albumId, newAlbum.getName(), newAlbum.getSubtitle(), newAlbum.getDescription(), newAlbum.getRating());
+			mediaAlbumService.updateAlbum(user, albumId, newAlbum.getName(),
+					newAlbum.getSubtitle(), newAlbum.getDescription(),
+					newAlbum.getRating(), newAlbum.getMetaType());
 			tagService.tagAlbum(user, albumId, newAlbum.getCategories());
 			mediaAlbumService.setCoverPhotoByName(user, albumId, newAlbum.getCoverPhotoName());
 		} else {

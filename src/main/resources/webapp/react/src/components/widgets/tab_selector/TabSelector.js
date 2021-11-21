@@ -1,9 +1,13 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './TabSelector.css';
 
-function TabSelector({headerContent, tabs, children}) {
+function TabSelector({headerContent, defaultTab, tabs, children}) {
     const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+
+    useEffect(() => {
+        setSelectedTabIndex(tabs.findIndex( tab => tab.value === defaultTab ) || 0);
+    }, [setSelectedTabIndex, tabs, defaultTab]);
 
     return (
         <div className="tab_selector_container">

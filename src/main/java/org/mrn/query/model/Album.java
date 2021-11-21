@@ -8,16 +8,19 @@ public class Album implements QueryModel {
 	private String description;
 	private Long coverPhotoId;
 	private Integer rating;
+	private String metaType;
 
-	public Album() {}
+	public Album() {
+	}
 
-	public Album(Long id, String name, String description, String subtitle, Long coverPhotoId, Integer rating) {
+	public Album(Long id, String name, String description, String subtitle, Long coverPhotoId, Integer rating, String metaType) {
 		this.id = id;
 		this.name = name;
 		this.publisher = subtitle;
 		this.description = description;
 		this.coverPhotoId = coverPhotoId;
 		this.rating = rating;
+		this.metaType = metaType;
 	}
 
 	public Long getId() {
@@ -72,4 +75,11 @@ public class Album implements QueryModel {
 		return this;
 	}
 
+	public String getMetaType() {
+		return metaType;
+	}
+
+	public void setMetaType(String metaType) {
+		this.metaType = metaType;
+	}
 }

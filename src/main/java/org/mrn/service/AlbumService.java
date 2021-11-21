@@ -81,6 +81,12 @@ public class AlbumService {
 		return new PageItemBuilder<Album, AlbumEntity>().build(albums, new AlbumBuilder());
 	}
 
+	public Album fetchMediaAlbum(UserEntity user, Long albumId) throws AlbumNotFound {
+		AlbumEntity album = mediaAlbumRepo.findByOwnerAndId(user, albumId);
+		if (album == null) throw new AlbumNotFound(user, albumId);
+		return new AlbumBuilder().build(album);
+	}
+
 	public PageItems<Album> listMediaAlbums(UserEntity user, Long parentId, Pageable pageable) {
 		Page<AlbumEntity> albums;
 		if (parentId == null || parentId < 1) albums = mediaAlbumRepo.findAllByOwner(user, pageable);
@@ -117,7 +123,7 @@ public class AlbumService {
 		return new AlbumBuilder().build(albumEntity);
 	}
 
-	public Album updateAlbum(EndUserEntity user, Long albumId, String name, String subtitle, String description, Integer rating)
+	public Album updateAlbum(EndUserEntity user, Long albumId, String name, String subtitle, String description, Integer rating, String metaType)
 			throws AlbumNotFound {
 		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).get();
 		if (albumEntity != null) {
@@ -125,6 +131,7 @@ public class AlbumService {
 			if (subtitle != null) albumEntity.setSubtitle(subtitle);
 			if (description != null) albumEntity.setDescription(description);
 			if (rating != null) albumEntity.setRating(rating);
+			if (metaType != null) albumEntity.setMetaType(metaType);
 			albumEntity = mediaAlbumRepo.save(albumEntity);
 			return new AlbumBuilder().build(albumEntity);
 		} else {

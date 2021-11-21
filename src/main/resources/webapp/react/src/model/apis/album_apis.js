@@ -5,7 +5,13 @@ const onResponseJson = (response) => {
     return response.json();
 }
 
-export const get_fetchAlbums = async (page, parentId) => {
+export const get_album = async (albumId) => {
+    if (albumId <= 0) return { metaType: "albums" };
+    const searchParams = new URLSearchParams({albumId});
+    return fetch('/album/get?' + searchParams.toString()).then(onResponseJson);
+}
+
+export const get_listAlbums = async (page, parentId) => {
     const searchParams = new URLSearchParams({page, parentId});
     return fetch('/album/list?' + searchParams.toString()).then(onResponseJson);
 }

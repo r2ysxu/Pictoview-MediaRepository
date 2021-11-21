@@ -12,7 +12,7 @@ import './AlbumsContainer.css';
 
 function AlbumsContainer({albumHistory, setAlbumHistory}) {
     const dispatch = useDispatch();
-    const { albumId, albums, images, videos , audios} = useSelector(selectAlbums);
+    const { albumId, metaType, albums, images, videos , audios} = useSelector(selectAlbums);
 
     const changeAlbum = (id) => {
         dispatch(loadCurrentAlbumInfo(id));
@@ -28,15 +28,16 @@ function AlbumsContainer({albumHistory, setAlbumHistory}) {
     }, [dispatch, albumId]);
 
     const tabs = [
-        {label: "Albums", badgeLabel: albums.pageInfo.total},
-        {label: "Images", badgeLabel: images.pageInfo.total},
-        {label: "Videos", badgeLabel: videos.pageInfo.total},
-        {label: "Music",  badgeLabel: audios.pageInfo.total},
+        {label: "Albums", value: "albums", badgeLabel: albums.pageInfo.total},
+        {label: "Images", value: "images", badgeLabel: images.pageInfo.total},
+        {label: "Videos", value: "videos", badgeLabel: videos.pageInfo.total},
+        {label: "Music",  value: "music", badgeLabel: audios.pageInfo.total},
     ]
 
     return (
         <TabSelector
             tabs={tabs}
+            defaultTab={metaType}
             headerContent={
                 <Breadcrumbs
                   initHistory={{id: 0, name: ""}}

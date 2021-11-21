@@ -1,7 +1,8 @@
 import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { 
-    get_fetchAlbums,
+    get_album,
     get_searchAlbums,
+    get_listAlbums,
     get_listAlbumImages,
     get_listAlbumVideos,
     get_listAlbumAudios,
@@ -17,6 +18,7 @@ const pendingMoreRequests = new Set();
 
 const initialState = {
     albumId: 0,
+    metaType: 'albums',
     albums: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
     images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
     videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
@@ -64,21 +66,24 @@ export const searchAlbums = createAsyncThunk('album/search', async (query, thunk
 
 export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async (albumId) => {
     pendingMoreRequests.clear();
-    const albums = await get_fetchAlbums(0, albumId);
-    const images = await get_listAlbumImages(0, albumId);
-    const videos = await get_listAlbumVideos(0, albumId);
-    const audios = await get_listAlbumAudios(0, albumId);
+    const currentAlbum = get_album(albumId);
+    const albums = get_listAlbums(0, albumId);
+    const images = get_listAlbumImages(0, albumId);
+    const videos = get_listAlbumVideos(0, albumId);
+    const audios = get_listAlbumAudios(0, albumId);
+    const currentAlbumInfo = await currentAlbum;
     return {
         albumId,
-        albums,
-        images,
-        videos,
-        audios,
+        metaType: currentAlbumInfo.metaType,
+        albums: await albums,
+        images: await images,
+        videos: await videos,
+        audios: await audios,
     };
 });
 
 export const loadMoreAlbums = createAsyncThunk('album/load', async ({albumId, page}) => {
-    const albumsPage = await get_fetchAlbums(page, albumId);
+    const albumsPage = await get_listAlbums(page, albumId);
     return { albumsPage };
 });
 
