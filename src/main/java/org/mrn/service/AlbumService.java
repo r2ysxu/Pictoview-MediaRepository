@@ -240,7 +240,7 @@ public class AlbumService {
 		return mediaAlbumRepo.save(albumEntity);
 	}
 
-	public Album setCoverPhotoById(EndUserEntity user, Long albumId, Long imageId)
+	public Album updateCoverPhotoById(EndUserEntity user, Long albumId, Long imageId)
 			throws AlbumNotFound, InvalidMediaAlbumException, IOException {
 		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
 		ImageMediaEntity imageMedia = imageMediaRepo.findByOwnerAndId(user, imageId);
@@ -252,7 +252,7 @@ public class AlbumService {
 		return new AlbumBuilder().build(mediaAlbumRepo.save(albumEntity));
 	}
 
-	public AlbumEntity setFirstAlbumCoverPhoto(EndUserEntity user, Long albumId) throws IOException, AlbumNotFound {
+	public AlbumEntity updateFirstAlbumCoverPhoto(EndUserEntity user, Long albumId) throws IOException, AlbumNotFound {
 		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
 		ImageMediaEntity imageMedia = imageMediaRepo.findFirstByAlbumOrderByNameAsc(albumEntity);
 		if (imageMedia == null) return null;

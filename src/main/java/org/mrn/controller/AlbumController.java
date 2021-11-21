@@ -110,7 +110,7 @@ public class AlbumController extends BaseController {
 			tagService.tagAlbum(user, albumId, newAlbum.getCategories());
 			mediaAlbumService.setCoverPhotoByName(user, albumId, newAlbum.getCoverPhotoName());
 		} else {
-			mediaAlbumService.setFirstAlbumCoverPhoto(user, albumId);
+			mediaAlbumService.updateFirstAlbumCoverPhoto(user, albumId);
 		}
 		return true;
 	}
@@ -119,6 +119,6 @@ public class AlbumController extends BaseController {
 	@PostMapping(value = "/album/update/cover", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Album updateCoverId(@RequestBody CoverImage coverImage)
 			throws AlbumNotFound, InvalidMediaAlbumException, UnauthenticatedUserException, IOException {
-		return mediaAlbumService.setCoverPhotoById(getUser(), coverImage.getAlbumId(), coverImage.getImageId());
+		return mediaAlbumService.updateCoverPhotoById(getUser(), coverImage.getAlbumId(), coverImage.getImageId());
 	}
 }
