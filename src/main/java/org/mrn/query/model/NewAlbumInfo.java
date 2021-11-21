@@ -9,15 +9,18 @@ public class NewAlbumInfo implements QueryModel {
 	private String subtitle;
 	private String description;
 	private String coverPhotoName;
+	private Integer rating;
 	private List<Category> categories;
-	
-	public NewAlbumInfo() {}
 
-	public NewAlbumInfo(String name, String description, String subtitle, String coverPhotoName) {
+	public NewAlbumInfo() {
+	}
+
+	public NewAlbumInfo(String name, String description, String subtitle, String coverPhotoName, Integer rating) {
 		this.name = name;
 		this.description = description;
 		this.subtitle = subtitle;
 		this.coverPhotoName = coverPhotoName;
+		this.rating = rating;
 		this.categories = new ArrayList<>();
 	}
 
@@ -51,6 +54,14 @@ public class NewAlbumInfo implements QueryModel {
 
 	public void setCoverPhotoName(String coverPhotoName) {
 		this.coverPhotoName = coverPhotoName;
+	}
+
+	public Integer getRating() {
+		return rating;
+	}
+
+	public void setRating(Integer rating) {
+		this.rating = rating;
 	}
 
 	public List<Category> getCategories() {

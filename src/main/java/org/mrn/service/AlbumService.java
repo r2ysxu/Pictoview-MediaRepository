@@ -117,18 +117,25 @@ public class AlbumService {
 		return new AlbumBuilder().build(albumEntity);
 	}
 
-	public Album updateAlbum(EndUserEntity user, Long albumId, String name, String subtitle, String description)
+	public Album updateAlbum(EndUserEntity user, Long albumId, String name, String subtitle, String description, Integer rating)
 			throws AlbumNotFound {
 		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).get();
 		if (albumEntity != null) {
 			if (name != null) albumEntity.setName(name);
 			if (subtitle != null) albumEntity.setSubtitle(subtitle);
 			if (description != null) albumEntity.setDescription(description);
+			if (rating != null) albumEntity.setRating(rating);
 			albumEntity = mediaAlbumRepo.save(albumEntity);
 			return new AlbumBuilder().build(albumEntity);
 		} else {
 			throw new AlbumNotFound(user, albumId);
 		}
+	}
+
+	public Album updateAlbumRating(EndUserEntity user, Long albumId, Integer rating) throws AlbumNotFound {
+		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).get();
+		albumEntity.setRating(rating);
+		return new AlbumBuilder().build(mediaAlbumRepo.save(albumEntity));
 	}
 
 	private String generateThumbnailPath(AlbumEntity album, ImageMediaEntity image) {
@@ -139,7 +146,7 @@ public class AlbumService {
 		List<MusicGenreEntity> musicGenreEntities = musicGenreRepo.findByNameIn(new ArrayList<>(musicEntities.keySet()));
 		Map<String, MusicGenreEntity> musicGenreMap = musicGenreEntities.stream()
 				.collect(Collectors.toMap(MusicGenreEntity::getName, Function.identity()));
-		musicEntities.forEach( (genreName, sameGenreSong) -> {
+		musicEntities.forEach((genreName, sameGenreSong) -> {
 			sameGenreSong.stream().forEach(song -> {
 				MusicGenreEntity musicGenre = musicGenreMap.get(genreName);
 				if (musicGenre == null) musicGenre = musicGenreRepo.save(new MusicGenreEntity().setName(genreName));
@@ -152,8 +159,8 @@ public class AlbumService {
 		List<MusicArtistEntity> musicArtistEntities = musicArtistRepo.findByNameIn(new ArrayList<>(musicEntities.keySet()));
 		Map<String, MusicArtistEntity> musicArtistMap = musicArtistEntities.stream()
 				.collect(Collectors.toMap(MusicArtistEntity::getName, Function.identity()));
-		musicEntities.forEach( (artistName, sameArtistSong) -> {
-			sameArtistSong.stream().forEach( song -> {
+		musicEntities.forEach((artistName, sameArtistSong) -> {
+			sameArtistSong.stream().forEach(song -> {
 				MusicArtistEntity musicArtist = musicArtistMap.get(artistName);
 				if (musicArtist == null) musicArtist = musicArtistRepo.save(new MusicArtistEntity().setName(artistName));
 				song.setArtist(musicArtist);
@@ -191,7 +198,8 @@ public class AlbumService {
 				break;
 			case AUDIO:
 				AudioMediaFile audioFile = AlbumFileUtils.parseAudioFile(file.getAbsolutePath());
-				AudioMediaEntity musicEntity = new AudioMediaEntity(user, file.getAbsolutePath(), file.getName(), file.getMediaType(), albumEntity);
+				AudioMediaEntity musicEntity = new AudioMediaEntity(user, file.getAbsolutePath(), file.getName(),
+						file.getMediaType(), albumEntity);
 				musicEntity.setTrackNumber(audioFile.getTrackNumber());
 				if (audioFile != null) {
 					musicEntity.setTitle(audioFile.getTitle());

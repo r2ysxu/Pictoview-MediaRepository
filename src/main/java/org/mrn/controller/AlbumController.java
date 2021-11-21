@@ -86,7 +86,7 @@ public class AlbumController extends BaseController {
 	public Album updateAlbum(@RequestBody Album album) throws UnauthenticatedUserException, AlbumNotFound {
 		EndUserEntity user = getUser();
 		return mediaAlbumService.updateAlbum(user, album.getId(), album.getName(), album.getPublisher(),
-				album.getDescription());
+				album.getDescription(), album.getRating());
 	}
 
 	@PostMapping(value = "/album/update/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -98,7 +98,7 @@ public class AlbumController extends BaseController {
 		mediaAlbumService.createMediaFromFile(user, albumId, albumDirectory);
 		if (fromMetadata) {
 			NewAlbumInfo newAlbum = AlbumInfoParserUtil.loadAlbumInfoFromJson(albumDirectory.getInfoJson());
-			mediaAlbumService.updateAlbum(user, albumId, newAlbum.getName(), newAlbum.getSubtitle(), newAlbum.getDescription());
+			mediaAlbumService.updateAlbum(user, albumId, newAlbum.getName(), newAlbum.getSubtitle(), newAlbum.getDescription(), newAlbum.getRating());
 			tagService.tagAlbum(user, albumId, newAlbum.getCategories());
 			mediaAlbumService.setCoverPhotoByName(user, albumId, newAlbum.getCoverPhotoName());
 		} else {

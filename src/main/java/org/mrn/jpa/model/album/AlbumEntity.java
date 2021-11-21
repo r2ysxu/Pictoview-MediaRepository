@@ -35,6 +35,8 @@ public class AlbumEntity implements EntityModel {
 	@Column
 	private String description;
 	@Column
+	private Integer rating;
+	@Column
 	private String metaType;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private ImageMediaEntity coverPhoto;
@@ -49,15 +51,15 @@ public class AlbumEntity implements EntityModel {
 		this.name = name;
 	}
 
-	public AlbumEntity(UserEntity owner, String name, String description) {
-		this(owner, name);
-		this.description = description;
-	}
-
-	public AlbumEntity(UserEntity owner, String name, String subtitle, String description) {
+	public AlbumEntity(UserEntity owner, String name, String subtitle, String description, Integer rating) {
 		this(owner, name);
 		this.subtitle = subtitle;
 		this.description = description;
+		this.rating = rating;
+	}
+
+	public AlbumEntity(UserEntity owner, String name, String subtitle, String description) {
+		this(owner, name, subtitle, description, null);
 	}
 
 	public Long getId() {
@@ -107,6 +109,14 @@ public class AlbumEntity implements EntityModel {
 	public AlbumEntity setDescription(String description) {
 		this.description = description;
 		return this;
+	}
+
+	public Integer getRating() {
+		return rating;
+	}
+
+	public void setRating(Integer rating) {
+		this.rating = rating;
 	}
 
 	public String getMetaType() {

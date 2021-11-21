@@ -155,7 +155,7 @@ public class DirectoryService {
 		File currentPathFile = new File(adminSource + currentPath);
 		String parentPath = new File(currentPathFile.getParent()).getAbsolutePath();
 
-		AlbumEntity imageAlbum = new AlbumEntity(user, name, "");
+		AlbumEntity imageAlbum = new AlbumEntity(user, name, "", "");
 		imageAlbum.setSubtitle(albumPublisher.getName());
 		imageAlbum = mediaAlbumRepo.save(imageAlbum);
 
