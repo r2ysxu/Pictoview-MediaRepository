@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadAlbumTags, updateAlbum } from '../../../model/reducers/albumSlice';
+import { loadAlbumTags, updateAlbum, updateAlbumRating } from '../../../model/reducers/albumSlice';
 import AlbumInfoTagView from './album_info/album_info_tags/album_info_tags_view/AlbumInfoTagsView';
 import './Album.css';
 
@@ -9,6 +9,8 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
     const dispatch = useDispatch();
     const [showMoreInfo, setShowMoreInfo] = useState(false);
     const [isEditing, setEditing] = useState(false);
+    const [isEditRating, setEditRating] = useState(false);
+    const [rating, setRating] = useState(album.rating);
     const [currentAlbum, setCurrentAlbum] = useState(album);
 
     const onShowMoreInfo = (albumId) => {
@@ -18,6 +20,24 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
         } else {
             setShowMoreInfo(false);
         }
+    }
+
+    const onEditRating = (event) => {
+        setEditRating(!isEditRating);
+        event.preventDefault();
+        return false;
+    }
+
+    const onChangeRating = (event) => {
+        setRating(event.target.value);
+    }
+
+    const onChangeRatingDone = (event) => {
+        dispatch(updateAlbum({
+            id: currentAlbum.id,
+            rating
+        }));
+        setEditRating(false);
     }
 
     const loadTags = (albumId) => {
@@ -69,7 +89,9 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
             <div className="album_banner" onClick={() => onShowMoreInfo(album.id)}>
                 {!isEditing && <h4>{album.publisher}</h4>}
                 {isEditing && <input className="album_text_field album_publisher_text_field" placeholder="Publisher" value={currentAlbum.publisher} onChange={ (event) => setCurrentAlbum({...currentAlbum, publisher: event.target.value}) } />}
-                <div className="album_banner_rating" style={{ backgroundColor: 'rgb(255, '+ Math.max(0, (100 - album.rating)) +', 0)' }} />
+                <div className="album_banner_rating" style={{ backgroundColor: 'rgb(255, '+ Math.max(0, (100 - album.rating)) +', 0)' }}
+                     onClick={onEditRating} />
+                {isEditRating && <input className="album_banner_rating_slider" type="range" min="0" max="100" value={rating} onChange={onChangeRating} onBlur={onChangeRatingDone} />}
             </div>
         </div>
     );

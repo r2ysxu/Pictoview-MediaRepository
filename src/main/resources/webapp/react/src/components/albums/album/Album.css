@@ -133,9 +133,10 @@
 }
 
 .album_publisher_text_field {
+    float: left;
     color: #848484;
     margin-left: 10px;
-    width: calc(100% - 20px);
+    width: calc(100% - 40px);
 }
 
 .album_edit_submit {
@@ -154,4 +155,8 @@
 
 .album_edit_submit:hover {
     background-color: #27cb2f;
+}
+
+.album_banner_rating_slider {
+    margin-top: 0px;
 }

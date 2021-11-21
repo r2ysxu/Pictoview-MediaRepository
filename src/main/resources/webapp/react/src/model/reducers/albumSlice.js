@@ -38,7 +38,7 @@ export const uploadAlbumFile = async ({albumId, file, fromMetadata}) => {
     return await post_uploadAlbum(albumId, file, fromMetadata);
 };
 
-export const updateAlbum = createAsyncThunk('album/update/info', async(updatedAlbum, thunkAPI) => {
+export const updateAlbum = createAsyncThunk('album/update/info', async (updatedAlbum, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
     const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === updatedAlbum.id);
     const tags = await get_listAlbumTags(updatedAlbum.id);

@@ -132,12 +132,6 @@ public class AlbumService {
 		}
 	}
 
-	public Album updateAlbumRating(EndUserEntity user, Long albumId, Integer rating) throws AlbumNotFound {
-		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).get();
-		albumEntity.setRating(rating);
-		return new AlbumBuilder().build(mediaAlbumRepo.save(albumEntity));
-	}
-
 	private String generateThumbnailPath(AlbumEntity album, ImageMediaEntity image) {
 		return adminThumbnailSource + album.getId() + "/" + image.getId() + image.getTypeExtension();
 	}
