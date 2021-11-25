@@ -54,10 +54,14 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
         setEditing(false);
     }
 
+    let albumNameSizeClass = "";
+    if (currentAlbum.name.length > 80) albumNameSizeClass = "album_title_40";
+    else if (currentAlbum.name.length > 20) albumNameSizeClass = "album_title_20";
+
     return (
         <div className="album_container">
             <div className="album_title">
-                {!isEditing && <h2>{currentAlbum.name}</h2>}
+                {!isEditing && <h2 className={albumNameSizeClass}>{currentAlbum.name}</h2>}
                 {isEditing && <input className="album_text_field album_name_text_field" type="text" placeholder="Name" value={currentAlbum.name} onChange={ (event) => setCurrentAlbum({...currentAlbum, name: event.target.value}) } />}
             </div>
             <div className="album_center_container">

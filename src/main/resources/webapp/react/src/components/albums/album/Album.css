@@ -11,6 +11,10 @@
 }
 
 .album_container h2 {
+    overflow-wrap: break-word;
+    white-space: normal;
+    word-break: break-word;
+    max-width: 200px;
     color: #fff;
     margin: 5px 5px 5px 5px;
 }
@@ -34,6 +38,18 @@
     box-shadow: inset -1px 1px 5px 0px rgb(0 0 0 / 25%);
     background-color: #5369de;
     border: 1px outset #fff;
+}
+
+.album_title_normal {
+    font-size: 1.5em;
+}
+
+.album_title_20 {
+    font-size: 1em;
+}
+
+.album_title_40 {
+    font-size: 0.5em;
 }
 
 .album_banner {
