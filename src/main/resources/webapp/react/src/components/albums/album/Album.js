@@ -71,18 +71,21 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
                         <img className="album_image" src={'/album/image/cover?albumid=' + album.id} alt="" />}
                 </div>
                 {showMoreInfo && <div className="album_info_container">
-                    <img className="album_info_edit_icon"
+                    {!isEditing && <img className="album_info_edit_icon"
                         src="/assets/icons/pencil.svg" alt=""
                         onClick={() => {
                             setEditing(!isEditing);
                         }}
-                    />
+                    />}
+                    {isEditing && <div className="album_info_edit_buttons">
+                        <img className="album_info_edit_buttons_save" src="/assets/icons/check.svg" alt="" onClick={onUpdateAlbum} />
+                        <img className="album_info_edit_buttons_cancel" src="/assets/icons/x.svg" alt="" onClick={onUpdateAlbum} />
+                    </div>}
                     <div className="album_info_description_container">
                         <h3>Description</h3>
                         {!isEditing && <div className="album_info_description_text">{currentAlbum.description}</div>}
                         {isEditing && <textarea className="album_info_description_text" placeholder="Description" value={currentAlbum.description} onChange={ (event) => setCurrentAlbum({...currentAlbum, description: event.target.value}) } />}
                     </div>
-                    {isEditing && <button className="album_edit_submit" onClick={onUpdateAlbum}>Save</button>}
                     <AlbumInfoTagView
                         albumId={album.id}
                         tags={album.tags}

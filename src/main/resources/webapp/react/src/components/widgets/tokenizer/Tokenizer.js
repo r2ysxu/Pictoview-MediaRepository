@@ -36,7 +36,6 @@ function Tokenizer({title, tokens, setTokens, autoCompleteValues, onAutoComplete
         } else if (event.charCode === 96) { // `
             onDiscardPressed(event);
         }
-        console.log(event.charCode)
     }
 
     const onDiscardPressed = (event) => {

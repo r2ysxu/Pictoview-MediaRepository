@@ -123,6 +123,25 @@
     float: right;
 }
 
+.album_info_edit_buttons {
+    margin-top: 5px;
+    margin-right: 10px;
+    float: right;
+}
+
+.album_info_edit_buttons img {
+    height: 15pt;
+    width: 15pt;
+}
+
+.album_info_edit_buttons_save {
+    filter: invert(50%) sepia(1) hue-rotate(90deg) saturate(5);
+}
+
+.album_info_edit_buttons_cancel {
+    filter: invert(50%) sepia(1) hue-rotate(320deg) saturate(5);
+}
+
 .album_text_field {
     font-style: italic;
     color: #fff;
