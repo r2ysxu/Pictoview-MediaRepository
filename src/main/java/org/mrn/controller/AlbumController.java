@@ -6,8 +6,10 @@ import org.mrn.exceptions.AlbumNotFound;
 import org.mrn.exceptions.InvalidMediaAlbumException;
 import org.mrn.exceptions.UnauthenticatedUserException;
 import org.mrn.filemanager.AlbumDirectory;
+import org.mrn.filemanager.AlbumFileUtils;
 import org.mrn.jpa.model.tags.SearchQuery;
 import org.mrn.jpa.model.user.EndUserEntity;
+import org.mrn.jpa.model.user.UserEntity.Role;
 import org.mrn.query.model.Album;
 import org.mrn.query.model.AlbumTag;
 import org.mrn.query.model.CoverImage;
@@ -113,6 +115,34 @@ public class AlbumController extends BaseController {
 			mediaAlbumService.updateFirstAlbumCoverPhoto(user, albumId);
 		}
 		return true;
+	}
+
+	/**
+	 * This allows an admin to dangerously create an album by giving a filepath of the file on the server.
+	 * Please remove this when deploying to public domains for security.
+	 *
+	 * @param path file path of the album on the server
+	 * @return
+	 * @throws IOException
+	 * @throws AlbumNotFound
+	 * @throws UnsupportedTagException
+	 * @throws InvalidDataException
+	 * @throws UnauthenticatedUserException
+	 */
+	@PostMapping(value = "/album/update/filepath")
+	public Album uploadAlbumMedia(@RequestBody String path)
+			throws IOException, AlbumNotFound, UnsupportedTagException, InvalidDataException, UnauthenticatedUserException {
+		EndUserEntity user = getUser();
+		if (user.getRole() != Role.ADMIN) return null;
+		AlbumDirectory albumDirectory = AlbumFileUtils.generateAlbumFolder(path, true);
+		NewAlbumInfo newAlbum = AlbumInfoParserUtil.loadAlbumInfoFromJson(albumDirectory.getInfoJson());
+		Album album = mediaAlbumService.createAlbum(user, newAlbum.getName(), newAlbum.getSubtitle(), newAlbum.getDescription());
+		mediaAlbumService.updateAlbum(user, album.getId(), newAlbum.getName(), newAlbum.getSubtitle(), newAlbum.getDescription(),
+				newAlbum.getRating(), newAlbum.getMetaType());
+		mediaAlbumService.createMediaFromFile(user, album.getId(), albumDirectory);
+		tagService.tagAlbum(user, album.getId(), newAlbum.getCategories());
+		mediaAlbumService.setCoverPhotoByName(user, album.getId(), newAlbum.getCoverPhotoName());
+		return album;
 	}
 
 	@ResponseBody
