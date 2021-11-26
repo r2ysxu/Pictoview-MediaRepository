@@ -14,7 +14,7 @@ public class CategoryBuilder implements ModelBuilder<Category, CategoryEntity> {
 
 	public static List<Category> buildFrom(Iterable<CategoryEntity> entities) {
 		List<Category> categories = new ArrayList<>();
-		entities.forEach(category -> CategoryBuilder.buildFrom(category));
+		entities.forEach(category -> categories.add(CategoryBuilder.buildFrom(category)));
 		return categories;
 	}
 

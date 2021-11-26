@@ -22,7 +22,7 @@ function AlbumInfoTagsNewCategory({albumId, existingCategories}) {
             const availabileCategories = (categories || []).filter( category => !existingCategories.some( existingCategory => existingCategory.id === category.id ));
             setCategories(availabileCategories);
         });
-    });
+    }, []);
 
     return (
         <div className="album_info_tags_new_category_container">
