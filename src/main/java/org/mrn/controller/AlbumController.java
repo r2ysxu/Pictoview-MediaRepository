@@ -98,7 +98,7 @@ public class AlbumController extends BaseController {
 	}
 
 	@PostMapping(value = "/album/update/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public Boolean uploadAlbumMedia(@RequestParam("file") MultipartFile file, @RequestParam("albumId") Long albumId,
+	public Boolean uploadAlbum(@RequestParam("file") MultipartFile file, @RequestParam("albumId") Long albumId,
 			@RequestParam("fromMetadata") Boolean fromMetadata)
 			throws UnauthenticatedUserException, IllegalStateException, IOException, AlbumNotFound, UnsupportedTagException, InvalidDataException {
 		EndUserEntity user = getUser();
@@ -117,6 +117,13 @@ public class AlbumController extends BaseController {
 		return true;
 	}
 
+	@PostMapping(value = "/album/update/upload/media", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public Boolean uploadAlbumMedium(@RequestParam("file") MultipartFile file, @RequestParam("albumId") Long albumId) throws UnauthenticatedUserException, UnsupportedTagException, InvalidDataException, IOException, AlbumNotFound {
+		EndUserEntity user = getUser();
+		mediaAlbumService.createMediumFromFile(user, albumId, file);
+		return true;
+	}
+
 	/**
 	 * This allows an admin to dangerously create an album by giving a filepath of the file on the server.
 	 * Please remove this when deploying to public domains for security.
@@ -130,7 +137,7 @@ public class AlbumController extends BaseController {
 	 * @throws UnauthenticatedUserException
 	 */
 	@PostMapping(value = "/album/update/filepath")
-	public Album uploadAlbumMedia(@RequestBody String path)
+	public Album uploadAlbum(@RequestBody String path)
 			throws IOException, AlbumNotFound, UnsupportedTagException, InvalidDataException, UnauthenticatedUserException {
 		EndUserEntity user = getUser();
 		if (user.getRole() != Role.ADMIN) return null;

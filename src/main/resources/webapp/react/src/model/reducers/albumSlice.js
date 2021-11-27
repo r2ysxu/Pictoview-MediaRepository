@@ -9,6 +9,7 @@ import {
     get_listAlbumTags,
     post_createAlbum,
     post_uploadAlbum,
+    post_uploadMedia,
     post_updateAlbum,
     post_changeAlbumCover,
 } from '../apis/album_apis';
@@ -39,6 +40,10 @@ export const createAlbum = async ({name, publisher, description}) => {
 export const uploadAlbumFile = async ({albumId, file, fromMetadata}) => {
     return await post_uploadAlbum(albumId, file, fromMetadata);
 };
+
+export const uploadAlbumMediaFile = async({albumId, file}) => {
+    return await post_uploadMedia(albumId, file);
+}
 
 export const updateAlbum = createAsyncThunk('album/update/info', async (updatedAlbum, thunkAPI) => {
     const currentState = thunkAPI.getState().album;

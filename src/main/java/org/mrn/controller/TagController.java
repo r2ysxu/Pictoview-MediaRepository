@@ -3,6 +3,7 @@ package org.mrn.controller;
 import java.util.List;
 
 import org.mrn.exceptions.UnauthenticatedUserException;
+import org.mrn.jpa.model.user.UserEntity.Role;
 import org.mrn.query.model.Category;
 import org.mrn.query.model.Tag;
 import org.mrn.service.TagService;
@@ -58,7 +59,7 @@ public class TagController extends BaseController {
 	@ResponseBody
 	@PostMapping(value = "/tag/category/create", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Category createTagCategory(@RequestBody String categoryName) throws UnauthenticatedUserException {
-		getUser();
+		if (getUser().getRole() != Role.ADMIN) return null;
 		return tagService.createCategory(categoryName);
 	}
 }

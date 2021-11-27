@@ -53,6 +53,17 @@ export const post_createAlbum = async(album) => {
     }).then(onResponseJson);
 }
 
+export const post_uploadMedia = async(albumId, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('albumId', albumId);
+    return fetch('/album/update/upload/media', {
+        method: 'POST',
+        headers: { 'enctype': 'multipart/form-data' },
+        body: formData,
+    }).then(onResponseJson);
+}
+
 export const post_uploadAlbum = async(albumId, file, fromMetadata) => {
     const formData = new FormData();
     formData.append('file', file);

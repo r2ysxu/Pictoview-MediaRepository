@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface MusicArtistRepo extends CrudRepository<MusicArtistEntity, Long> {
 	List<MusicArtistEntity> findByNameIn(List<String> name);
+	MusicArtistEntity findByName(String name);
 }

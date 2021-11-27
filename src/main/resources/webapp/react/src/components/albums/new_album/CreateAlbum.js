@@ -54,6 +54,7 @@ function CreateAlbum({onDone}) {
 
     return (
         <div>
+            <h3>Create New Album</h3>
             <ToggleButton selectedValue={newAlbumFile.fromMetadata} onSelect={setFromMetadata} label="Populate From File" />
             {!newAlbumFile.fromMetadata && <div>
                 <TextField label="Name" value={newAlbum.name} onChange={(event) => setNewAlbum({...newAlbum, name: event.target.value})} />
@@ -61,7 +62,6 @@ function CreateAlbum({onDone}) {
                 <textarea className="text_field" placeholder="Description" value={newAlbum.description} onChange={(event) => setNewAlbum({...newAlbum, description: event.target.value})} />
             </div>}
                 <input className="text_field" type="file" onChange={onFileUploadChange} disabled={isLoading} />
-                {}
                 <button className="button_form_submit" disabled={isLoading} onClick={onSubmit}>
                     <span>Create</span>
                     {isLoading && <div className="button_form_loader">

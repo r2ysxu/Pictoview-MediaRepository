@@ -141,7 +141,7 @@ public class AlbumFileUtils {
 		}
 	}
 
-	private static AlbumMediaFile generateAlbumMediaFile(File file) {
+	public static AlbumMediaFile generateAlbumMediaFile(File file) {
 		AlbumMediaFile albumMediaFile = new AlbumMediaFile()
 				.setAbsolutePath(file.getAbsolutePath())
 				.setName(file.getName())

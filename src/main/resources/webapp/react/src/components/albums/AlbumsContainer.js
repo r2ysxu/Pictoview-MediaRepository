@@ -1,17 +1,20 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAlbums, loadCurrentAlbumInfo } from '../../model/reducers/albumSlice';
+import Modal from '../widgets/modal/Modal';
 import TabSelector from '../widgets/tab_selector/TabSelector';
 import SubAlbums from './subalbums/SubAlbums';
 import ImageMedia from './media/image_media/ImageMedia';
 import VideoMedia from './media/video_media/VideoMedia';
 import AudioMedia from './media/audio_media/AudioMedia';
 import Breadcrumbs from '../breadcrumbs/Breadcrumbs';
+import CreateMedia  from './new_media/CreateMedia';
 import './AlbumsContainer.css';
 
 function AlbumsContainer({albumHistory, setAlbumHistory}) {
     const dispatch = useDispatch();
+    const [showAddMedia, setShowAddMedia] = useState(false);
     const { albumId, metaType, albums, images, videos , audios} = useSelector(selectAlbums);
 
     const changeAlbum = (id) => {
@@ -44,6 +47,17 @@ function AlbumsContainer({albumHistory, setAlbumHistory}) {
                   path={albumHistory}
                   setHistory={setAlbumHistory}
                   onChange={changeAlbum} />
+            }
+            sideContent={
+                <div>
+                    <img className="albums_add_media_button" src="/assets/icons/plus-circle-fill.svg" alt=""
+                        onClick={() => setShowAddMedia(true)} />
+                    <Modal
+                        isShown={showAddMedia}
+                        onHide={() => setShowAddMedia(false)}
+                        content={<CreateMedia onDone={() => setShowAddMedia(false)} />}
+                    />
+                </div>
             }>
             <SubAlbums albumId={albumId} changeCurrentAlbum={changeCurrentAlbum}/>
             <ImageMedia albumId={albumId} />

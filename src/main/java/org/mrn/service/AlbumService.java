@@ -36,8 +36,8 @@ import org.mrn.query.model.AudioMediaItem;
 import org.mrn.query.model.MediaItem;
 import org.mrn.query.model.PageItems;
 import org.mrn.service.builder.AlbumBuilder;
-import org.mrn.service.builder.ImageMediaItemBuilder;
 import org.mrn.service.builder.AudioMediaItemBuilder;
+import org.mrn.service.builder.ImageMediaItemBuilder;
 import org.mrn.service.builder.PageItemBuilder;
 import org.mrn.service.builder.VideoMediaItemBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +111,7 @@ public class AlbumService {
 
 	public AlbumDirectory uploadAlbumMedia(EndUserEntity user, Long albumId, MultipartFile file, Boolean loadMetadata)
 			throws IllegalStateException, IOException {
-		final String albumFolderPath = adminSource + ALBUMS_DIRECTORY + file.getOriginalFilename().replace(".zip", "");
+		final String albumFolderPath = adminSource + ALBUMS_DIRECTORY + albumId;
 		File zippedFile = new File(adminSource + ZIPPED_DIRECTORY + file.getOriginalFilename());
 		file.transferTo(zippedFile);
 		AlbumFileUtils.unzipFolder(zippedFile.getAbsolutePath(), albumFolderPath);
@@ -173,6 +173,48 @@ public class AlbumService {
 		for (ImageMediaEntity image : imageMedia) {
 			image.setThumbnailSource(generateThumbnailPath(albumEntity, image));
 			AlbumFileUtils.createPhotoThumbnail(image.getSource(), image.getThumbnailSource());
+		}
+	}
+
+	public MediaEntity createMediumFromFile(EndUserEntity user, Long albumId, MultipartFile mediaFile) throws UnsupportedTagException, InvalidDataException, IOException, AlbumNotFound {
+		File storedFile = new File(adminSource + ALBUMS_DIRECTORY + albumId + "/" + mediaFile.getOriginalFilename());
+		mediaFile.transferTo(storedFile);
+		AlbumMediaFile file = AlbumFileUtils.generateAlbumMediaFile(storedFile);
+		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
+		switch (file.getType()) {
+		case IMAGE:
+			ImageMediaEntity imageMedia = imageMediaRepo.save(new ImageMediaEntity(user,
+					file.getAbsolutePath(), file.getName(), file.getMediaType(),
+					albumEntity));
+			imageMedia.setThumbnailSource(generateThumbnailPath(albumEntity, imageMedia));
+			AlbumFileUtils.createPhotoThumbnail(imageMedia.getSource(), imageMedia.getThumbnailSource());
+			return imageMediaRepo.save(imageMedia);
+		case VIDEO:
+			return videoMediaRepo.save(new VideoMediaEntity(user,
+					file.getAbsolutePath(), file.getName(), file.getMediaType(),
+					albumEntity));
+		case AUDIO:
+			AudioMediaFile audioFile = AlbumFileUtils.parseAudioFile(file.getAbsolutePath());
+			AudioMediaEntity musicEntity = new AudioMediaEntity(user, file.getAbsolutePath(), file.getName(),
+					file.getMediaType(), albumEntity);
+			musicEntity.setTrackNumber(audioFile.getTrackNumber());
+			if (audioFile != null) {
+				MusicArtistEntity musicArtistEntity = musicArtistRepo.findByName(audioFile.getArtist());
+				MusicGenreEntity musicGenreEntity = musicGenreRepo.findByName(audioFile.getGenre());
+				if (musicArtistEntity == null) {
+					musicArtistEntity = musicArtistRepo.save(
+							new MusicArtistEntity().setName(audioFile.getArtist()));
+				}
+				if (musicGenreEntity == null) {
+					musicGenreEntity = musicGenreRepo.save(
+							new MusicGenreEntity().setName(audioFile.getGenre()));
+				}
+				musicEntity.setTitle(audioFile.getTitle());
+				musicEntity.setArtist(musicArtistEntity);
+				musicEntity.setGenre(musicGenreEntity);
+			}
+			return audioMediaRepo.save(musicEntity);
+		default: return null;
 		}
 	}
 
