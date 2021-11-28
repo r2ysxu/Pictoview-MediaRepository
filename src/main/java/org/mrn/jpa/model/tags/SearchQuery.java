@@ -35,7 +35,6 @@ public class SearchQuery {
 
 	private SearchQuery(String[] tokens) {
 		tags = new HashMap<>();
-		tags.put(Categories.Tags, new ArrayList<>());
 		List<String> names = new ArrayList<>();
 
 		for (String token : tokens) {
@@ -44,6 +43,8 @@ public class SearchQuery {
 			if (token.startsWith(CATEGORY_DELIMITER)) {
 				String[] categoryToken = token.substring(2).split(CATEGORY_DELIMITER);
 				if (categoryToken.length == 1) {
+					if (tags.get(Categories.Tags) == null)
+						tags.put(Categories.Tags, new ArrayList<>());
 					tags.get(Categories.Tags).add(removeQuotes(categoryToken[0]).toLowerCase());
 				} else if (categoryToken.length == 2) {
 					if (!tags.containsKey(categoryToken[0]))

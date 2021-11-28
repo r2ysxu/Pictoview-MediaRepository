@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -32,9 +33,9 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 	private EntityManager entityManager;
 
 	private Predicate generateFilters(CriteriaBuilder cb, Root<AlbumEntity> album, UserEntity user, SearchQuery searchQuery) {
-		Join<AlbumEntity, AlbumTagEntity> albumTag = album.join("albumTags");
-		Join<AlbumTagEntity, TagEntity> tagPath = albumTag.join("tag");
-		Join<TagEntity, CategoryEntity> categoryPath = tagPath.join("category");
+		Join<AlbumEntity, AlbumTagEntity> albumTag = album.join("albumTags", JoinType.LEFT);
+		Join<AlbumTagEntity, TagEntity> tagPath = albumTag.join("tag", JoinType.LEFT);
+		Join<TagEntity, CategoryEntity> categoryPath = tagPath.join("category", JoinType.LEFT);
 
 		Path<String> tagName = tagPath.get("name");
 		Path<String> categoryName = categoryPath.get("name");
@@ -45,12 +46,12 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 			for (String tag : tags.getValue())
 				whereTags.add(cb.and(cb.equal(categoryName, tags.getKey()), cb.equal(tagName, tag)));
 		}
-		String namePattern = StringUtils.isEmpty(searchQuery.getName()) ? "" : '%' + searchQuery.getName() + '%';
+		String namePattern = StringUtils.isEmpty(searchQuery.getName()) ? "%" : '%' + searchQuery.getName().toUpperCase() + '%';
 
 		return cb.and(
 				cb.equal(album.get("owner"), user),
 				cb.or(
-					cb.like(album.get("name"), namePattern),
+					cb.like(cb.upper(album.get("name")), namePattern),
 					cb.or(whereTags.toArray(new Predicate[whereTags.size()]))
 				)
 			);
