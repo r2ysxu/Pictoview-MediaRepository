@@ -96,7 +96,7 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
             <div className="album_banner" onClick={() => onShowMoreInfo(album.id)}>
                 {!isEditing && <h4>{album.publisher}</h4>}
                 {isEditing && <input className="album_text_field album_publisher_text_field" placeholder="Publisher" value={currentAlbum.publisher} onChange={ (event) => setCurrentAlbum({...currentAlbum, publisher: event.target.value}) } />}
-                <div className="album_banner_rating" style={{ backgroundColor: 'rgb(255, '+ Math.max(0, (100 - album.rating)) +', 0)' }}
+                <div className="album_banner_rating" style={{ backgroundColor: 'rgb(' + (album.ratings < 50 ? '0' : '255') + ', '+ Math.min(255, (200 - album.rating * 2)) +', 0)' }}
                      onClick={onEditRating} />
                 {isEditRating && <input className="album_banner_rating_slider" type="range" min="0" max="100" value={rating} onChange={onChangeRating} onBlur={onChangeRatingDone} />}
             </div>
