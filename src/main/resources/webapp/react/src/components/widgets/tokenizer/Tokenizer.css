@@ -5,6 +5,7 @@
     width: 100%;
     min-width: 800px;
     background-color: rgba(17,17,17,0.75);
+    z-index: 200;
 }
 
 .tokenizer_container input {
