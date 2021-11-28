@@ -66,6 +66,7 @@ public class TagService {
 						newTags.add(new TagEntity(category, tagQuery.getValue()));
 					} else {
 						tagQuery.setId(tag.getId());
+						existingTagIds.add(tagQuery.getId());
 					}
 				} else {
 					existingTagIds.add(tagQuery.getId());
