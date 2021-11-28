@@ -87,7 +87,7 @@ export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async (albumI
     };
 });
 
-export const loadMoreAlbums = createAsyncThunk('album/load', async ({albumId, page}) => {
+export const loadMoreAlbums = createAsyncThunk('album/load/album/more', async ({albumId, page}) => {
     const albumsPage = await get_listAlbums(page, albumId);
     return { albumsPage };
 });
@@ -152,6 +152,17 @@ export const albumSlice = createSlice({
                 state.isLoading = true;
             }).addCase(searchAlbums.fulfilled, (state, action) => {
                 Object.assign(state, action.payload);
+                state.isLoading = false;
+            }).addCase(loadMoreAlbums.fulfilled, (state, action) => {
+                if (pendingMoreRequests.has(action.meta.requestId)) {
+                    state.albums.pageInfo = action.payload.albumsPage.pageInfo;
+                    state.albums.items.push(...action.payload.albumsPage.items || []);
+                    pendingMoreRequests.delete(action.meta.requestId);
+                }
+            }).addCase(loadMoreAlbums.pending, (state, action) => {
+                pendingMoreRequests.add(action.meta.requestId);
+                state.isLoading = true;
+            }).addCase(loadMoreAlbums.rejected, (state, action) => {
                 state.isLoading = false;
             }).addCase(loadMoreImages.fulfilled, (state, action) => {
                 if (pendingMoreRequests.has(action.meta.requestId)) {
