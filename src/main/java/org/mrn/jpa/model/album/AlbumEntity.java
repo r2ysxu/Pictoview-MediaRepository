@@ -28,7 +28,7 @@ public class AlbumEntity implements EntityModel {
 	private UserEntity owner;
 	@ManyToOne
 	private AlbumEntity parent;
-	@OneToMany
+	@OneToMany(mappedBy = "album")
 	private List<AlbumTagEntity> albumTags;
 	@Column
 	private String subtitle;
@@ -40,7 +40,7 @@ public class AlbumEntity implements EntityModel {
 	private String metaType;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private ImageMediaEntity coverPhoto;
-	@OneToMany
+	@OneToMany(mappedBy = "album")
 	private List<MediaEntity> media;
 
 	protected AlbumEntity() {

@@ -19,7 +19,7 @@ public class CategoryEntity implements EntityModel {
 	protected long id;
 	@Column(unique = true, nullable = false)
 	private String name;
-	@OneToMany
+	@OneToMany(mappedBy = "category")
 	private List<TagEntity> tags;
 	
 	public CategoryEntity() {}

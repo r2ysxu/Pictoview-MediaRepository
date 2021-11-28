@@ -29,7 +29,7 @@ public class MediaEntity implements EntityModel {
 	private String source;
 	@ManyToOne
 	private AlbumEntity album;
-	@OneToMany
+	@OneToMany(mappedBy = "medium")
 	private List<MediaTagEntity> mediaTags;
 
 	public MediaEntity() {}

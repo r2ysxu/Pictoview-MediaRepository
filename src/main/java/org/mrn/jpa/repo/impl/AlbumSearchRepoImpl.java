@@ -46,7 +46,7 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 			for (String tag : tags.getValue())
 				whereTags.add(cb.and(cb.equal(categoryName, tags.getKey()), cb.equal(tagName, tag)));
 		}
-		String namePattern = StringUtils.isEmpty(searchQuery.getName()) ? "%" : '%' + searchQuery.getName().toUpperCase() + '%';
+		String namePattern = StringUtils.isEmpty(searchQuery.getName()) ? "" : '%' + searchQuery.getName().toUpperCase() + '%';
 
 		return cb.and(
 				cb.equal(album.get("owner"), user),

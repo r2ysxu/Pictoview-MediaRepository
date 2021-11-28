@@ -19,7 +19,7 @@ public class PlayListEntity implements EntityModel {
 	protected long id;
 	@Column(nullable = false)
 	private String name;
-	@OneToMany
+	@OneToMany(mappedBy = "track")
 	List<PlayListTrackEntity> tracks;
 
 	public Long getId() {
