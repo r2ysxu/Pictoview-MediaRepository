@@ -1,5 +1,7 @@
 package org.mrn.service;
 
+import javax.transaction.Transactional;
+
 import org.mrn.exceptions.UnauthenticatedUserException;
 import org.mrn.exceptions.UserExistsException;
 import org.mrn.jpa.model.user.EndUserEntity;
@@ -17,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
 	@Autowired
-	EndUserRepo endUsersRepo;
+	private EndUserRepo endUsersRepo;
 
 	public static UserDetails getAuthenticatedUser() throws UnauthenticatedUserException {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -26,6 +28,7 @@ public class UserService {
 		return (UserDetails) principal;
 	}
 
+	@Transactional
 	public EndUserEntity findByUserName(String username) {
 		return endUsersRepo.findByUsername(username);
 	}
