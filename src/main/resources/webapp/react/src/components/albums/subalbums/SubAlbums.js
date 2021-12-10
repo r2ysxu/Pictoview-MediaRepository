@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAlbums, loadMoreAlbums } from '../../../model/reducers/albumSlice';
+import { selectAlbums, loadMoreAlbums, loadMoreSearchAlbums } from '../../../model/reducers/albumSlice';
 import ScrollLoader from '../../widgets/scroll_loader/ScrollLoader';
 import Album from '../album/Album';
 import '../AlbumsContainer.css';
@@ -11,7 +11,10 @@ function SubAlbums({albumId, changeCurrentAlbum}) {
     const isLoading = useSelector((state) => state.album.isLoading);
 
     const loadMore = () => {
-        if (!isLoading) dispatch(loadMoreAlbums({albumId, page: albums.pageInfo.page + 1}));
+        if (!isLoading) {
+            if (albumId === null) dispatch(loadMoreSearchAlbums({page: albums.pageInfo.page + 1}));
+            else dispatch(loadMoreAlbums({albumId, page: albums.pageInfo.page + 1}));
+        }
     }
 
     return (

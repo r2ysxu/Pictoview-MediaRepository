@@ -27,7 +27,7 @@ function AlbumsContainer({albumHistory, setAlbumHistory}) {
     }
 
     useEffect(()=> {
-        dispatch(loadCurrentAlbumInfo(albumId));
+        if (albumId !== null) dispatch(loadCurrentAlbumInfo(albumId));
     }, [dispatch, albumId]);
 
     const tabs = [

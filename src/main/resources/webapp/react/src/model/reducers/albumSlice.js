@@ -64,8 +64,12 @@ export const searchAlbums = createAsyncThunk('album/search', async (query, thunk
     const page = 0;
     const albums = await get_searchAlbums(page, query);
     return {
-        albumId: 0,
-        albums
+        albumId: null,
+        albumQuery: query,
+        albums,
+        images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
+        videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
+        audios: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
     };
 });
 
@@ -85,6 +89,12 @@ export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async (albumI
         videos: await videos,
         audios: await audios,
     };
+});
+
+export const loadMoreSearchAlbums = createAsyncThunk('album/search/album/more', async ({page}, thunkAPI) => {
+    const currentState = thunkAPI.getState().album;
+    const albumsPage = await get_searchAlbums(page, currentState.albumQuery);
+    return { albumsPage };
 });
 
 export const loadMoreAlbums = createAsyncThunk('album/load/album/more', async ({albumId, page}) => {
@@ -153,12 +163,23 @@ export const albumSlice = createSlice({
             }).addCase(searchAlbums.fulfilled, (state, action) => {
                 Object.assign(state, action.payload);
                 state.isLoading = false;
+            }).addCase(loadMoreSearchAlbums.pending, (state, action) => {
+                pendingMoreRequests.add(action.meta.requestId);
+                state.isLoading = true;
+            }).addCase(loadMoreSearchAlbums.fulfilled, (state, action) => {
+                if (pendingMoreRequests.has(action.meta.requestId)) {
+                    state.albums.pageInfo = action.payload.albumsPage.pageInfo;
+                    state.albums.items.push(...action.payload.albumsPage.items || []);
+                    pendingMoreRequests.delete(action.meta.requestId);
+                }
+                state.isLoading = false;
             }).addCase(loadMoreAlbums.fulfilled, (state, action) => {
                 if (pendingMoreRequests.has(action.meta.requestId)) {
                     state.albums.pageInfo = action.payload.albumsPage.pageInfo;
                     state.albums.items.push(...action.payload.albumsPage.items || []);
                     pendingMoreRequests.delete(action.meta.requestId);
                 }
+                state.isLoading = false;
             }).addCase(loadMoreAlbums.pending, (state, action) => {
                 pendingMoreRequests.add(action.meta.requestId);
                 state.isLoading = true;
@@ -187,6 +208,7 @@ export const albumSlice = createSlice({
                     state.videos.items.push(...action.payload.videosPage.items || []);
                     pendingMoreRequests.delete(action.meta.requestId);
                 }
+                state.isLoading = false;
             }).addCase(loadMoreAudio.pending, (state, action) => {
                 pendingMoreRequests.add(action.meta.requestId);
                 state.isLoading = true;
@@ -198,6 +220,7 @@ export const albumSlice = createSlice({
                     state.audios.items.push(...action.payload.audiosPage.items || []);
                     pendingMoreRequests.delete(action.meta.requestId);
                 }
+                state.isLoading = false;
             }).addCase(updateAlbum.fulfilled, (state, action) => {
                 state.albums.items[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
             }).addCase(loadAlbumTags.fulfilled, (state, action) => {

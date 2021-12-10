@@ -10,7 +10,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -33,9 +32,9 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 	private EntityManager entityManager;
 
 	private Predicate generateFilters(CriteriaBuilder cb, Root<AlbumEntity> album, UserEntity user, SearchQuery searchQuery) {
-		Join<AlbumEntity, AlbumTagEntity> albumTag = album.join("albumTags", JoinType.LEFT);
-		Join<AlbumTagEntity, TagEntity> tagPath = albumTag.join("tag", JoinType.LEFT);
-		Join<TagEntity, CategoryEntity> categoryPath = tagPath.join("category", JoinType.LEFT);
+		Join<AlbumEntity, AlbumTagEntity> albumTag = album.join("albumTags");
+		Join<AlbumTagEntity, TagEntity> tagPath = albumTag.join("tag");
+		Join<TagEntity, CategoryEntity> categoryPath = tagPath.join("category");
 
 		Path<String> tagName = tagPath.get("name");
 		Path<String> categoryName = categoryPath.get("name");
@@ -44,16 +43,16 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 		Map<String, List<String>> categoryTags = searchQuery.getTags();
 		for (Entry<String, List<String>> tags : categoryTags.entrySet()) {
 			for (String tag : tags.getValue())
-				whereTags.add(cb.and(cb.equal(categoryName, tags.getKey()), cb.equal(tagName, tag)));
+				whereTags.add(cb.and(cb.equal(cb.upper(categoryName), tags.getKey().toUpperCase()), cb.equal(cb.upper(tagName), tag.toUpperCase())));
 		}
-		String namePattern = StringUtils.isEmpty(searchQuery.getName()) ? "" : '%' + searchQuery.getName().toUpperCase() + '%';
+
+		if (!StringUtils.isEmpty(searchQuery.getName())) {
+			whereTags.add(cb.like(cb.upper(album.get("name")), '%' + searchQuery.getName().toUpperCase() + '%'));
+		}
 
 		return cb.and(
 				cb.equal(album.get("owner"), user),
-				cb.or(
-					cb.like(cb.upper(album.get("name")), namePattern),
-					cb.or(whereTags.toArray(new Predicate[whereTags.size()]))
-				)
+				cb.or(whereTags.toArray(new Predicate[whereTags.size()]))
 			);
 	}
 
@@ -61,14 +60,15 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 		CriteriaQuery<AlbumEntity> query = cb.createQuery(AlbumEntity.class);
 		Root<AlbumEntity> album = query.from(AlbumEntity.class);
 
-		query.select(album).where(generateFilters(cb, album, user, searchQuery));
+		query.distinct(true).select(album).where(generateFilters(cb, album, user, searchQuery));
 		return query;
 	}
-	
+
 	private CriteriaQuery<Long> createSearchCountQuery(CriteriaBuilder cb, UserEntity user, SearchQuery searchQuery) {
 		CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
 		Root<AlbumEntity> countAlbum = countQuery.from(AlbumEntity.class);
 		countQuery
+			.distinct(true)
 			.select(cb.count(countAlbum))
 			.where(generateFilters(cb, countAlbum, user, searchQuery));
 		return countQuery;
