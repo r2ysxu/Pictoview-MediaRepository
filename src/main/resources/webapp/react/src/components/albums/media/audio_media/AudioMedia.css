@@ -10,6 +10,28 @@
 	width: 80%;
 }
 
+.audio_media_info_container_song {
+	display: flex;
+}
+
+.audio_media_info_container_song h3 {
+	color: #fff;
+    margin: 0 15px 0 0;
+	font-size: 14pt;
+}
+
+.audio_media_info_container_song h4 {
+	color: #848484;
+	margin: 0;
+	font-size: 14pt;
+}
+
+.audio_media_info_container_song h5 {
+	color: #848484;
+    margin: 0 0 0 40px;
+	font-size: 10pt;
+}
+
 .audio_media_play_button {
 	margin-right: 15px;
 }

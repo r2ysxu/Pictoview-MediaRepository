@@ -23,9 +23,11 @@ function AudioMedia({albumId}) {
                     {audios.items.map( (audio, index) =>
                         <div key={audio.id} className="audio_media_container">
                             <div className="audio_media_info_container">
-                                <span>{audio.title}</span>
-                                <span>{audio.artist}</span>
-                                <span>{audio.genre}</span>
+                                <div className="audio_media_info_container_song">
+                                    <h3>{audio.title}</h3>
+                                    <h4>{audio.artist}</h4>
+                                    <h5>{audio.genre}</h5>
+                                </div>
                             </div>
                             <img className="audio_media_play_button"
                                  src="/assets/icons/play-circle.svg"
