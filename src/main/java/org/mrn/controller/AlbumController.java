@@ -109,8 +109,8 @@ public class AlbumController extends BaseController {
 			mediaAlbumService.updateAlbum(user, albumId, newAlbum.getName(),
 					newAlbum.getSubtitle(), newAlbum.getDescription(),
 					newAlbum.getRating(), newAlbum.getMetaType());
-			tagService.tagAlbum(user, albumId, newAlbum.getCategories());
 			mediaAlbumService.setCoverPhotoByName(user, albumId, newAlbum.getCoverPhotoName());
+			tagService.tagAlbum(user, albumId, newAlbum.getCategories());
 		} else {
 			mediaAlbumService.updateFirstAlbumCoverPhoto(user, albumId);
 		}
