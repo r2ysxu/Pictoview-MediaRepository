@@ -14,9 +14,10 @@ function VideoView({videoItems, selectedIndex, onSelectIndex}) {
     }
 
     const useKeyControls = (event) => {
+        if (selectedIndex === null) return;
         if (event.keyCode === 67) { // C
             onSkipTime(60);
-        } else if (event.keyCode == 99) { // c
+        } else if (event.keyCode === 99) { // c
             onSkipTime(10);
         } else if (event.keyCode === 88) { // X
             onSkipTime(-60);

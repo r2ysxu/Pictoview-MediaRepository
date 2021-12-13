@@ -11,9 +11,14 @@ function VideoMedia({albumId}) {
     const { videos } = useSelector(selectAlbums);
     const isLoading = useSelector((state) => state.album.isLoading);
     const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
+    const [isFetching, setFetching] = useState(false);
 
     const loadMore = () => {
-        if (!isLoading) dispatch(loadMoreVideos({albumId, page: videos.pageInfo.page + 1}));
+        if (!isLoading && !isFetching) {
+            setFetching(true);
+            dispatch(loadMoreVideos({albumId, page: videos.pageInfo.page + 1}))
+                .then( () => setFetching(false));
+        }
     }
 
     return (

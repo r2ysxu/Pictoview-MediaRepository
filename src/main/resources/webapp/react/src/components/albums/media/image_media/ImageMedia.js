@@ -12,9 +12,14 @@ function ImageMedia({albumId}) {
     const { images } = useSelector(selectAlbums);
     const isLoading = useSelector((state) => state.album.isLoading);
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+    const [isFetching, setFetching] = useState(false);
 
     const loadMore = () => {
-        if (!isLoading) dispatch(loadMoreImages({albumId, page: images.pageInfo.page + 1}));
+        if (!isLoading && !isFetching) {
+            setFetching(true);
+            dispatch(loadMoreImages({albumId, page: images.pageInfo.page + 1}))
+                .then( () => setFetching(false));
+        }
     }
 
     return (

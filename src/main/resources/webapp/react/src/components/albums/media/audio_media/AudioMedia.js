@@ -11,9 +11,14 @@ function AudioMedia({albumId}) {
     const { audios } = useSelector(selectAlbums);
     const isLoading = useSelector((state) => state.album.isLoading);
     const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
+    const [isFetching, setFetching] = useState(false);
 
     const loadMore = () => {
-        if (!isLoading) dispatch(loadMoreAudio({albumId, page: audios.pageInfo.page + 1}));
+        if (!isLoading && isFetching) {
+            setFetching(true);
+            dispatch(loadMoreAudio({albumId, page: audios.pageInfo.page + 1}))
+                .then( () => setFetching(false));
+        }
     }
 
     return (
