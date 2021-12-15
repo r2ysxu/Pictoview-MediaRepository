@@ -17,13 +17,20 @@
     color: #fff;
 }
 
-.albums_add_media_button {
+.albums_side_button {
     margin: 15px 10px 10px 10px;
     width: 15pt;
     height: 15pt;
+}
+
+.albums_side_button_sort:hover {
+    filter: invert(50%);
+}
+
+.albums_side_button_add {
     filter: invert(50%) sepia(1) hue-rotate(90deg) saturate(3);
 }
 
-.albums_add_media_button:hover {
+.albums_side_button_add:hover {
     filter: invert(70%) sepia(1) hue-rotate(90deg) saturate(3);
 }

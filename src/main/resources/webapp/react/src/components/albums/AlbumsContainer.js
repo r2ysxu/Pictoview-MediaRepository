@@ -42,7 +42,8 @@ function AlbumsContainer({albumId, history}) {
                 <Breadcrumbs history={history} />}
             sideContent={
                 <div>
-                    <img className="albums_add_media_button" src="/assets/icons/plus-circle-fill.svg" alt=""
+                    <img className="albums_side_button albums_side_button_sort" src="/assets/icons/arrow-down-up.svg" alt="" />
+                    <img className="albums_side_button albums_side_button_add" src="/assets/icons/plus-circle-fill.svg" alt=""
                         onClick={() => setShowAddMedia(true)} />
                     <Modal
                         isShown={showAddMedia}

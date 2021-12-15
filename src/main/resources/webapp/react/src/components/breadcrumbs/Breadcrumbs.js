@@ -30,7 +30,7 @@ function Breadcrumbs({history}) {
 
     return (
         <div className="breadcrumbs_container">
-            <div className="breadcrumbs_back_icon" onClick={() => popHistory()}>
+            <div className="breadcrumbs_icon_container" onClick={() => popHistory()}>
                 <img className="breadcrumbs_icon" src="/assets/icons/folder-symlink.svg" alt="" />
             </div>
             <div onClick={() => goHome()}>
@@ -38,7 +38,7 @@ function Breadcrumbs({history}) {
             </div>
             { pathHistory().map( (id, index) => 
                 <div key={id + index}>
-                    <img className="breadcrumbs_icon" src="/assets/icons/chevron-compact-right.svg" alt="" />
+                    <img className="breadcrumbs_icon_chevron" src="/assets/icons/chevron-compact-right.svg" alt="" />
                     <img className="breadcrumbs_icon" src="/assets/icons/folder.svg" alt="" onClick={() => sliceHistory(index)} />
                 </div> ) }
         </div>

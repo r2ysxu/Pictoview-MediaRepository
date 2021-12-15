@@ -155,7 +155,7 @@
 }
 
 .album_name_text_field {
-    font-size: 1.5em;
+    font-size: 14pt;
     width: calc(100% - 15px);
     margin: 10px 0 5px 0;
     line-height: 18px;
