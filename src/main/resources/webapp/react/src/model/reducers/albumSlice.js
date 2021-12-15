@@ -20,10 +20,10 @@ const pendingMoreRequests = new Set();
 const initialState = {
     albumId: 0,
     metaType: 'albums',
-    albums: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
-    images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
-    videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
-    audios: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
+    albums: { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } },
+    images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } },
+    videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } },
+    audios: { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } },
 
     isLoading: false,
 }
@@ -67,16 +67,16 @@ export const searchAlbums = createAsyncThunk('album/search', async (query, thunk
         albumId: null,
         albumQuery: query,
         albums,
-        images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
-        videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
-        audios: { items: [], pageInfo: { page: 0, total: 0, hasNext: false } },
+        images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false, sortedBy: { field: 'unsorted', asc: true } } },
+        videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false, sortedBy: { field: 'unsorted', asc: true } } },
+        audios: { items: [], pageInfo: { page: 0, total: 0, hasNext: false, sortedBy: { field: 'unsorted', asc: true } } },
     };
 });
 
-export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async (albumId) => {
+export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async ({albumId, sort}) => {
     pendingMoreRequests.clear();
     const currentAlbum = get_album(albumId);
-    const albums = get_listAlbums(0, albumId);
+    const albums = get_listAlbums(0, albumId, sort);
     const images = get_listAlbumImages(0, albumId);
     const videos = get_listAlbumVideos(0, albumId);
     const audios = get_listAlbumAudios(0, albumId);
@@ -97,8 +97,8 @@ export const loadMoreSearchAlbums = createAsyncThunk('album/search/album/more', 
     return { albumsPage };
 });
 
-export const loadMoreAlbums = createAsyncThunk('album/load/album/more', async ({albumId, page}) => {
-    const albumsPage = await get_listAlbums(page, albumId);
+export const loadMoreAlbums = createAsyncThunk('album/load/album/more', async ({albumId, page, sort}) => {
+    const albumsPage = await get_listAlbums(page, albumId, sort);
     return { albumsPage };
 });
 

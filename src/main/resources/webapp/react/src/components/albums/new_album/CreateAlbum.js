@@ -35,7 +35,7 @@ function CreateAlbum({onDone}) {
     const onFileUpload = () => {
         uploadAlbumFile(newAlbumFile).then( () => {
             setIsLoading(false);
-            dispatch(loadCurrentAlbumInfo(currentAlbumId)).then(onDone);
+            dispatch(loadCurrentAlbumInfo({ albumId: currentAlbumId })).then(onDone);
         });
     }
 
@@ -47,7 +47,7 @@ function CreateAlbum({onDone}) {
                 onFileUpload();
             } else {
                 setIsLoading(false);
-                dispatch(loadCurrentAlbumInfo(currentAlbumId)).then(onDone);
+                dispatch(loadCurrentAlbumInfo({ albumId: currentAlbumId })).then(onDone);
             }
         })
     };

@@ -15,6 +15,7 @@ import org.mrn.query.model.AlbumTag;
 import org.mrn.query.model.CoverImage;
 import org.mrn.query.model.NewAlbumInfo;
 import org.mrn.query.model.PageItems;
+import org.mrn.query.model.SortBy;
 import org.mrn.service.AlbumService;
 import org.mrn.service.TagService;
 import org.mrn.utils.AlbumInfoParserUtil;
@@ -61,11 +62,17 @@ public class AlbumController extends BaseController {
 
 	@ResponseBody
 	@GetMapping(value = "/album/list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public PageItems<Album> listAlbums(@RequestParam(name = "parentId") Long parentId,
-			@RequestParam(name = "page") Integer page) throws UnauthenticatedUserException {
+	public PageItems<Album> listAlbums(
+		@RequestParam(name = "parentId") Long parentId,
+		@RequestParam(name = "page") Integer page,
+		@RequestParam(name = "sortField", required = false) String sortBy,
+		@RequestParam(name = "ascending", required = false) Boolean asc
+	) throws UnauthenticatedUserException {
 		EndUserEntity user = getUser();
-		Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.unsorted());
-		return mediaAlbumService.listMediaAlbums(user, parentId, pageable);
+		Pageable pageable = PageRequest.of(page, PAGE_SIZE, SortBy.getSortField(sortBy, asc));
+		PageItems<Album> albums = mediaAlbumService.listMediaAlbums(user, parentId, pageable);
+		albums.getPageInfo().setSortedBy(SortBy.instance(sortBy, asc));
+		return albums;
 	}
 
 	@ResponseBody

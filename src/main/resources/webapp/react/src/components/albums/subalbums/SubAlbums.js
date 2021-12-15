@@ -16,12 +16,12 @@ function SubAlbums({albumId, changeCurrentAlbum}) {
         if (!isLoading && !isFetching) {
             setFetching(true);
             if (albumId === null) {
-                dispatch(loadMoreSearchAlbums({page: albums.pageInfo.page + 1}))
+                dispatch(loadMoreSearchAlbums({page: albums.pageInfo.page + 1, sort: albums.pageInfo.sortedBy }))
                     .then( () => setFetching(false));
             } else {
-                dispatch(loadMoreAlbums({albumId, page: albums.pageInfo.page + 1}))
+                dispatch(loadMoreAlbums({albumId, page: albums.pageInfo.page + 1, sort: albums.pageInfo.sortedBy }))
                     .then( () => setFetching(false));
-            } 
+            }
         }
     }
 

@@ -19,12 +19,27 @@
 
 .albums_side_button {
     margin: 15px 10px 10px 10px;
-    width: 15pt;
-    height: 15pt;
+    width: 16pt;
+    height: 16pt;
+}
+
+.album_side_button_dropdown {
+    color: #fff;
+    margin: 15px 10px 10px 10px;
+    float: right;
+}
+
+.albums_side_button_sort {
+    width: 10pt;
+    height: 10pt;
+    background-color: #fff;
+    border-radius: 25%;
+    padding: 3pt;
+    filter: invert(100%);
 }
 
 .albums_side_button_sort:hover {
-    filter: invert(50%);
+    filter: invert(20%);
 }
 
 .albums_side_button_add {

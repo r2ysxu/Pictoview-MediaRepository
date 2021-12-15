@@ -4,6 +4,7 @@ public class PageInfo {
 	private Boolean hasNext;
 	private Long total;
 	private Integer page;
+	private SortBy sortedBy;
 
 	public PageInfo() {}
 
@@ -30,5 +31,13 @@ public class PageInfo {
 	}
 	public void setPage(Integer page) {
 		this.page = page;
+	}
+
+	public SortBy getSortedBy() {
+		return sortedBy;
+	}
+
+	public void setSortedBy(SortBy sortedBy) {
+		this.sortedBy = sortedBy;
 	}
 }

@@ -13,6 +13,10 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
     const [rating, setRating] = useState(album.rating);
     const [currentAlbum, setCurrentAlbum] = useState(album);
 
+    const onAlbumClick = (event) => {
+        return onChangeAlbum(album.id, event.ctrlKey);
+    }
+
     const onShowMoreInfo = (albumId) => {
         if (showMoreInfo === false) {
             setShowMoreInfo(true);
@@ -65,7 +69,7 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
                 {isEditing && <input className="album_text_field album_name_text_field" type="text" placeholder="Name" value={currentAlbum.name} onChange={ (event) => setCurrentAlbum({...currentAlbum, name: event.target.value}) } />}
             </div>
             <div className="album_center_container">
-                <div className="album_wrapper" onClick={() => onChangeAlbum(album.id)}>
+                <div className="album_wrapper" onClick={onAlbumClick}>
                     {album.id === 0 ? 
                         <imge className="album_image" src="/assets/icons/image.svg" /> :
                         <img className="album_image" src={'/album/image/cover?albumid=' + album.id} alt="" />}

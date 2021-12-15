@@ -4,6 +4,7 @@
     margin: 5px 5px;
     box-shadow: 4px 5px 2px 0px rgba(0, 0, 0, 0.25);
     -webkit-transition: all 0.4s ease;
+    min-width: 200px;
 }
 
 .album_container p {
