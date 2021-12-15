@@ -17,7 +17,7 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
         if (showMoreInfo === false) {
             setShowMoreInfo(true);
             loadTags(albumId);
-        } else {
+        } else if (isEditing === false) {
             setShowMoreInfo(false);
         }
     }
