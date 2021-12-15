@@ -52,7 +52,7 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 
 		return cb.and(
 				cb.equal(album.get("owner"), user),
-				cb.or(whereTags.toArray(new Predicate[whereTags.size()]))
+				cb.and(whereTags.toArray(new Predicate[whereTags.size()]))
 			);
 	}
 

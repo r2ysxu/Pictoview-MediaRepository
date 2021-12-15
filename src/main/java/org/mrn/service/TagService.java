@@ -60,10 +60,11 @@ public class TagService {
 		for (Category categoryQuery : categories) {
 			CategoryEntity category = categoryRepo.findById(categoryQuery.getId()).get();
 			for (Tag tagQuery : categoryQuery.getTags()) {
+				String tagValue = tagQuery.getValue().trim();
 				if (tagQuery.getId() == null) {
-					TagEntity tag = tagRepo.findByNameAndCategory(tagQuery.getValue(), category);
+					TagEntity tag = tagRepo.findByNameAndCategory(tagValue, category);
 					if (tag == null) {
-						newTags.add(new TagEntity(category, tagQuery.getValue()));
+						newTags.add(new TagEntity(category, tagValue));
 					} else {
 						tagQuery.setId(tag.getId());
 						existingTagIds.add(tagQuery.getId());
