@@ -4,26 +4,23 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAlbums, loadCurrentAlbumInfo } from '../../model/reducers/albumSlice';
 import Modal from '../widgets/modal/Modal';
 import TabSelector from '../widgets/tab_selector/TabSelector';
+import Breadcrumbs from '../breadcrumbs/Breadcrumbs';
 import SubAlbums from './subalbums/SubAlbums';
 import ImageMedia from './media/image_media/ImageMedia';
 import VideoMedia from './media/video_media/VideoMedia';
 import AudioMedia from './media/audio_media/AudioMedia';
-import Breadcrumbs from '../breadcrumbs/Breadcrumbs';
 import CreateMedia  from './new_media/CreateMedia';
 import './AlbumsContainer.css';
 
-function AlbumsContainer({albumHistory, setAlbumHistory}) {
+function AlbumsContainer({albumId, history}) {
     const dispatch = useDispatch();
     const [showAddMedia, setShowAddMedia] = useState(false);
-    const { albumId, metaType, albums, images, videos , audios} = useSelector(selectAlbums);
+    const { metaType, albums, images, videos, audios} = useSelector(selectAlbums);
 
-    const changeAlbum = (id) => {
-        dispatch(loadCurrentAlbumInfo(id));
-    }
-
-    const changeCurrentAlbum = ({id, name}) => {
-        changeAlbum(id);
-        setAlbumHistory([...albumHistory, {id, name}]);
+    const changeCurrentAlbum = (id) => {
+        const newHistory = history.length === 0 ? [] : history.split(',');
+        newHistory.push(albumId);
+        window.location = '/album?albumId=' + id + '&history=' + newHistory.join(',');
     }
 
     useEffect(()=> {
@@ -42,12 +39,7 @@ function AlbumsContainer({albumHistory, setAlbumHistory}) {
             tabs={tabs}
             defaultTab={metaType}
             headerContent={
-                <Breadcrumbs
-                  initHistory={{id: 0, name: ""}}
-                  path={albumHistory}
-                  setHistory={setAlbumHistory}
-                  onChange={changeAlbum} />
-            }
+                <Breadcrumbs history={history} />}
             sideContent={
                 <div>
                     <img className="albums_add_media_button" src="/assets/icons/plus-circle-fill.svg" alt=""

@@ -65,7 +65,7 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
                 {isEditing && <input className="album_text_field album_name_text_field" type="text" placeholder="Name" value={currentAlbum.name} onChange={ (event) => setCurrentAlbum({...currentAlbum, name: event.target.value}) } />}
             </div>
             <div className="album_center_container">
-                <div className="album_wrapper" onClick={() => onChangeAlbum({id: album.id, name: album.name})}>
+                <div className="album_wrapper" onClick={() => onChangeAlbum(album.id)}>
                     {album.id === 0 ? 
                         <imge className="album_image" src="/assets/icons/image.svg" /> :
                         <img className="album_image" src={'/album/image/cover?albumid=' + album.id} alt="" />}

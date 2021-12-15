@@ -1,25 +1,31 @@
 import React from 'react';
 import './Breadcrumbs.css';
 
-function Breadcrumbs({path, initHistory, setHistory, onChange}) {
+function Breadcrumbs({history}) {
 
-    const pathHistory = path || [];
+    const pathHistory = () => {
+        if (history.length === 0) return [];
+        return history.split(',') || [];
+    }
 
     const goHome = () => {
-        onChange(0);
-        setHistory([initHistory]);
+        window.location = '/album';
     }
 
     const sliceHistory = (index) => {
-        if (pathHistory.length > index) {
-            const lastId = pathHistory[index].id;
-            onChange(lastId);
-            setHistory(pathHistory.slice(0, index + 1));
+        if (pathHistory().length - 1 === index) {
+            // Current path
+        } else if (pathHistory().length > index && index >= 0) {
+            const lastId = pathHistory()[index].id;
+            const historyPath = pathHistory().slice(0, index);
+            window.location = '/album?albumId=' + lastId + ((historyPath.length === 0) ? '' : '&history=' + historyPath.join(','));
+        } else {
+            window.location = '/album';
         }
     }
 
     const popHistory = () => {
-        sliceHistory(Math.max(0, pathHistory.length - 2));
+        sliceHistory(pathHistory().length - 2);
     }
 
     return (
@@ -30,12 +36,10 @@ function Breadcrumbs({path, initHistory, setHistory, onChange}) {
             <div onClick={() => goHome()}>
                 <img className="breadcrumbs_icon" src="/assets/icons/house-door.svg" alt="" />
             </div>
-            { pathHistory.slice(1).map( (item, index) => 
-                <div key={item.id}>
+            { pathHistory().map( (id, index) => 
+                <div key={id + index}>
                     <img className="breadcrumbs_icon" src="/assets/icons/chevron-compact-right.svg" alt="" />
-                    <div className="breadcrumbs_label" onClick={() => sliceHistory(index + 1)}>
-                        <span>{item.name}</span>
-                    </div>
+                    <img className="breadcrumbs_icon" src="/assets/icons/folder.svg" alt="" onClick={() => sliceHistory(index)} />
                 </div> ) }
         </div>
     );
