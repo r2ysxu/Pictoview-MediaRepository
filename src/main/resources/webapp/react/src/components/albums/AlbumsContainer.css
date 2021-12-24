@@ -53,11 +53,15 @@
 
 .album_selector {
     position: fixed;
-    width: calc(100% - 110px);
-    top: 66px;
+    box-sizing: border-box;
+    top: 50pt;
     left: 0;
-    padding-left: 100px;
-    padding-right: 10px;
+    padding-right: 5pt;
     border-radius: 0;
     background-color: rgba(0, 0, 0, 0.5);
+}
+
+.album_selector_offset {
+    left: 70pt;
+    width: calc(100% - 70pt);
 }

@@ -22,6 +22,7 @@ function AlbumPage(props) {
     const [loggedIn, setLoggedIn] = useState(false);
     const [searchInput, setSearchInput] = useState('');
     const [showNewAlbumModal, setShowNewAlbumModal] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const onSearch = (query) => {
         dispatch(searchAlbums(query));
@@ -31,6 +32,10 @@ function AlbumPage(props) {
         setShowNewAlbumModal(false);
     }
 
+    const onMenuSelect = (isOpen) => {
+        setIsMenuOpen(isOpen);
+    }
+
     return (
         <div>
             <Header
@@ -38,15 +43,17 @@ function AlbumPage(props) {
                 searchInput={searchInput}
                 onSearchChange={setSearchInput}
                 onSearchSubmit={onSearch}
-                setShowNewAlbumModal={setShowNewAlbumModal} />
-            <Container isLoggedIn={loggedIn}>
+                setShowNewAlbumModal={setShowNewAlbumModal}
+                onMenuSelect={onMenuSelect} />
+            <Container isLoggedIn={loggedIn} containerClass={isMenuOpen ? "menubar_offset" : ""}>
                 <Modal
                     content={<CreateAlbum onDone={hideNewAlbumModal} />}
                     isShown={showNewAlbumModal}
                     onHide={hideNewAlbumModal} />
                 <AlbumsContainer
                     albumId={albumId}
-                    history={history} />
+                    history={history}
+                    selectorClass={"album_selector " + (isMenuOpen ? "album_selector_offset" : "") } />
             </Container>
         </div>
     );

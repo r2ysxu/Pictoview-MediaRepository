@@ -64,9 +64,9 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
 
     return (
         <div className="album_container">
-            <div className="album_title">
-                {!isEditing && <h2 className={albumNameSizeClass}>{currentAlbum.name}</h2>}
-                {isEditing && <input className="album_text_field album_name_text_field" type="text" placeholder="Name" value={currentAlbum.name} onChange={ (event) => setCurrentAlbum({...currentAlbum, name: event.target.value}) } />}
+            <div className="album_banner" onClick={() => onShowMoreInfo(album.id)}>
+                {!isEditing && <h4>{album.publisher}</h4>}
+                {isEditing && <input className="album_text_field album_publisher_text_field" placeholder="Publisher" value={currentAlbum.publisher} onChange={ (event) => setCurrentAlbum({...currentAlbum, publisher: event.target.value}) } />}
             </div>
             <div className="album_center_container">
                 <div className="album_wrapper" onClick={onAlbumClick}>
@@ -98,11 +98,12 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
                     <div className="album_center_after" />
                 </div>}
             </div>
-            <div className="album_banner" onClick={() => onShowMoreInfo(album.id)}>
-                {!isEditing && <h4>{album.publisher}</h4>}
-                {isEditing && <input className="album_text_field album_publisher_text_field" placeholder="Publisher" value={currentAlbum.publisher} onChange={ (event) => setCurrentAlbum({...currentAlbum, publisher: event.target.value}) } />}
+            <div className="album_title">
+                {!isEditing && <h2 className={albumNameSizeClass}>{currentAlbum.name}</h2>}
+                {isEditing && <input className="album_text_field album_name_text_field" type="text" placeholder="Name" value={currentAlbum.name} onChange={ (event) => setCurrentAlbum({...currentAlbum, name: event.target.value}) } />}
+
                 <div className="album_banner_rating" style={{ backgroundColor: 'rgb(' + (album.ratings < 50 ? '0' : '255') + ', '+ Math.min(255, (200 - album.rating * 2)) +', 0)' }}
-                     onClick={onEditRating} />
+                    onClick={onEditRating} />
                 {isEditRating && <input className="album_banner_rating_slider" type="range" min="0" max="100" value={rating} onChange={onChangeRating} onBlur={onChangeRatingDone} />}
             </div>
         </div>

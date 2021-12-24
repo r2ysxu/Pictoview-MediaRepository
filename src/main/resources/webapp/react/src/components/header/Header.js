@@ -11,7 +11,7 @@ const hasProfile = (userProfile) => {
     return userProfile !== null && userProfile !== undefined && userProfile.username && userProfile.username !== "";
 }
 
-function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit, setShowNewAlbumModal}) {
+function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit, setShowNewAlbumModal, onMenuSelect}) {
     const [userProfile, setUserProfile] = useState(null);
 
     const onLogout = () => {
@@ -34,9 +34,9 @@ function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit, setSh
             {!hasProfile(userProfile) && <HomeBanner />}
             {hasProfile(userProfile) && <Searchbar
                     sideContent={
-                        <MenuBar lastItem={
-                            <MenuItem label={<img src="/assets/icons/box-arrow-up.svg" alt="" />} tooltip="Logout" onClick={onLogout} />
-                        }>
+                        <MenuBar
+                            onSelect={onMenuSelect}
+                            footerItem={<MenuItem label={<img src="/assets/icons/box-arrow-up.svg" alt="" />} tooltip="Logout" onClick={onLogout} />}>
                             <MenuItem label={<img src="/assets/icons/house.svg" alt="" />} tooltip="Home" onClick={() => {window.location.replace("/")}} />
                             <MenuItem label={<img src="/assets/icons/journal-album.svg" alt="" />} tooltip="Albums" onClick={() => {window.location.replace("/album")}} />
                             <MenuItem label={<img src="/assets/icons/folder-plus.svg" alt="" />} tooltip="New Album" onClick={() => {setShowNewAlbumModal(true)}} />

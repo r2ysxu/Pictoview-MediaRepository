@@ -1,7 +1,7 @@
 .menu_item_container {
 	position: relative;
 	height: calc(100% - 68px - 1.5em);
-	width: 70px;
+	width: 50pt;
 }
 
 .menu_item_button {
@@ -11,7 +11,7 @@
 }
 
 .menu_item_button img {
-	height: 50px;
+	height: 35pt;
 	filter: invert(60%);
 }
 

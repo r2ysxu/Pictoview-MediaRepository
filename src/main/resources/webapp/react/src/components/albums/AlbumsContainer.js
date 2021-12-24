@@ -12,7 +12,7 @@ import AudioMedia from './media/audio_media/AudioMedia';
 import CreateMediaButton  from './new_media/CreateMediaButton';
 import './AlbumsContainer.css';
 
-function AlbumsContainer({albumId, history}) {
+function AlbumsContainer({albumId, history, selectorClass}) {
     const dispatch = useDispatch();
     const { metaType, albums, images, videos, audios} = useSelector(selectAlbums);
 
@@ -49,7 +49,7 @@ function AlbumsContainer({albumId, history}) {
         <TabSelector
             tabs={tabs}
             defaultTab={metaType}
-            selectorClass="album_selector"
+            selectorClass={selectorClass}
             footerContent={<Breadcrumbs history={history} />}
             sideContent={
                 <div>
