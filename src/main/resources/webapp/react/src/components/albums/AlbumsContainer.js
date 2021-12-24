@@ -49,7 +49,8 @@ function AlbumsContainer({albumId, history}) {
         <TabSelector
             tabs={tabs}
             defaultTab={metaType}
-            headerContent={<Breadcrumbs history={history} />}
+            selectorClass="album_selector"
+            footerContent={<Breadcrumbs history={history} />}
             sideContent={
                 <div>
                     {albumId === 0 && <SortField

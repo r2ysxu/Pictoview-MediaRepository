@@ -3,11 +3,18 @@
     width: 100%;
 }
 
+.tab_selector_row_container {
+	position: absolute;
+    top: -100px;
+    width: 100%;
+}
+
 .tab_selector_row {
 	display: flex;
 	background-color: rgba(0, 0, 0, 0.25);
 	border-radius: 5px;
 	justify-content: space-between;
+	min-width: 700px;
 }
 
 .tab_selector_tabs {
@@ -35,7 +42,7 @@
 }
 
 .tab_selector_content {
-	margin: 15px 0 15px 0;
+	margin: 120px 0 15px 0;
 	padding: 5px;
 	background-color: rgba(0, 0, 0, 0.25);
 	border-radius: 5px;
@@ -51,4 +58,9 @@
 
 .tab_selector_side_content {
 	float: right;
+}
+
+.tab_selector_footer {
+    position: absolute;
+    top: 55px;
 }

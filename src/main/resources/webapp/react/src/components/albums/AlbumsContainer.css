@@ -50,3 +50,14 @@
 .albums_side_button_add:hover {
     filter: invert(70%) sepia(1) hue-rotate(90deg) saturate(3);
 }
+
+.album_selector {
+    position: fixed;
+    width: calc(100% - 110px);
+    top: 66px;
+    left: 0;
+    padding-left: 100px;
+    padding-right: 10px;
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}

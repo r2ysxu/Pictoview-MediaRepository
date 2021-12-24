@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import './TabSelector.css';
 
-function TabSelector({headerContent, sideContent, defaultTab, tabs, children}) {
+function TabSelector({footerContent, selectorClass= "", sideContent, defaultTab, tabs, children}) {
     const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
     useEffect(() => {
@@ -11,10 +11,7 @@ function TabSelector({headerContent, sideContent, defaultTab, tabs, children}) {
 
     return (
         <div className="tab_selector_container">
-            <div>
-                {headerContent}
-            </div>
-            <div className="tab_selector_row">
+            <div className={"tab_selector_row tab_selector_row_container " + selectorClass}>
                 <div className="tab_selector_tabs">
                     {tabs.map( (tab, index) => 
                         <div key={index}
@@ -26,6 +23,9 @@ function TabSelector({headerContent, sideContent, defaultTab, tabs, children}) {
                             {tab.badgeLabel !== undefined && <div className="tab_selector_badge">{tab.badgeLabel}</div>}
                         </div>
                     )}
+                </div>
+                <div className="tab_selector_footer">
+                    {footerContent}
                 </div>
                 <div className="tab_selector_side_content">
                     {sideContent}
