@@ -1,6 +1,8 @@
+.album_info_tag_container {
+}
+
 .album_info_tag_content {
-    margin-left: 15px;
-    width: calc(100% - 30px);
+    margin: 0 10px;
 }
 
 .album_info_tag_category_container {
