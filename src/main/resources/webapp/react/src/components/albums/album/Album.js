@@ -14,7 +14,7 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
     const [currentAlbum, setCurrentAlbum] = useState(album);
 
     const onAlbumClick = (event) => {
-        return onChangeAlbum(album.id, event.ctrlKey);
+        return onChangeAlbum(album.id, event.ctrlKey || event.shiftKey);
     }
 
     const onShowMoreInfo = (albumId) => {

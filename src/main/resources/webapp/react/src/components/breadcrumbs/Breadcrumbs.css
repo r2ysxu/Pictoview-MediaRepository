@@ -1,25 +1,25 @@
 .breadcrumbs_container {
-	display: flex;
+    display: flex;
 }
 
 .breadcrumbs_icon {
-	width: 18pt;
-	height: 18pt;
-	background-color: rgba(0 0 0 / 25%);
+    width: 18pt;
+    height: 18pt;
+    background-color: #3a3a3a;
     border-radius: 25%;
     padding: 5px;
 }
 
 .breadcrumbs_icon:hover {
-	filter: invert(50%);
+    filter: sepia(50%);
 }
 
 .breadcrumbs_icon_chevron {
-	width: 18pt;
-	height: 18pt;
+    width: 18pt;
+    height: 18pt;
     padding: 5px 0;
 }
 
 .breadcrumbs_icon_container {
-	margin-right: 10px;
+    margin-right: 10px;
 }

@@ -19,7 +19,7 @@ function AlbumsContainer({albumId, history, selectorClass}) {
     const changeCurrentAlbum = (id, openNew) => {
         const newHistory = history.length === 0 ? [] : history.split(',');
         newHistory.push(albumId);
-        const url = '/album?albumId=' + id + '&history=' + newHistory.join(',');
+        const url = '/album?albumId=' + encodeURIComponent(id) + '&history=' + encodeURIComponent(newHistory.join(','));
         if(!openNew) window.location = url;
         else window.open(url, '_blank');
         return false;

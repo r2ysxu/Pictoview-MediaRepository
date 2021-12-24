@@ -12,20 +12,22 @@ function TabSelector({footerContent, selectorClass= "", sideContent, defaultTab,
     return (
         <div className="tab_selector_container">
             <div className={"tab_selector_row tab_selector_row_container " + selectorClass}>
-                <div className="tab_selector_tabs">
-                    {tabs.map( (tab, index) => 
-                        <div key={index}
-                          className={"tab_selector_button " + 
-                                (tab.disabled === true ? "tab_selector_button_disabled " : " ") +
-                                (selectedTabIndex === index ? "tab_selector_button_selected " : " ")}
-                          onClick={() => {if (!tab.disabled) setSelectedTabIndex(index)} }>
-                            {tab.label}
-                            {tab.badgeLabel !== undefined && <div className="tab_selector_badge">{tab.badgeLabel}</div>}
-                        </div>
-                    )}
-                </div>
-                <div className="tab_selector_footer">
-                    {footerContent}
+                <div className="tab_selector_row_left">
+                    <div className="tab_selector_tabs">
+                        {tabs.map( (tab, index) =>
+                            <div key={index}
+                              className={"tab_selector_button " +
+                                    (tab.disabled === true ? "tab_selector_button_disabled " : " ") +
+                                    (selectedTabIndex === index ? "tab_selector_button_selected " : " ")}
+                              onClick={() => {if (!tab.disabled) setSelectedTabIndex(index)} }>
+                                {tab.label}
+                                {tab.badgeLabel !== undefined && <div className="tab_selector_badge">{tab.badgeLabel}</div>}
+                            </div>
+                        )}
+                    </div>
+                    <div className="tab_selector_footer">
+                        {footerContent}
+                    </div>
                 </div>
                 <div className="tab_selector_side_content">
                     {sideContent}

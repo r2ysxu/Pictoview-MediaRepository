@@ -1,55 +1,55 @@
 .tab_selector_container {
-	position: relative;
+    position: relative;
     width: 100%;
 }
 
 .tab_selector_row_container {
-	position: absolute;
+    position: absolute;
     top: -100px;
     width: 100%;
 }
 
 .tab_selector_row {
-	display: flex;
-	background-color: rgba(0, 0, 0, 0.25);
-	border-radius: 5px;
-	justify-content: space-between;
-	min-width: 700px;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    justify-content: space-between;
+    min-width: 700px;
 }
 
 .tab_selector_tabs {
-	display: flex;
+    display: flex;
 }
 
 .tab_selector_button {
-	margin: 10px 5px 10px 10px;
-	background-color: rgba(0, 0, 0, 0.9);
-	color: #fff;
-	padding: 5px 10px;
+    margin: 10px 5px 10px 10px;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 5px 10px;
 }
 
 .tab_selector_button:hover {
-	background-color: #808fdd;
-	cursor: default;
+    background-color: #808fdd;
+    cursor: default;
 }
 
 .tab_selector_button_disabled {
-	background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.25);
 }
 
 .tab_selector_button_selected {
-	background-color: #5369de;
+    background-color: #5369de;
 }
 
 .tab_selector_content {
-	margin: 110px 0 15px 0;
-	padding: 5px;
-	background-color: rgba(0, 0, 0, 0.25);
-	border-radius: 5px;
+    margin: 110px 0 15px 0;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
 }
 
 .tab_selector_badge {
-	float: right;
+    float: right;
     margin-left: 5px;
     padding: 0 5px;
     background: rgb(255 255 255 / 25%);
@@ -57,11 +57,14 @@
 }
 
 .tab_selector_side_content {
-	float: right;
+    float: right;
+}
+
+.tab_selector_row_left {
+    display: flex;
 }
 
 .tab_selector_footer {
-	position: absolute;
-    top: 42pt;
-    left: 10px;
+    margin: 7px 0 5px 0;
+    padding-left: 40pt;
 }

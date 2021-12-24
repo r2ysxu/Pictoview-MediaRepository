@@ -1,15 +1,15 @@
 import React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import './MenuBar.css';
 
 function MenuBar({children, footerItem, selectedIndex, onSelect}) {
     const ref = useRef();
     const [showExpand, setShowExpand] = useState(false);
 
-    const onMenuSelect = (isOpen) => {
+    const onMenuSelect = useCallback((isOpen) => {
         setShowExpand(isOpen);
         onSelect(isOpen);
-    }
+    }, [onSelect]);
 
     useEffect(() => {
         const onOutsideClicked = (event) => {
@@ -19,7 +19,7 @@ function MenuBar({children, footerItem, selectedIndex, onSelect}) {
         };
         document.addEventListener("mousedown", onOutsideClicked);
         return () => document.removeEventListener("mousedown", onOutsideClicked);
-    }, [setShowExpand]);
+    }, [setShowExpand, onMenuSelect]);
 
     return (
         <div className="menubar_container" ref={ref}>

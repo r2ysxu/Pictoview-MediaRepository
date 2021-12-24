@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation } from "react-router-dom";
 import { searchAlbums } from '../model/reducers/albumSlice';
@@ -14,18 +14,24 @@ function useQuery() {
 }
 
 function AlbumPage(props) {
-    const albumIdQuery =  useQuery().get('albumId') || 0;
-    const albumId = isNaN(albumIdQuery) ? 0 : albumIdQuery;
-    const history = useQuery().get('history') || '';
+
+    const query = useQuery();
     const dispatch = useDispatch();
+    const albumSearchQuery = decodeURIComponent(query.get('searchQuery') ?? '');
+    const albumId = albumSearchQuery.length > 0 ? null : query.get('albumId') ?? 0;
+    const history = decodeURIComponent(query.get('history') ?? '');
 
     const [loggedIn, setLoggedIn] = useState(false);
-    const [searchInput, setSearchInput] = useState('');
     const [showNewAlbumModal, setShowNewAlbumModal] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const onSearch = (query) => {
+    const onSearch = useCallback((query) => {
         dispatch(searchAlbums(query));
+    }, [dispatch]);
+
+    const onSearchRefresh = (query) => {
+        const url = '/album?searchQuery=' + encodeURIComponent(query);
+        window.location = url;
     }
 
     const hideNewAlbumModal = (album) => {
@@ -36,14 +42,17 @@ function AlbumPage(props) {
         setIsMenuOpen(isOpen);
     }
 
+    useEffect( () => {
+        if (albumId === null) onSearch(albumSearchQuery);
+    }, [albumId, albumSearchQuery, onSearch])
+
     return (
         <div>
             <Header
                 setLoggedIn={setLoggedIn}
-                searchInput={searchInput}
-                onSearchChange={setSearchInput}
-                onSearchSubmit={onSearch}
+                onSearchSubmit={onSearchRefresh}
                 setShowNewAlbumModal={setShowNewAlbumModal}
+                searchQuery={albumSearchQuery}
                 onMenuSelect={onMenuSelect} />
             <Container isLoggedIn={loggedIn} containerClass={isMenuOpen ? "menubar_offset" : ""}>
                 <Modal

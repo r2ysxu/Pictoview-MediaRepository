@@ -11,7 +11,7 @@ const hasProfile = (userProfile) => {
     return userProfile !== null && userProfile !== undefined && userProfile.username && userProfile.username !== "";
 }
 
-function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit, setShowNewAlbumModal, onMenuSelect}) {
+function Header({setLoggedIn, onSearchSubmit, setShowNewAlbumModal, searchQuery, onMenuSelect}) {
     const [userProfile, setUserProfile] = useState(null);
 
     const onLogout = () => {
@@ -42,8 +42,7 @@ function Header({setLoggedIn, searchInput, onSearchChange, onSearchSubmit, setSh
                             <MenuItem label={<img src="/assets/icons/folder-plus.svg" alt="" />} tooltip="New Album" onClick={() => {setShowNewAlbumModal(true)}} />
                         </MenuBar>
                     }
-                    searchInput={searchInput}
-                    onSearchChange={onSearchChange}
+                    searchQuery={searchQuery}
                     onSearch={onSearchSubmit} />}
         </div>
     );
