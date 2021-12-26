@@ -95,7 +95,6 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
                         tags={album.tags}
                         isEditing={isEditing}
                     />
-                    <div className="album_center_after" />
                 </div>}
             </div>
             <div className="album_title">

@@ -47,6 +47,7 @@
     position: absolute;
     width: 100%;
     text-align: center;
+    top: 40pt;
 }
 
 .image_view_update_controls_container > img {
