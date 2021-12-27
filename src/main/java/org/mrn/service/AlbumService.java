@@ -2,7 +2,9 @@ package org.mrn.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -181,6 +183,7 @@ public class AlbumService {
 		mediaFile.transferTo(storedFile);
 		AlbumMediaFile file = AlbumFileUtils.generateAlbumMediaFile(storedFile);
 		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
+		mediaAlbumRepo.save(albumEntity.setUpdatedAt(Date.from(Instant.now())));
 		switch (file.getType()) {
 		case IMAGE:
 			ImageMediaEntity imageMedia = imageMediaRepo.save(new ImageMediaEntity(user,

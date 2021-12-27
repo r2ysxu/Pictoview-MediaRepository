@@ -43,6 +43,7 @@ function AlbumsContainer({albumId, history, selectorClass}) {
     const sortFields = [
         {name: "Unsorted", value: "unsorted"},
         {name: "Name", value: "name"},
+        {name: "Updated", value: "updatedAt"}
     ]
 
     return (

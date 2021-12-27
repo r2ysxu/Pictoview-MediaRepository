@@ -21,7 +21,7 @@ public class AlbumTagEntity implements EntityModel {
 	@OneToOne(cascade = CascadeType.ALL)
 	private AlbumEntity album;
 	@Column
-	private int revalance;
+	private int relevance;
 	
 	public AlbumTagEntity() {}
 	
@@ -50,11 +50,11 @@ public class AlbumTagEntity implements EntityModel {
 		this.album = album;
 	}
 
-	public int getRevalance() {
-		return revalance;
+	public int getRelevance() {
+		return relevance;
 	}
 
-	public void setRevalance(int revalance) {
-		this.revalance = revalance;
+	public void setRelevance(int relevance) {
+		this.relevance = relevance;
 	}
 }

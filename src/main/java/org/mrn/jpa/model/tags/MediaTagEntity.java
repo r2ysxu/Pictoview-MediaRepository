@@ -22,7 +22,7 @@ public class MediaTagEntity implements EntityModel {
 	@OneToOne(cascade = CascadeType.ALL)
 	private MediaEntity medium;
 	@Column
-	private int revalance;
+	private int relevance;
 
 	public MediaTagEntity() {}
 
@@ -51,11 +51,11 @@ public class MediaTagEntity implements EntityModel {
 		this.medium = medium;
 	}
 
-	public int getRevalance() {
-		return revalance;
+	public int getRelevance() {
+		return relevance;
 	}
 
-	public void setRevalance(int revalance) {
-		this.revalance = revalance;
+	public void setRelevance(int relevance) {
+		this.relevance = relevance;
 	}
 }

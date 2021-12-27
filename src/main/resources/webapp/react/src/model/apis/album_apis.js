@@ -13,7 +13,7 @@ export const get_album = async (albumId) => {
 
 export const get_listAlbums = async (page, parentId, sort) => {
     if (sort === undefined) sort = { field: 'unsorted', ascending: true };
-    const searchParams = new URLSearchParams({page, parentId, sortField: sort.field, asc: sort.ascending });
+    const searchParams = new URLSearchParams({page, parentId, sortField: sort.field, ascending: sort.ascending });
     return fetch('/album/list?' + searchParams.toString()).then(onResponseJson);
 }
 

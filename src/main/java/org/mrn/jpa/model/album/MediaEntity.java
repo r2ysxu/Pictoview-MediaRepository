@@ -1,5 +1,6 @@
 package org.mrn.jpa.model.album;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.UpdateTimestamp;
 import org.mrn.jpa.model.EntityModel;
 import org.mrn.jpa.model.tags.MediaTagEntity;
 import org.mrn.jpa.model.user.EndUserEntity;
@@ -21,6 +23,8 @@ public class MediaEntity implements EntityModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected long id;
+	@UpdateTimestamp
+	private Date updatedAt;
 	@ManyToOne
 	private UserEntity owner;
 	@Column(nullable = false)
@@ -43,6 +47,14 @@ public class MediaEntity implements EntityModel {
 
 	public Long getId() {
 		return id;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	public UserEntity getOwner() {

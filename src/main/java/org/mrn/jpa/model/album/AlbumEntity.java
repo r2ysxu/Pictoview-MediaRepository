@@ -1,6 +1,7 @@
 package org.mrn.jpa.model.album;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.UpdateTimestamp;
 import org.mrn.jpa.model.EntityModel;
 import org.mrn.jpa.model.tags.AlbumTagEntity;
 import org.mrn.jpa.model.user.UserEntity;
@@ -22,6 +24,8 @@ public class AlbumEntity implements EntityModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected long id;
+	@UpdateTimestamp
+	private Date updatedAt;
 	@Column(nullable = false)
 	private String name;
 	@ManyToOne
@@ -64,6 +68,15 @@ public class AlbumEntity implements EntityModel {
 
 	public Long getId() {
 		return id;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public AlbumEntity setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+		return this;
 	}
 
 	public String getName() {
@@ -115,8 +128,9 @@ public class AlbumEntity implements EntityModel {
 		return rating;
 	}
 
-	public void setRating(Integer rating) {
+	public AlbumEntity setRating(Integer rating) {
 		this.rating = rating;
+		return this;
 	}
 
 	public String getMetaType() {
