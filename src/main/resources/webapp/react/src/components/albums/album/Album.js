@@ -3,14 +3,13 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loadAlbumTags, updateAlbum } from '../../../model/reducers/albumSlice';
 import AlbumInfoTagView from './album_info/album_info_tags/album_info_tags_view/AlbumInfoTagsView';
+import AlbumRating from './album_rating/AlbumRating';
 import './Album.css';
 
 function Album({album, onChangeAlbum, isEditting, setEditting}) {
     const dispatch = useDispatch();
     const [showMoreInfo, setShowMoreInfo] = useState(false);
     const [isEditing, setEditing] = useState(false);
-    const [isEditRating, setEditRating] = useState(false);
-    const [rating, setRating] = useState(album.rating);
     const [currentAlbum, setCurrentAlbum] = useState(album);
 
     const onAlbumClick = (event) => {
@@ -24,24 +23,6 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
         } else if (isEditing === false) {
             setShowMoreInfo(false);
         }
-    }
-
-    const onEditRating = (event) => {
-        setEditRating(!isEditRating);
-        event.preventDefault();
-        return false;
-    }
-
-    const onChangeRating = (event) => {
-        setRating(event.target.value);
-    }
-
-    const onChangeRatingDone = (event) => {
-        dispatch(updateAlbum({
-            id: currentAlbum.id,
-            rating
-        }));
-        setEditRating(false);
     }
 
     const loadTags = (albumId) => {
@@ -100,10 +81,7 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
             <div className="album_title">
                 {!isEditing && <h2 className={albumNameSizeClass}>{currentAlbum.name}</h2>}
                 {isEditing && <input className="album_text_field album_name_text_field" type="text" placeholder="Name" value={currentAlbum.name} onChange={ (event) => setCurrentAlbum({...currentAlbum, name: event.target.value}) } />}
-
-                <div className="album_banner_rating" style={{ backgroundColor: 'rgb(' + (album.ratings < 50 ? '0' : '255') + ', '+ Math.min(255, (200 - album.rating * 2)) +', 0)' }}
-                    onClick={onEditRating} />
-                {isEditRating && <input className="album_banner_rating_slider" type="range" min="0" max="100" value={rating} onChange={onChangeRating} onBlur={onChangeRatingDone} />}
+                <AlbumRating album={album} />
             </div>
         </div>
     );

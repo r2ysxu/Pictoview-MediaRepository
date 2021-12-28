@@ -72,15 +72,6 @@
     float: left;
 }
 
-.album_banner_rating {
-    float: left;
-    width: 14pt;
-    height: 14pt;
-    border-radius: 50%;
-    margin: 6px 5px 5px 5px;
-    display: inline-block;
-}
-
 .album_center_container {
     position: relative;
     overflow: hidden;
@@ -205,8 +196,4 @@
 
 .album_edit_submit:hover {
     background-color: #27cb2f;
-}
-
-.album_banner_rating_slider {
-    margin-top: 0px;
 }
