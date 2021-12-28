@@ -11,7 +11,7 @@ const hasProfile = (userProfile) => {
     return userProfile !== null && userProfile !== undefined && userProfile.username && userProfile.username !== "";
 }
 
-function Header({setLoggedIn, onSearchSubmit, setShowNewAlbumModal, searchQuery, onMenuSelect}) {
+function Header({setLoggedIn, onSearchSubmit, setShowNewAlbumModal, setShowTagModal, searchQuery, onMenuSelect}) {
     const [userProfile, setUserProfile] = useState(null);
 
     const onLogout = () => {
@@ -39,6 +39,7 @@ function Header({setLoggedIn, onSearchSubmit, setShowNewAlbumModal, searchQuery,
                             footerItem={<MenuItem label={<img src="/assets/icons/box-arrow-up.svg" alt="" />} tooltip="Logout" onClick={onLogout} />}>
                             <MenuItem label={<img src="/assets/icons/house.svg" alt="" />} tooltip="Home" onClick={() => {window.location.replace("/")}} />
                             <MenuItem label={<img src="/assets/icons/journal-album.svg" alt="" />} tooltip="Albums" onClick={() => {window.location.replace("/album")}} />
+                            <MenuItem label={<img src="/assets/icons/tags.svg" alt="" />} tooltip="Tags" onClick={() => {setShowTagModal(true)}} />
                             <MenuItem label={<img src="/assets/icons/folder-plus.svg" alt="" />} tooltip="New Album" onClick={() => {setShowNewAlbumModal(true)}} />
                         </MenuBar>
                     }

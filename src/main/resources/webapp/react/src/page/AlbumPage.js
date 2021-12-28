@@ -7,6 +7,7 @@ import Modal from '../components/widgets/modal/Modal';
 import Container from '../components/widgets/container/Container';
 import Header from '../components/header/Header';
 import AlbumsContainer from '../components/albums/AlbumsContainer';
+import TagList from '../components/tag_list/TagList';
 import CreateAlbum from '../components/albums/new_album/CreateAlbum';
 
 function useQuery() {
@@ -23,19 +24,27 @@ function AlbumPage(props) {
 
     const [loggedIn, setLoggedIn] = useState(false);
     const [showNewAlbumModal, setShowNewAlbumModal] = useState(false);
+    const [showTagModal, setShowTagModal] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [tagQueryMap, setTagQueryMap] = useState(new Map());
 
     const onSearch = useCallback((query) => {
         dispatch(searchAlbums(query));
     }, [dispatch]);
 
     const onSearchRefresh = (query) => {
+        console.log('refreshing search');
         const url = '/album?searchQuery=' + encodeURIComponent(query);
         window.location = url;
     }
 
-    const hideNewAlbumModal = (album) => {
+    const hideNewAlbumModal = () => {
         setShowNewAlbumModal(false);
+    }
+
+    const hideTagModal = () => {
+        setShowTagModal(false);
+        setTagQueryMap(new Map());
     }
 
     const onMenuSelect = (isOpen) => {
@@ -44,7 +53,7 @@ function AlbumPage(props) {
 
     useEffect( () => {
         if (albumId === null) onSearch(albumSearchQuery);
-    }, [albumId, albumSearchQuery, onSearch])
+    }, [albumId, albumSearchQuery, onSearch]);
 
     return (
         <div>
@@ -52,6 +61,7 @@ function AlbumPage(props) {
                 setLoggedIn={setLoggedIn}
                 onSearchSubmit={onSearchRefresh}
                 setShowNewAlbumModal={setShowNewAlbumModal}
+                setShowTagModal={setShowTagModal}
                 searchQuery={albumSearchQuery}
                 onMenuSelect={onMenuSelect} />
             <Container isLoggedIn={loggedIn} containerClass={isMenuOpen ? "menubar_offset" : ""}>
@@ -59,6 +69,10 @@ function AlbumPage(props) {
                     content={<CreateAlbum onDone={hideNewAlbumModal} />}
                     isShown={showNewAlbumModal}
                     onHide={hideNewAlbumModal} />
+                <Modal
+                    content={<TagList tagQueryMap={tagQueryMap} />}
+                    isShown={showTagModal}
+                    onHide={hideTagModal} />
                 <AlbumsContainer
                     albumId={albumId}
                     history={history}

@@ -109,7 +109,7 @@ public class TagService {
 	}
 
 	public List<Category> listCategories() {
-		return CategoryBuilder.buildFrom(categoryRepo.findAll());
+		return CategoryBuilder.buildList(categoryRepo.findAll());
 	}
 
 	public List<Category> searchCategories(String categoryName, Integer pageSize, Integer pageNumber) {

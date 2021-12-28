@@ -41,8 +41,13 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 			whereTags.add(cb.like(cb.upper(album.get("name")), '%' + searchQuery.getName().toUpperCase() + '%'));
 		}
 		if (!searchQuery.getTags().isEmpty()) {
-			Subquery<AlbumEntity> tagQuery = generateSubQueryTagFilter(cb, query.subquery(AlbumEntity.class), searchQuery);
-			whereTags.add(cb.in(album).value(tagQuery));
+			Map<String, List<String>> categoryTags = searchQuery.getTags();
+			for (Entry<String, List<String>> tags : categoryTags.entrySet()) {
+				for (String tag : tags.getValue()) {
+					Subquery<Long> tagQuery = generateSubQueryTagFilter(cb, query.subquery(Long.class), tags.getKey(), tag);
+					whereTags.add(cb.in(album.get("id")).value(tagQuery));
+				}
+			}
 		}
 
 		return cb.and(
@@ -51,22 +56,19 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 			);
 	}
 
-	private Subquery<AlbumEntity> generateSubQueryTagFilter(CriteriaBuilder cb, Subquery<AlbumEntity> tagQuery, SearchQuery searchQuery) {
+	private Subquery<Long> generateSubQueryTagFilter(CriteriaBuilder cb, Subquery<Long> tagQuery, String categoryName, String tagName) {
 		Root<AlbumTagEntity> albumTag = tagQuery.from(AlbumTagEntity.class);
 		Join<AlbumTagEntity, TagEntity> tagPath = albumTag.join("tag");
 		Join<TagEntity, CategoryEntity> categoryPath = tagPath.join("category");
 
-		Path<String> tagName = tagPath.get("name");
-		Path<String> categoryName = categoryPath.get("name");
-
-		List<Predicate> whereTags = new ArrayList<>();
-		Map<String, List<String>> categoryTags = searchQuery.getTags();
-		for (Entry<String, List<String>> tags : categoryTags.entrySet()) {
-			for (String tag : tags.getValue())
-				whereTags.add(cb.and(cb.equal(cb.upper(categoryName), tags.getKey().toUpperCase()), cb.equal(cb.upper(tagName), tag.toUpperCase())));
-		}
-
-		return tagQuery.select(albumTag.get("album")).where(cb.or(whereTags.toArray(new Predicate[whereTags.size()])));
+		Path<String> tagNamePath = tagPath.get("name");
+		Path<String> categoryNamePath = categoryPath.get("name");
+		return tagQuery.select(albumTag.get("album").get("id")).where(
+				cb.and(
+					cb.equal(cb.upper(categoryNamePath), categoryName.toUpperCase()),
+					cb.equal(cb.upper(tagNamePath), tagName.toUpperCase())
+				)
+			);
 	}
 
 	private CriteriaQuery<AlbumEntity> createSearchQuery(CriteriaBuilder cb, UserEntity user, SearchQuery searchQuery) {

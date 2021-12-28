@@ -1,5 +1,17 @@
+const onResponseJson = (response) => {
+    if (response.status === 401) {
+        window.location = '/';
+    }
+    return response.json();
+}
+
 export const get_categories = async () => {
-    return fetch('/category/list').then( response => response.json());
+    return fetch('/category/list').then(onResponseJson);
+}
+
+export const get_tagsByCategory = async (categoryId) => {
+    const searchParams = new URLSearchParams({categoryId});
+    return fetch('/tag/list?' + searchParams.toString()).then(onResponseJson);
 }
 
 export const post_createCategory = async (categoryName) => {
@@ -19,5 +31,5 @@ export const post_tagAlbum = async (albumCategoryTags) => {
 
 export const get_searchTags = async (tagQuery) => {
     const searchParams = new URLSearchParams({tagQuery});
-    return fetch('/tag/search?' + searchParams.toString()).then( response => response.json());
+    return fetch('/tag/search?' + searchParams.toString()).then(onResponseJson);
 }

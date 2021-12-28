@@ -18,6 +18,12 @@ public class CategoryBuilder implements ModelBuilder<Category, CategoryEntity> {
 		return categories;
 	}
 
+	public static List<Category> buildList(Iterable<CategoryEntity> entities) {
+		List<Category> categories = new ArrayList<>();
+		entities.forEach(category -> categories.add(new CategoryBuilder().buildShallow(category)));
+		return categories;
+	}
+
 	private CategoryBuilder() {}
 
 	@Override
@@ -25,5 +31,9 @@ public class CategoryBuilder implements ModelBuilder<Category, CategoryEntity> {
 		Category category = new Category(entity.getId(), entity.getName());
 		category.setTags(TagBuilder.buildFromList(entity.getTags()));
 		return category;
+	}
+	
+	public Category buildShallow(CategoryEntity entity) {
+		return new Category(entity.getId(), entity.getName());
 	}
 }

@@ -1,6 +1,6 @@
 const onResponseJson = (response) => {
     if (response.status === 401) {
-        window.location.reload();
+        window.location = '/';
     }
     return response.json();
 }
