@@ -18,7 +18,11 @@ function TagList({tagQueryMap}) {
         if (tagQueryMap.has(category.id + '_' + tag.id)) {
             tagQueryMap.delete(category.id + '_' + tag.id);
         } else {
-            tagQueryMap.set(category.id + '_' + tag.id, "::" + category.name + "::" + tag.value);
+            let tagValue = tag.value;
+            let categoryValue = category.name;
+            if (tagValue.indexOf(' ') !== -1) tagValue = '"' + tagValue + '"';
+            if (categoryValue.indexOf(' ') !== -1) categoryValue = '"' + categoryValue + '"';
+            tagQueryMap.set(category.id + '_' + tag.id, "::" + categoryValue + "::" + tagValue);
         }
     }
 
@@ -38,7 +42,6 @@ function TagList({tagQueryMap}) {
                 <TagListItem
                     key={category.id}
                     index={index}
-                    size={(categories || []).length}
                     category={category}
                     onSelectCategory={onSelectCategory}
                     onSelectTag={onSelectTag} />

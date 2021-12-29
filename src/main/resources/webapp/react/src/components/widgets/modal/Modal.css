@@ -23,6 +23,7 @@
     top: 66px;
     margin: auto;
     width: 80%;
+    min-width: 800px;
     background-color: #fff;
     border-radius: 0px 0px 0px 4px;
     box-shadow: 0 3px 7px 0 rgb(0 0 0 / 35%);
@@ -40,6 +41,9 @@
 
 .modal_content {
     padding: 20px 40px;
+    min-width: 700px;
+    max-height: calc(100vh - 100pt);
+    overflow: auto;
 }
 
 .modal_dialog_float_out {

@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import TagItem from './TagItem';
 
-function TagListItem({index, size, category, onSelectCategory, onSelectTag}) {
+function TagListItem({index, category, onSelectCategory, onSelectTag}) {
     const [showExpand, setShowExpand] = useState(false);
 
     const onExpand = () => {
@@ -16,7 +16,7 @@ function TagListItem({index, size, category, onSelectCategory, onSelectTag}) {
 
     return (
         <div className="tag_list_item_container">
-            <div className={"tag_list_header_container " + (index === 0 ? "tag_list_header_container_first " : "") + (index === size - 1 ? "tag_list_header_container_last " : "")} 
+            <div className={"tag_list_header_container " + (index === 0 ? "tag_list_header_container_first " : "")} 
                 onClick={onExpand}>
                 <h3>{category.name}</h3>
             </div>
