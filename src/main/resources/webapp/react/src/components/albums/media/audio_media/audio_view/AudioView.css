@@ -10,6 +10,10 @@
 
 }
 
+.audio_view_audio_tag {
+	display: none;
+}
+
 .audio_view_audio_content_container {
 	text-align: center;
 }
@@ -20,4 +24,9 @@
 
 audio::-webkit-media-controls-panel {
 	background: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    cursor: pointer;
+    background: linear-gradient(to right, rgba(0, 125, 181, 0.6) var(--buffered-width), rgba(0, 125, 181, 0.2) var(--buffered-width));
 }

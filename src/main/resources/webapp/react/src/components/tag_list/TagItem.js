@@ -10,7 +10,7 @@ function TagItem({index, tag, onSelect}) {
     }
 
     return (
-        <span className={"tag_list_item_content_item " + (isSelected ? "tag_list_item_content_item_selected " : "")} onClick={onSelectItem}>{tag.value}</span>
+        <span className={"tag_list_item_content_item " + (isSelected ? "tag_list_item_content_item_selected " : "")} onClick={onSelectItem}>{tag.value} </span>
     );
 }
 

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAlbums, loadMoreAudio } from '../../../../model/reducers/albumSlice';
 import ScrollLoader from '../../../widgets/scroll_loader/ScrollLoader';
 import AudioView from './audio_view/AudioView';
+import AudioMediaItem from './AudioMediaItem';
 import './AudioMedia.css';
 
 function AudioMedia({albumId}) {
@@ -25,21 +26,7 @@ function AudioMedia({albumId}) {
         <div>
             <ScrollLoader isLoading={isLoading} loadMore={loadMore} height={50} hasMore={audios.pageInfo.hasNext}>
                 <div className="album_media_list">
-                    {audios.items.map( (audio, index) =>
-                        <div key={audio.id} className="audio_media_container">
-                            <div className="audio_media_info_container">
-                                <div className="audio_media_info_container_song">
-                                    <h3>{audio.title}</h3>
-                                    <h4>{audio.artist}</h4>
-                                    <h5>{audio.genre}</h5>
-                                </div>
-                            </div>
-                            <img className="audio_media_play_button"
-                                 src="/assets/icons/play-circle.svg"
-                                 alt={'video ' + audio.id}
-                                 title="Play"
-                                 onClick={() => {setSelectedVideoIndex(index)} } />
-                        </div>
+                    {audios.items.map( (audio, index) => <AudioMediaItem key={index} albumId={albumId} audio={audio} trackNumber={index} onSelect={() => setSelectedVideoIndex(index)} />
                 )}
                 </div>
             </ScrollLoader>

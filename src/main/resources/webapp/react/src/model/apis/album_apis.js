@@ -5,6 +5,14 @@ const onResponseJson = (response) => {
     return response.json();
 }
 
+export const post_uploadAlbumPath = async (path) => {
+    return fetch('/album/update/filepath', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: path,
+    }).then(onResponseJson);
+}
+
 export const get_album = async (albumId) => {
     if (albumId <= 0) return { metaType: "albums" };
     const searchParams = new URLSearchParams({albumId});
