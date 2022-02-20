@@ -23,10 +23,6 @@ function VideoView({videoItems, selectedIndex, onSelectIndex}) {
             onSkipTime(-60);
         } else if (event.keyCode === 120) { // x
             onSkipTime(-10);
-        } else if (event.keyCode === 32) { // Space
-            if (videoRef.current.paused) {
-                videoRef.current.play();
-            } else videoRef.current.pause();
         }
         event.preventDefault();
     };
