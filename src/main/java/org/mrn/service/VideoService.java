@@ -23,7 +23,7 @@ public class VideoService {
 	@Value("${app.admin.main.cache.size}")
 	private Integer maxCacheItemSize = 1;
 
-	Cache<String, Resource> resourceCache = CacheBuilder
+	Cache<String, String> resourceCache = CacheBuilder
 			.newBuilder()
 			.maximumSize(maxCacheItemSize)
 			.expireAfterAccess(4L, TimeUnit.HOURS)
@@ -35,17 +35,16 @@ public class VideoService {
 	private VideoMediaRepo videoMediaRepo;
 
 	public Mono<Resource> fetchVideoStream(UserDetails owner, Long mediaId) {
-		Resource resource = resourceCache.getIfPresent(mediaId + "_" + owner.getUsername());
-		if (resource == null) {
-			final Resource unCachedResource = resourceLoader.getResource("file:" + findVideo(owner, mediaId).getSource());
-			resourceCache.put(mediaId + "_" + owner.getUsername(), unCachedResource);
-			return Mono.fromSupplier(() -> unCachedResource);
+		final String resourcePath = resourceCache.getIfPresent(mediaId + "_" + owner.getUsername());
+		if (resourcePath == null) {
+			final String unCachedResourcePath = findVideo(owner, mediaId).getSource();
+			resourceCache.put(mediaId + "_" + owner.getUsername(), unCachedResourcePath);
+			return Mono.fromSupplier(() -> resourceLoader.getResource("file:" + unCachedResourcePath));
 		} else {
-			return Mono.fromSupplier(() -> resource);
+			return Mono.fromSupplier(() -> resourceLoader.getResource("file:" + resourcePath));
 		}
 	}
 
-	@Transactional
 	public VideoMediaEntity findVideo(UserDetails owner, Long mediaId) {
 		return videoMediaRepo.findByOwner_UsernameAndId(owner.getUsername(), mediaId);
 	}
