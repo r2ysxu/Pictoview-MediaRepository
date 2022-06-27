@@ -1,4 +1,4 @@
-import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { 
     get_album,
     get_searchAlbums,
@@ -19,6 +19,7 @@ const pendingMoreRequests = new Set();
 
 const initialState = {
     albumId: 0,
+    albumName: '',
     metaType: 'albums',
     albums: { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } },
     images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } },
@@ -65,6 +66,7 @@ export const searchAlbums = createAsyncThunk('album/search', async (query, thunk
     const albums = await get_searchAlbums(page, query);
     return {
         albumId: null,
+        albumName: '',
         albumQuery: query,
         albums,
         images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false, sortedBy: { field: 'unsorted', asc: true } } },
@@ -83,6 +85,7 @@ export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async ({album
     const currentAlbumInfo = await currentAlbum;
     return {
         albumId,
+        albumName: currentAlbumInfo.name,
         metaType: currentAlbumInfo.metaType,
         albums: await albums,
         images: await images,

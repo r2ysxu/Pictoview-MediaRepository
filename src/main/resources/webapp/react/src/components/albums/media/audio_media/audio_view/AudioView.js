@@ -80,7 +80,7 @@ function AudioView({audioItems, selectedIndex}) {
                 <div class="audio_view_audio_content_right_info">
                     <span>{audioTotalTime}</span>
                 </div>
-                <input className="audio_view_content_play_button" type="image" src={isPaused ? "/assets/icons/play-circle.svg" : "/assets/icons/pause-circle.svg"} onClick={onTogglePlay} />
+                <input className="audio_view_content_play_button" type="image" alt="play" src={isPaused ? "/assets/icons/play-circle.svg" : "/assets/icons/pause-circle.svg"} onClick={onTogglePlay} />
             </div>
         </div> : <div />
     );

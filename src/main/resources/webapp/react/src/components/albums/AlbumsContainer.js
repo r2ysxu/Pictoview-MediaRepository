@@ -14,7 +14,7 @@ import './AlbumsContainer.css';
 
 function AlbumsContainer({albumId, history, selectorClass}) {
     const dispatch = useDispatch();
-    const { metaType, albums, images, videos, audios} = useSelector(selectAlbums);
+    const { metaType, albumName, albums, images, videos, audios} = useSelector(selectAlbums);
 
     const changeCurrentAlbum = (id, openNew) => {
         const newHistory = history.length === 0 ? [] : history.split(',');
@@ -51,7 +51,7 @@ function AlbumsContainer({albumId, history, selectorClass}) {
             tabs={tabs}
             defaultTab={metaType}
             selectorClass={selectorClass}
-            footerContent={<Breadcrumbs history={history} />}
+            footerContent={<Breadcrumbs history={history} current={albumName} />}
             sideContent={
                 <div>
                     {albumId === 0 && <SortField
