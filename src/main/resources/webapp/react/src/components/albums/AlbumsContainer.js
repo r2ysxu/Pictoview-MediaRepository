@@ -30,7 +30,7 @@ function AlbumsContainer({albumId, history, selectorClass}) {
     }
 
     useEffect(()=> {
-        if (albumId !== null) dispatch(loadCurrentAlbumInfo({ albumId }));
+        if (albumId !== null) dispatch(loadCurrentAlbumInfo({ albumId, sort: { field: 'name', ascending: true } }));
     }, [dispatch, albumId]);
 
     const tabs = [

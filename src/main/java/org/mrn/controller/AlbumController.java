@@ -48,12 +48,14 @@ public class AlbumController extends BaseController {
 	@ResponseBody
 	@GetMapping(value = "/album/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public PageItems<Album> searchAlbums(@RequestParam(name = "query") String searchString,
-			@RequestParam(name = "page") Integer page) throws UnauthenticatedUserException {
+			@RequestParam(name = "page") Integer page, @RequestParam(name = "sortField", required = false) String sortBy,
+			@RequestParam(name = "ascending", required = false) Boolean asc) throws UnauthenticatedUserException {
+		if (asc == null) asc = true;
 		EndUserEntity user = getUser();
-		Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.unsorted());
+		Pageable pageable = PageRequest.of(page, PAGE_SIZE, SortBy.getSortField(sortBy, asc));
 		return mediaAlbumService.searchMediaAlbum(user, SearchQuery.parse(searchString), pageable);
 	}
-	
+
 	@ResponseBody
 	@GetMapping(value = "/album/get", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Album getAlbum(@RequestParam("albumId") Long albumId) throws AlbumNotFound, UnauthenticatedUserException {
@@ -62,12 +64,10 @@ public class AlbumController extends BaseController {
 
 	@ResponseBody
 	@GetMapping(value = "/album/list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public PageItems<Album> listAlbums(
-		@RequestParam(name = "parentId") Long parentId,
-		@RequestParam(name = "page") Integer page,
-		@RequestParam(name = "sortField", required = false) String sortBy,
-		@RequestParam(name = "ascending", required = false) Boolean asc
-	) throws UnauthenticatedUserException {
+	public PageItems<Album> listAlbums(@RequestParam(name = "parentId") Long parentId,
+			@RequestParam(name = "page") Integer page, @RequestParam(name = "sortField", required = false) String sortBy,
+			@RequestParam(name = "ascending", required = false) Boolean asc) throws UnauthenticatedUserException {
+		if (asc == null) asc = true;
 		EndUserEntity user = getUser();
 		Pageable pageable = PageRequest.of(page, PAGE_SIZE, SortBy.getSortField(sortBy, asc));
 		PageItems<Album> albums = mediaAlbumService.listMediaAlbums(user, parentId, pageable);
@@ -100,21 +100,20 @@ public class AlbumController extends BaseController {
 	@PostMapping(value = "/album/update", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Album updateAlbum(@RequestBody Album album) throws UnauthenticatedUserException, AlbumNotFound {
 		EndUserEntity user = getUser();
-		return mediaAlbumService.updateAlbum(user, album.getId(), album.getName(), album.getPublisher(),
-				album.getDescription(), album.getRating(), album.getMetaType());
+		return mediaAlbumService.updateAlbum(user, album.getId(), album.getName(), album.getPublisher(), album.getDescription(),
+				album.getRating(), album.getMetaType());
 	}
 
 	@PostMapping(value = "/album/update/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public Boolean uploadAlbum(@RequestParam("file") MultipartFile file, @RequestParam("albumId") Long albumId,
-			@RequestParam("fromMetadata") Boolean fromMetadata)
-			throws UnauthenticatedUserException, IllegalStateException, IOException, AlbumNotFound, UnsupportedTagException, InvalidDataException {
+			@RequestParam("fromMetadata") Boolean fromMetadata) throws UnauthenticatedUserException, IllegalStateException,
+			IOException, AlbumNotFound, UnsupportedTagException, InvalidDataException {
 		EndUserEntity user = getUser();
 		AlbumDirectory albumDirectory = mediaAlbumService.uploadAlbumMedia(user, albumId, file, fromMetadata);
 		mediaAlbumService.createMediaFromFile(user, albumId, albumDirectory);
 		if (fromMetadata) {
 			NewAlbumInfo newAlbum = AlbumInfoParserUtil.loadAlbumInfoFromJson(albumDirectory.getInfoJson());
-			mediaAlbumService.updateAlbum(user, albumId, newAlbum.getName(),
-					newAlbum.getSubtitle(), newAlbum.getDescription(),
+			mediaAlbumService.updateAlbum(user, albumId, newAlbum.getName(), newAlbum.getSubtitle(), newAlbum.getDescription(),
 					newAlbum.getRating(), newAlbum.getMetaType());
 			mediaAlbumService.setCoverPhotoByName(user, albumId, newAlbum.getCoverPhotoName());
 			tagService.tagAlbum(user, albumId, newAlbum.getCategories());
@@ -125,17 +124,18 @@ public class AlbumController extends BaseController {
 	}
 
 	@PostMapping(value = "/album/update/upload/media", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public Boolean uploadAlbumMedium(@RequestParam("file") MultipartFile file, @RequestParam("albumId") Long albumId) throws UnauthenticatedUserException, UnsupportedTagException, InvalidDataException, IOException, AlbumNotFound {
+	public Boolean uploadAlbumMedium(@RequestParam("file") MultipartFile file, @RequestParam("albumId") Long albumId)
+			throws UnauthenticatedUserException, UnsupportedTagException, InvalidDataException, IOException, AlbumNotFound {
 		EndUserEntity user = getUser();
 		mediaAlbumService.createMediumFromFile(user, albumId, file);
 		return true;
 	}
 
 	/**
-	 * This allows an admin to dangerously create an album by giving a filepath of the file on the server.
-	 * Please remove this when deploying to public domains for security.
+	 * This allows an admin to dangerously create an album by giving a filepath of the file on the server. Please remove this when deploying to public domains for security.
 	 *
-	 * @param path file path of the album on the server
+	 * @param path
+	 *            file path of the album on the server
 	 * @return
 	 * @throws IOException
 	 * @throws AlbumNotFound
@@ -150,9 +150,10 @@ public class AlbumController extends BaseController {
 		if (user.getRole() != Role.ADMIN) return null;
 		AlbumDirectory albumDirectory = AlbumFileUtils.generateAlbumFolder(path, true);
 		NewAlbumInfo newAlbum = AlbumInfoParserUtil.loadAlbumInfoFromJson(albumDirectory.getInfoJson());
-		Album album = mediaAlbumService.createAlbum(user, newAlbum.getName(), newAlbum.getSubtitle(), newAlbum.getDescription());
-		mediaAlbumService.updateAlbum(user, album.getId(), newAlbum.getName(), newAlbum.getSubtitle(), newAlbum.getDescription(),
-				newAlbum.getRating(), newAlbum.getMetaType());
+		Album album = mediaAlbumService.createAlbum(user, newAlbum.getName(), newAlbum.getSubtitle(),
+				newAlbum.getDescription());
+		mediaAlbumService.updateAlbum(user, album.getId(), newAlbum.getName(), newAlbum.getSubtitle(),
+				newAlbum.getDescription(), newAlbum.getRating(), newAlbum.getMetaType());
 		mediaAlbumService.createMediaFromFile(user, album.getId(), albumDirectory);
 		mediaAlbumService.setCoverPhotoByName(user, album.getId(), newAlbum.getCoverPhotoName());
 		tagService.tagAlbum(user, album.getId(), newAlbum.getCategories());

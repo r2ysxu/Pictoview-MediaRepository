@@ -63,7 +63,7 @@ export const updateCoverImage = createAsyncThunk('album/update/cover', async ({a
 
 export const searchAlbums = createAsyncThunk('album/search', async (query, thunkAPI) => {
     const page = 0;
-    const albums = await get_searchAlbums(page, query);
+    const albums = await get_searchAlbums(page, query, "name");
     return {
         albumId: null,
         albumName: '',
@@ -96,7 +96,7 @@ export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async ({album
 
 export const loadMoreSearchAlbums = createAsyncThunk('album/search/album/more', async ({page}, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
-    const albumsPage = await get_searchAlbums(page, currentState.albumQuery);
+    const albumsPage = await get_searchAlbums(page, currentState.albumQuery, "name");
     return { albumsPage };
 });
 

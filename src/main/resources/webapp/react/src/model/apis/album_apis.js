@@ -25,8 +25,8 @@ export const get_listAlbums = async (page, parentId, sort) => {
     return fetch('/album/list?' + searchParams.toString()).then(onResponseJson);
 }
 
-export const get_searchAlbums = async (page, query) => {
-    const searchParams = new URLSearchParams({page, query});
+export const get_searchAlbums = async (page, query, sortField) => {
+    const searchParams = new URLSearchParams({page, query, sortField});
     return fetch('/album/search?' + searchParams.toString()).then(onResponseJson);
 }
 

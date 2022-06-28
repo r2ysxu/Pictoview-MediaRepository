@@ -2,8 +2,6 @@ package org.mrn.service;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.transaction.Transactional;
-
 import org.mrn.jpa.model.album.VideoMediaEntity;
 import org.mrn.jpa.repo.VideoMediaRepo;
 import org.springframework.beans.factory.annotation.Autowired;
