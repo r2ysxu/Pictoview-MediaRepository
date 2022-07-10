@@ -26,7 +26,7 @@ function VideoMedia({albumId}) {
             <ScrollLoader isLoading={isLoading} loadMore={loadMore} height={50} hasMore={videos.pageInfo.hasNext}>
                 <div className="album_media_list">
                     {videos.items.map( (video, index) =>
-                        <div key={video.id} className="video_media_container" onClick={() => {setSelectedVideoIndex(index)} }>
+                        <div key={video.id} className="video_media_container" onClick={() => { setSelectedVideoIndex(index) }}>
                             <img src="/assets/icons/play-circle.svg" alt={'video ' + video.id} title={video.name} />
                         </div>
                 )}

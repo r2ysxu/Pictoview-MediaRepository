@@ -21,11 +21,8 @@ public class VideoService {
 	@Value("${app.admin.main.cache.size}")
 	private Integer maxCacheItemSize = 1;
 
-	Cache<String, String> resourceCache = CacheBuilder
-			.newBuilder()
-			.maximumSize(maxCacheItemSize)
-			.expireAfterAccess(4L, TimeUnit.HOURS)
-			.build();
+	Cache<String, String> resourceCache = CacheBuilder.newBuilder().maximumSize(maxCacheItemSize)
+			.expireAfterAccess(4L, TimeUnit.HOURS).build();
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -33,10 +30,10 @@ public class VideoService {
 	private VideoMediaRepo videoMediaRepo;
 
 	public Mono<Resource> fetchVideoStream(UserDetails owner, Long mediaId) {
-		final String resourcePath = resourceCache.getIfPresent(mediaId + "_" + owner.getUsername());
+		final String resourcePath = resourceCache.getIfPresent(owner.getUsername() + mediaId);
 		if (resourcePath == null) {
 			final String unCachedResourcePath = findVideo(owner, mediaId).getSource();
-			resourceCache.put(mediaId + "_" + owner.getUsername(), unCachedResourcePath);
+			resourceCache.put(owner.getUsername() + mediaId, unCachedResourcePath);
 			return Mono.fromSupplier(() -> resourceLoader.getResource("file:" + unCachedResourcePath));
 		} else {
 			return Mono.fromSupplier(() -> resourceLoader.getResource("file:" + resourcePath));

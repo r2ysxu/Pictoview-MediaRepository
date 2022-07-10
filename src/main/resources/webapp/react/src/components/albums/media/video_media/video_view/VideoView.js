@@ -13,21 +13,21 @@ function VideoView({videoItems, selectedIndex, onSelectIndex}) {
         videoRef.current.currentTime += seconds;
     }
 
-    const useKeyControls = (event) => {
-        if (selectedIndex === null) return;
-        if (event.keyCode === 67) { // C
-            onSkipTime(60);
-        } else if (event.keyCode === 99) { // c
-            onSkipTime(10);
-        } else if (event.keyCode === 88) { // X
-            onSkipTime(-60);
-        } else if (event.keyCode === 120) { // x
-            onSkipTime(-10);
-        }
-        event.preventDefault();
-    };
-
     useEffect( () => {
+        const useKeyControls = (event) => {
+            if (selectedIndex === null) return;
+            if (event.keyCode === 67) { // C
+                onSkipTime(60);
+            } else if (event.keyCode === 99) { // c
+                onSkipTime(10);
+            } else if (event.keyCode === 88) { // X
+                onSkipTime(-60);
+            } else if (event.keyCode === 120) { // x
+                onSkipTime(-10);
+            }
+            event.preventDefault();
+        };
+
         document.addEventListener('keypress', useKeyControls);
         return () => document.removeEventListener('keypress', useKeyControls);
     });
@@ -37,7 +37,7 @@ function VideoView({videoItems, selectedIndex, onSelectIndex}) {
             <div className="video_view_container_modal">
                 <div className="video_view_container_modal_background" onClick={onCloseModal} />
                 <video className="video_view_video_content" controls autoPlay ref={videoRef}>
-                    <source src={'/album/video?mediaid=' + videoItems[selectedIndex].id} />
+                    <source src={'/album/video?mediaId=' + videoItems[selectedIndex].id} />
                 </video>
             </div>
         </div> : <div />
