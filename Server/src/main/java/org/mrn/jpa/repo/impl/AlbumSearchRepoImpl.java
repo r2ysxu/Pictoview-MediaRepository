@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -26,6 +27,7 @@ import org.mrn.jpa.repo.AlbumSearchRepo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 
@@ -71,11 +73,16 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 			);
 	}
 
-	private CriteriaQuery<AlbumEntity> createSearchQuery(CriteriaBuilder cb, UserEntity user, SearchQuery searchQuery) {
+	private CriteriaQuery<AlbumEntity> createSearchQuery(final CriteriaBuilder cb, UserEntity user, SearchQuery searchQuery, Sort sortable) {
 		CriteriaQuery<AlbumEntity> query = cb.createQuery(AlbumEntity.class);
 		Root<AlbumEntity> album = query.from(AlbumEntity.class);
 
-		query.select(album).where(generateFilters(cb, query, album, user, searchQuery));
+		List<Order> orderable = sortable.get().map( sort -> {
+			if (sort.isDescending()) return cb.desc(album.get(sort.getProperty()));
+			else return cb.asc(album.get(sort.getProperty()));
+		}).toList();
+
+		query.select(album).where(generateFilters(cb, query, album, user, searchQuery)).orderBy(orderable);
 		return query;
 	}
 
@@ -92,7 +99,7 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 	public Page<AlbumEntity> searchAlbums(UserEntity user, SearchQuery searchQuery, Pageable pageable) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		List<AlbumEntity> items = entityManager
-				.createQuery(createSearchQuery(cb, user, searchQuery))
+				.createQuery(createSearchQuery(cb, user, searchQuery, pageable.getSort()))
 				.setFirstResult((int) pageable.getOffset())
 				.setMaxResults(pageable.getPageSize())
 				.getResultList();
