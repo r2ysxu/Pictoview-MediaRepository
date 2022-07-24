@@ -84,7 +84,7 @@ public class AlbumController extends BaseController {
 	@PostMapping(value = "/album/tag/create", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public AlbumTag tagAlbum(@RequestBody AlbumTag albumTag) throws UnauthenticatedUserException, AlbumNotFound {
 		EndUserEntity user = getUser();
-		tagService.tagAlbum(user, albumTag.getAlbumId(), albumTag.getCategories());
+		tagService.tagAlbum(user, albumTag.getAlbumId(), albumTag.getTags());
 		return tagService.listAlbumTags(albumTag.getAlbumId());
 	}
 
@@ -115,7 +115,7 @@ public class AlbumController extends BaseController {
 			mediaAlbumService.updateAlbum(user, albumId, newAlbum.getName(), newAlbum.getSubtitle(), newAlbum.getDescription(),
 					newAlbum.getRating(), newAlbum.getMetaType());
 			mediaAlbumService.setCoverPhotoByName(user, albumId, newAlbum.getCoverPhotoName());
-			tagService.tagAlbum(user, albumId, newAlbum.getCategories());
+			tagService.tagAlbum(user, albumId, newAlbum.getTags());
 		} else {
 			mediaAlbumService.updateFirstAlbumCoverPhoto(user, albumId);
 		}
@@ -155,7 +155,7 @@ public class AlbumController extends BaseController {
 				newAlbum.getDescription(), newAlbum.getRating(), newAlbum.getMetaType());
 		mediaAlbumService.createMediaFromFile(user, album.getId(), albumDirectory);
 		mediaAlbumService.setCoverPhotoByName(user, album.getId(), newAlbum.getCoverPhotoName());
-		tagService.tagAlbum(user, album.getId(), newAlbum.getCategories());
+		tagService.tagAlbum(user, album.getId(), newAlbum.getTags());
 		return album;
 	}
 

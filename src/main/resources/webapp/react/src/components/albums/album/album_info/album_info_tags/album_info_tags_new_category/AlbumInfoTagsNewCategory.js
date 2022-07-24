@@ -11,31 +11,32 @@ function AlbumInfoTagsNewCategory({albumId, existingCategories}) {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [categories, setCategories] = useState([]);
 
-    const onAddCategory = () => {
+    const onAddCategory = (selectedCategory) => {
+        setSelectedCategory(selectedCategory);
         if (selectedCategory) {
+            selectedCategory.tags = [];
             dispatch(addCategory({albumId, newCategory: selectedCategory}));
         }
     }
 
     useEffect(()=> {
         get_categories().then( categories => {
-            const availabileCategories = (categories || []).filter( category => !existingCategories.some( existingCategory => existingCategory.id === category.id ));
-            setCategories(availabileCategories);
+            const availableCategories = (categories || []).filter( category => !existingCategories.some( existingCategory => existingCategory.id === category.id ));
+            setCategories(availableCategories);
         });
     }, [existingCategories]);
 
     return (
         <div className="album_info_tags_new_category_container">
+            <div className="album_info_tags_new_category_icon" >
+                <img className="album_info_tag_edit_add_tag_icon" src="/assets/icons/plus-circle-fill.svg" alt="" />
+            </div>
             <Dropdown
                 placeholder="Category"
-                selectedValue={selectedCategory}
-                onSelect={setSelectedCategory}
+                onSelect={onAddCategory}
                 values={categories}
                 width="115px"
             />
-            <div className="album_info_tags_new_category_icon" onClick={onAddCategory} >
-                <img className="album_info_tag_edit_add_tag_icon" src="/assets/icons/plus-circle-fill.svg" alt="" />
-            </div>
         </div>
     );
 }

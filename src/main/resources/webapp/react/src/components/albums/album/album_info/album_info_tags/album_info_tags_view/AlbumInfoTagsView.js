@@ -5,11 +5,14 @@ import AlbumInfoTagsCategoryTagToken from '../album_info_tags_tagtoken/AlbumInfo
 import AlbumInfoTagsNewCategory  from '../album_info_tags_new_category/AlbumInfoTagsNewCategory';
 import './AlbumInfoTagsView.css';
 
-function AlbumInfoTagView({albumId, tags, isEditing}) {
+function AlbumInfoTagView({albumId, tags, onClose, isTagging}) {
     const [selectedCategory, setSelectedCategory] = useState(null);
 
-    const onClose = () => {
-        setSelectedCategory(null);
+    const onStopEdit = () => {
+        if (isTagging) {
+            setSelectedCategory(null);
+            onClose();
+        }
     }
 
     return (
@@ -20,27 +23,22 @@ function AlbumInfoTagView({albumId, tags, isEditing}) {
             <div className="album_info_tag_content">
                 {tags && tags.categories.map( category => {
                     return (
-                        <div className="album_info_tag_category_container" key={category.id} >
-                            <div className="album_info_tag_category_label">{category.name}</div>
-                            <div className="album_info_tag_category_tag_container">
+                        <div className="album_info_tag_category_container" key={category.id}  onClick={() => setSelectedCategory(category)}>
+                            <div className="album_info_tag_category_label">
+                                {category.name}
+                            </div>
+                            <div className={"album_info_tag_category_tag_container " + (isTagging && selectedCategory === null ? "album_info_tag_edit" : "")} >
                                 {category.tags.map( (tag, index) => <AlbumInfoTagsCategoryTagToken
                                     key={category.id + '-' + index}
                                     tagToken={tag}
-                                    even={index % 2 === 0}
                                 /> )}
-                                {isEditing && <div className="album_info_tag_edit_icon_container"
-                                  onClick={() => {
-                                    setSelectedCategory(category);
-                                  }} >
-                                    <img className="album_info_tag_edit_add_tag_icon" src="/assets/icons/pencil.svg" alt="" />
-                                </div>}
                             </div>
                         </div>
                     );
                 })}
-                {isEditing && <AlbumInfoTagsNewCategory albumId={albumId} existingCategories={tags.categories} />}
+                {isTagging && <AlbumInfoTagsNewCategory albumId={albumId} existingCategories={tags.categories} />}
             </div>
-            {selectedCategory && <AlbumInfoTagEdit albumId={albumId} category={selectedCategory} onClose={onClose} />}
+            {selectedCategory && isTagging && <AlbumInfoTagEdit albumId={albumId} category={selectedCategory} onClose={onStopEdit} />}
         </div>
     );
 };

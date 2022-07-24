@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import org.mrn.jpa.model.EntityModel;
 
@@ -13,19 +14,22 @@ import org.mrn.jpa.model.EntityModel;
 public class TagEntity implements EntityModel {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected long id;
 	@Column(nullable = false)
 	private String name;
 	@ManyToOne
 	private CategoryEntity category;
+	@Transient
+	private Integer relevance;
 
 	public TagEntity() {
 	}
 
-	public TagEntity(CategoryEntity category, String name) {
+	public TagEntity(CategoryEntity category, String name, Integer relevance) {
 		this.category = category;
 		this.name = name;
+		this.relevance = relevance;
 	}
 
 	public Long getId() {
@@ -52,5 +56,13 @@ public class TagEntity implements EntityModel {
 	public TagEntity setCategory(CategoryEntity category) {
 		this.category = category;
 		return this;
+	}
+
+	public Integer getRelevance() {
+		return relevance;
+	}
+
+	public void setRelevance(Integer relevance) {
+		this.relevance = relevance;
 	}
 }

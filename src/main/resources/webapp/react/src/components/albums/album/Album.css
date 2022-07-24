@@ -101,7 +101,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    overflow-y: auto;
+    overflow-y: overlay;
     background-color: rgba(0,0,0, 0.8);
     color: #fff;
     cursor: default;
@@ -127,6 +127,14 @@
     height: 10pt;
     width: 10pt;
     float: right;
+}
+
+.album_info_edit_icon:hover {
+    filter: invert(50%) sepia(1) hue-rotate(90deg) saturate(3);
+}
+
+.album_info_edit_icon_enabled {
+    filter: invert(50%) sepia(1) hue-rotate(90deg) saturate(3);
 }
 
 .album_info_edit_buttons {

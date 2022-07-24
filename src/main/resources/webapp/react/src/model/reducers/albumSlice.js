@@ -49,7 +49,8 @@ export const uploadAlbumMediaFile = async({albumId, file}) => {
 export const updateAlbum = createAsyncThunk('album/update/info', async (updatedAlbum, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
     const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === updatedAlbum.id);
-    const tags = await get_listAlbumTags(updatedAlbum.id);
+    const categoryTags = await get_listAlbumTags(updatedAlbum.id);
+    const tags = buildCategoryTags(categoryTags);
     const currentAlbum = {...await post_updateAlbum(updatedAlbum), tags };
     return {
         currentAlbumIndex,
@@ -120,9 +121,21 @@ export const loadMoreAudio = createAsyncThunk('album/load/audio/more', async({al
     return { audiosPage };
 });
 
+const buildCategoryTags = (categoryTags) => {
+    const categoryMap = categoryTags.categories.reduce( (map, category) => {
+        category.tags = [];
+        map.set(category.id, category);
+        return map;
+    }, new Map());
+    categoryTags.tags.forEach( tag => categoryMap.get(tag.categoryId).tags.push(tag));
+    return { categories: [...categoryMap.values()] };
+}
+
 export const loadAlbumTags = createAsyncThunk('album/load/tags', async (albumId, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
-    const tags = await get_listAlbumTags(albumId);
+    const categoryTags = await get_listAlbumTags(albumId);
+    const tags = buildCategoryTags(categoryTags);
+
     const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
     const currentAlbum = {...currentState.albums.items[currentAlbumIndex], tags };
     return {
@@ -131,11 +144,12 @@ export const loadAlbumTags = createAsyncThunk('album/load/tags', async (albumId,
     }
 });
 
-export const updateCategoryTags = createAsyncThunk('album/tags/update', async ({albumId, categories}, thunkAPI) => {
+export const updateCategoryTags = createAsyncThunk('album/tags/update', async ({albumId, tags}, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
-    const tags = await post_tagAlbum({albumId, categories});
+    const categoryTags = await post_tagAlbum({albumId, tags});
+    const newTags = buildCategoryTags(categoryTags);
     const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
-    const currentAlbum = {...currentState.albums.items[currentAlbumIndex], tags };
+    const currentAlbum = {...currentState.albums.items[currentAlbumIndex], tags: newTags };
     return {
         currentAlbumIndex,
         currentAlbum,

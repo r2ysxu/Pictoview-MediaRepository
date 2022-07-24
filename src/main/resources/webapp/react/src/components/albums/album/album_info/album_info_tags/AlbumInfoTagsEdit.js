@@ -13,7 +13,7 @@ function AlbumInfoTagEdit({albumId, category, onClose}) {
 
     const onAutoComplete = (value) => {
         if (value && value.trim().length > 0) {
-            get_searchTags(value).then( (response) => {
+            get_searchTags(value, category.id).then( (response) => {
                 setAutoCompleteTokens(response);
             });
         } else {
@@ -22,15 +22,14 @@ function AlbumInfoTagEdit({albumId, category, onClose}) {
     }
 
     const onSave = () => {
-        const taggedCategory = {
-            id: category.id,
-            name: category.name,
-            tags
-        };
         dispatch(updateCategoryTags({
             albumId,
-            categories: [taggedCategory]
+            tags
         }));
+    }
+
+    const addNewTag = (value) => {
+        return { id: null, value, categoryId: category.id }
     }
 
     const onRemoveTag = (tagIndex) => {
@@ -45,6 +44,7 @@ function AlbumInfoTagEdit({albumId, category, onClose}) {
             autoCompleteValues={autoCompleteTokens}
             onAutoComplete={onAutoComplete}
             onRemove={onRemoveTag}
+            addNewToken={addNewTag}
             onSave={onSave}
             onClose={onClose} />
     );

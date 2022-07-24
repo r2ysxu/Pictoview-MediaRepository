@@ -10,6 +10,7 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
     const dispatch = useDispatch();
     const [showMoreInfo, setShowMoreInfo] = useState(false);
     const [isEditing, setEditing] = useState(false);
+    const [isTagging, setTagging] = useState(false);
     const [currentAlbum, setCurrentAlbum] = useState(album);
 
     const onAlbumClick = (event) => {
@@ -56,15 +57,21 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
                         <img className="album_image" src={'/album/image/cover?albumid=' + album.id} alt="" />}
                 </div>
                 {showMoreInfo && <div className="album_info_container">
+                    <img className={"album_info_edit_icon " + (isTagging ? "album_info_edit_icon_enabled" : "")}
+                        src="/assets/icons/tags.svg" alt="" title="Edit Tags (Select category to edit)"
+                        onClick={() => {
+                            setTagging(!isTagging);
+                        }}
+                    />
                     {!isEditing && <img className="album_info_edit_icon"
-                        src="/assets/icons/pencil.svg" alt=""
+                        src="/assets/icons/pencil.svg" alt="" title="Edit Title &amp; Description"
                         onClick={() => {
                             setEditing(!isEditing);
                         }}
                     />}
                     {isEditing && <div className="album_info_edit_buttons">
                         <img className="album_info_edit_buttons_save" src="/assets/icons/check.svg" alt="" onClick={onUpdateAlbum} />
-                        <img className="album_info_edit_buttons_cancel" src="/assets/icons/x.svg" alt="" onClick={onUpdateAlbum} />
+                        <img className="album_info_edit_buttons_cancel" src="/assets/icons/x.svg" alt="" onClick={() => setEditing(false)} />
                     </div>}
                     <div className="album_info_description_container">
                         <h3>Description</h3>
@@ -74,7 +81,8 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
                     <AlbumInfoTagView
                         albumId={album.id}
                         tags={album.tags}
-                        isEditing={isEditing}
+                        isTagging={isTagging}
+                        onClose={() => {setTagging(false)}}
                     />
                 </div>}
             </div>

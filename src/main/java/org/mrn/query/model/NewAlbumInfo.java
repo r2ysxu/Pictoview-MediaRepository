@@ -1,6 +1,5 @@
 package org.mrn.query.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NewAlbumInfo implements QueryModel {
@@ -11,9 +10,10 @@ public class NewAlbumInfo implements QueryModel {
 	private String coverPhotoName;
 	private Integer rating;
 	private String metaType;
-	private List<Category> categories;
+	private List<Tag> tags;
 
-	public NewAlbumInfo() {}
+	public NewAlbumInfo() {
+	}
 
 	public NewAlbumInfo(String name, String description, String subtitle, String coverPhotoName, Integer rating) {
 		this.name = name;
@@ -21,7 +21,6 @@ public class NewAlbumInfo implements QueryModel {
 		this.subtitle = subtitle;
 		this.coverPhotoName = coverPhotoName;
 		this.rating = rating;
-		this.categories = new ArrayList<>();
 	}
 
 	public String getName() {
@@ -72,11 +71,11 @@ public class NewAlbumInfo implements QueryModel {
 		this.metaType = metaType;
 	}
 
-	public List<Category> getCategories() {
-		return categories;
+	public List<Tag> getTags() {
+		return tags;
 	}
 
-	public void setCategories(List<Category> categories) {
-		this.categories = categories;
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
 	}
 }

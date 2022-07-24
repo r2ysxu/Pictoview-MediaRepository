@@ -3,9 +3,9 @@ import { useState, useEffect, useRef } from 'react';
 import './Tokenizer.css';
 
 /* Token : [{ id: ID, value: String}] */
-function Tokenizer({title, tokens, setTokens, autoCompleteValues, onAutoComplete, onRemove, onSave, onClose}) {
+function Tokenizer({title, tokens, setTokens, addNewToken, autoCompleteValues, onAutoComplete, onRemove, onSave, onClose}) {
     const inputRef = useRef(null);
-    const [tagValue, setTagValue] = useState('');
+    const [inputValue, setInputValue] = useState('');
 
     useEffect(() => {
         inputRef.current.focus();
@@ -13,17 +13,15 @@ function Tokenizer({title, tokens, setTokens, autoCompleteValues, onAutoComplete
 
     const onAddToken = () => {
         let token;
-        if (autoCompleteValues &&
-          autoCompleteValues.length &&
-          autoCompleteValues[0].value === tagValue) {
+        if (autoCompleteValues?.length > 0) {
             token = autoCompleteValues[0];
         } else {
-           token = { id: null, value: tagValue };
+            token = addNewToken(inputValue);
         }
-        if (tagValue.trim().length && !tokens.some( token => token.value === tagValue )) {
+        if (inputValue.trim().length && !tokens.some( token => token.value === inputValue )) {
             setTokens([...tokens, token]);
         }
-        setTagValue('');
+        setInputValue('');
         onAutoComplete('');
     }
 
@@ -31,16 +29,20 @@ function Tokenizer({title, tokens, setTokens, autoCompleteValues, onAutoComplete
         if (event.charCode === 13 && !event.shiftKey) { // Enter
             onAddToken();
         } else if (event.charCode === 13 && event.shiftKey) { // Shift + Enter
-            onSave();
-            onDiscardPressed(event);
+            onSavePressed(event);
         } else if (event.charCode === 96) { // `
             onDiscardPressed(event);
         }
     }
 
+    const onSavePressed = (event) => {
+        onSave();
+        onDiscardPressed(event);
+    }
+
     const onDiscardPressed = (event) => {
         onClose(event);
-        setTagValue('');
+        setInputValue('');
         setTokens([]);
     }
 
@@ -49,23 +51,29 @@ function Tokenizer({title, tokens, setTokens, autoCompleteValues, onAutoComplete
         setTokens([...tokens]);
     }
 
+    const onSelectItem = (index) => {
+        setTokens([...tokens, autoCompleteValues[index]]);
+        setInputValue('');
+        onAutoComplete('');
+    }
+
     return (
         <div className="tokenizer_container">
             <div className="tokenizer_input_container">
                 <div className="tokenizer_input_autocomplete_container">
-                    {(autoCompleteValues || []).map( (token, index) => <div key={index + '-' + token.id}>{token.value}</div> )}
+                    {(autoCompleteValues || []).map( (token, index) => <div className="tokenizer_input_autocomplete_item" key={index + '-' + token.id} onClick={() => onSelectItem(index)}>{token.value}</div> )}
                 </div>
                 <input className="tokenizer_input_text"
                     ref={inputRef}
                     type="text"
-                    value={tagValue}
+                    value={inputValue}
                     onChange={(event) => {
                         const value = event.target.value;
-                        setTagValue(value);
+                        setInputValue(value);
                         onAutoComplete(value);
                     }}
                     onKeyPress={onEnterPressed} />
-                <button className="tokenizer_image_button tokenizer_input_image_save_button" onClick={onSave}>
+                <button className="tokenizer_image_button tokenizer_input_image_save_button" onClick={onSavePressed}>
                     <img src="/assets/icons/check.svg" alt="" />
                 </button>
                 <button className="tokenizer_image_button tokenizer_input_image_discard_button" onClick={(onDiscardPressed)}>

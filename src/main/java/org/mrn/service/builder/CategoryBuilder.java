@@ -29,7 +29,6 @@ public class CategoryBuilder implements ModelBuilder<Category, CategoryEntity> {
 	@Override
 	public Category build(CategoryEntity entity) {
 		Category category = new Category(entity.getId(), entity.getName());
-		category.setTags(TagBuilder.buildFromList(entity.getTags()));
 		return category;
 	}
 	

@@ -1,6 +1,7 @@
 package org.mrn.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -54,49 +55,62 @@ public class TagService {
 		return AlbumTagBuilder.buildFrom(albumId, albumTagRepo.findAllByAlbum_Id(albumId));
 	}
 
-	private List<TagEntity> persistTags(List<Category> categories) {
-		List<Long> existingTagIds = new ArrayList<>();
-		List<TagEntity> newTags = new ArrayList<>();
-		for (Category categoryQuery : categories) {
-			CategoryEntity category = categoryRepo.findById(categoryQuery.getId()).get();
-			for (Tag tagQuery : categoryQuery.getTags()) {
-				String tagValue = tagQuery.getValue().trim();
-				if (tagQuery.getId() == null) {
-					TagEntity tag = tagRepo.findByNameAndCategory(tagValue, category);
-					if (tag == null) {
-						newTags.add(new TagEntity(category, tagValue));
-					} else {
-						tagQuery.setId(tag.getId());
-						existingTagIds.add(tagQuery.getId());
-					}
-				} else {
-					existingTagIds.add(tagQuery.getId());
+	private void findAndSetPreexistingTags(List<Tag> tags) {
+		tags.stream().forEach(tag -> {
+			if (tag.getId() == null) {
+				TagEntity tagEntity = tagRepo.findByNameAndCategory_Id(tag.getValue(), tag.getCategoryId());
+				if (tagEntity != null) {
+					tag.setId(tagEntity.getId());
 				}
 			}
-		}
-		List<TagEntity> tags = tagRepo.findAllByIdIn(existingTagIds);
-		tagRepo.saveAll(newTags).forEach(tag -> tags.add(tag));
-		return tags;
+		});
+	}
+
+	private List<TagEntity> persistAndFetchTags(List<Tag> newTags) {
+		findAndSetPreexistingTags(newTags);
+		List<Long> existingTagIds = newTags.stream().filter(tag -> tag.getId() != null).map(Tag::getId).toList();
+		List<TagEntity> newTagEntities = newTags.stream().filter(tag -> tag.getId() == null)
+				.map(tag -> new TagEntity(new CategoryEntity(tag.getCategoryId()), tag.getValue(), tag.getRelevance()))
+				.toList();
+
+		List<TagEntity> existingTags = tagRepo.findAllByIdIn(existingTagIds);
+		tagRepo.saveAll(newTagEntities).forEach(tag -> existingTags.add(tag));
+		return existingTags;
+	}
+
+	private List<Tag> removeDuplicateTags(List<Tag> tags) {
+		Set<String> duplicateValues = new HashSet<>();
+		Set<String> duplicateIds = new HashSet<>();
+		return tags.stream().filter(tag -> {
+			String keyId = tag.getCategoryId() + "_" + tag.getId();
+			if (duplicateValues.contains(tag.getValue()) || duplicateIds.contains(keyId)) return false;
+			if (tag.getId() != null) duplicateIds.add(keyId);
+			if (tag.getValue() != null && !tag.getValue().isEmpty()) {
+				duplicateValues.add(tag.getValue());
+			}
+			return true;
+		}).collect(Collectors.toList());
 	}
 
 	@Transactional
-	public void tagAlbum(EndUserEntity user, Long albumId, List<Category> categories) throws AlbumNotFound {
+	public void tagAlbum(EndUserEntity user, Long albumId, List<Tag> newTags) throws AlbumNotFound {
+		Set<Long> categoryIds = newTags.stream().map(tag -> tag.getCategoryId()).filter(Objects::nonNull)
+				.collect(Collectors.toSet());
 		AlbumEntity imageAlbum = imageAlbumRepo.findByOwnerAndId(user, albumId);
 		if (imageAlbum == null) throw new AlbumNotFound(user, albumId);
-		Set<Long> categoryIds = categories.stream().map(Category::getId).collect(Collectors.toSet());
-		List<TagEntity> tags = persistTags(categories);
+		List<TagEntity> tagEntity = persistAndFetchTags(removeDuplicateTags(newTags));
 
-		Map<Long, AlbumTagEntity> existingAlbumTags = albumTagRepo.findAllByAlbum_Id(albumId).stream()
-				.filter(existingAlbumTag -> categoryIds.contains(existingAlbumTag.getTag().getCategory().getId()))
+		Map<Long, AlbumTagEntity> existingAlbumTags = albumTagRepo
+				.findAllByAlbum_IdAndTag_Category_IdIn(albumId, new ArrayList<>(categoryIds)).stream()
 				.collect(Collectors.toMap(existingAlbumTag -> existingAlbumTag.getTag().getId(), Function.identity()));
 
-		List<AlbumTagEntity> albumTags = tags.stream().map(tag -> {
+		List<AlbumTagEntity> newAlbumTags = tagEntity.stream().map(tag -> {
 			if (existingAlbumTags.containsKey(tag.getId())) {
 				existingAlbumTags.remove(tag.getId());
 				return null;
 			}
-			return new AlbumTagEntity(imageAlbum, tag);
-		}).filter(Objects::nonNull).collect(Collectors.toList());
+			return new AlbumTagEntity(imageAlbum, tag, 0);
+		}).filter(Objects::nonNull).toList();
 
 		// Unset binding
 		existingAlbumTags.values().forEach(existingAlbumTag -> {
@@ -105,7 +119,7 @@ public class TagService {
 		});
 		albumTagRepo.saveAll(existingAlbumTags.values());
 		albumTagRepo.deleteAll(existingAlbumTags.values());
-		albumTagRepo.saveAll(albumTags);
+		albumTagRepo.saveAll(newAlbumTags);
 	}
 
 	public List<Category> listCategories() {
@@ -123,7 +137,8 @@ public class TagService {
 		return TagBuilder.buildFromList(category.getTags());
 	}
 
-	public List<Tag> searchTags(String tagName, Integer pageSize, Integer pageNumber) {
-		return TagBuilder.buildFromList(tagRepo.findByNameContainingIgnoreCase(tagName, PageRequest.of(pageNumber, pageSize, Sort.unsorted())));
+	public List<Tag> searchTags(String tagName, Long categoryId, Integer pageSize, Integer pageNumber) {
+		return TagBuilder.buildFromList(
+				tagRepo.findByNameContainingIgnoreCaseAndCategory_Id(tagName, categoryId, PageRequest.of(pageNumber, pageSize, Sort.unsorted())));
 	}
 }

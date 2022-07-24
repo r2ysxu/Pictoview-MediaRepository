@@ -58,6 +58,11 @@
     position: relative;
     height: 14pt;
     width: 14pt;
+    display: inline-block;
+}
+
+.album_info_tag_edit:hover {
+    background-color: #4ac87a;
 }
 
 .album_info_tag_edit_add_tag_icon {

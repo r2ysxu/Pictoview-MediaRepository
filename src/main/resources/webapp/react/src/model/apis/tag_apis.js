@@ -29,7 +29,7 @@ export const post_tagAlbum = async (albumCategoryTags) => {
     }).then( response => response.json());
 }
 
-export const get_searchTags = async (tagQuery) => {
-    const searchParams = new URLSearchParams({tagQuery});
+export const get_searchTags = async (tagQuery, categoryId) => {
+    const searchParams = new URLSearchParams({tagQuery, categoryId});
     return fetch('/tag/search?' + searchParams.toString()).then(onResponseJson);
 }

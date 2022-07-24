@@ -24,6 +24,10 @@ public class CategoryEntity implements EntityModel {
 	
 	public CategoryEntity() {}
 	
+	public CategoryEntity(Long id) {
+		this.id = id;
+	}
+	
 	public CategoryEntity(String name) {
 		this.name = name;
 	}

@@ -14,7 +14,7 @@ import org.mrn.jpa.model.album.AlbumEntity;
 @Entity
 public class AlbumTagEntity implements EntityModel {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected long id;
 	@OneToOne(cascade = CascadeType.ALL)
 	private TagEntity tag;
@@ -25,9 +25,10 @@ public class AlbumTagEntity implements EntityModel {
 	
 	public AlbumTagEntity() {}
 	
-	public AlbumTagEntity(AlbumEntity album, TagEntity tag) {
+	public AlbumTagEntity(AlbumEntity album, TagEntity tag, Integer relevance) {
 		this.album = album;
 		this.tag = tag;
+		this.relevance = relevance == null ? 0 : relevance;
 	}
 
 	public Long getId() {

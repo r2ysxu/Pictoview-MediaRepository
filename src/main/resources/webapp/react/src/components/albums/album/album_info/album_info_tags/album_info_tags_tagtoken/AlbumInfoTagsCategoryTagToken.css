@@ -1,10 +1,17 @@
 .album_info_tags_category_tagToken_container {
 	display: flex;
-    margin: 0 3px;
 }
 
-.album_info_tags_category_tagToken_container_odd span {
-    color: #cdcdcd;
+.album_info_tags_category_tagToken_container40 {
+    opacity: .4;
+}
+
+.album_info_tags_category_tagToken_container60 {
+    opacity: .6;
+}
+
+.album_info_tags_category_tagToken_container80 {
+    opacity: .8;
 }
 
 .album_info_tags_category_tagToken_delete_icon_container {
@@ -27,3 +34,11 @@
     filter: invert(50%) sepia(1) hue-rotate(310deg) saturate(10);
 }
 
+.dot {
+    margin: 7px 3px;
+    height: 0.2em;
+    width: 0.2em;
+    background-color: #cdcdcd;
+    border-radius: 50%;
+    display: inline-block;
+}

@@ -43,10 +43,11 @@ public class TagController extends BaseController {
 	@ResponseBody
 	@GetMapping(value = "/tag/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Tag> searchTagName(@RequestParam(name = "tagQuery") String tagQuery,
+			@RequestParam(name = "categoryId") Long categoryId,
 			@RequestParam(name = "page", required = false) Integer page) throws UnauthenticatedUserException {
 		getUser();
 		if (page == null) page = 0;
-		return tagService.searchTags(tagQuery, PAGE_SIZE, page);
+		return tagService.searchTags(tagQuery, categoryId, PAGE_SIZE, page);
 	}
 
 	@ResponseBody
