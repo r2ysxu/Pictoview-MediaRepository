@@ -37,7 +37,7 @@ function TagList({tagQueryMap}) {
     }
 
     const onSearch = () => {
-        const searchQuery = Array.from(tagQueryMap.values()).join(" ") + "^^" + searchRating.lower + "-" + searchRating.upper;
+        const searchQuery = Array.from(tagQueryMap.values()).join(" ") + " ^^" + searchRating.lower + "-" + searchRating.upper;
         const url = '/album?searchQuery=' + encodeURIComponent(searchQuery);
         window.location = url;
     }

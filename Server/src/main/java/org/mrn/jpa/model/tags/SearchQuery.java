@@ -53,7 +53,7 @@ public class SearchQuery {
 					if (!tags.containsKey(categoryToken[0])) tags.put(categoryToken[0], new ArrayList<>());
 					tags.get(removeQuotes(categoryToken[0])).add(removeQuotes(categoryToken[1]).toLowerCase());
 				}
-			} if (token.startsWith(RATING_DELIMITER)) {
+			} else if (token.startsWith(RATING_DELIMITER)) {
 				String[] ratingRangeToken = token.substring(2).split("-");
 				if (ratingRangeToken.length == 2) {
 					try {

@@ -109,7 +109,7 @@ public class TagService {
 				existingAlbumTags.remove(tag.getId());
 				return null;
 			}
-			return new AlbumTagEntity(imageAlbum, tag, 0);
+			return new AlbumTagEntity(imageAlbum, tag, tag.getRelevance());
 		}).filter(Objects::nonNull).toList();
 
 		// Unset binding
@@ -131,10 +131,8 @@ public class TagService {
 				PageRequest.of(pageNumber, pageSize, Sort.unsorted())));
 	}
 
-	@Transactional
 	public List<Tag> listTags(Long categoryId) {
-		CategoryEntity category = categoryRepo.findById(categoryId).get();
-		return TagBuilder.buildFromList(category.getTags());
+		return TagBuilder.buildFromList(tagRepo.findAllByCategory_IdOrderByName(categoryId));
 	}
 
 	public List<Tag> searchTags(String tagName, Long categoryId, Integer pageSize, Integer pageNumber) {
