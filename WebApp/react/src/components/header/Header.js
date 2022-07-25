@@ -1,6 +1,7 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { get_userProfile, get_logout } from '../../model/apis/user_apis';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUserProfile, logout, selectUserLoggedIn } from '../../model/reducers/userSlice';
 import HomeBanner from '../home_banner/HomeBanner';
 import Searchbar from '../widgets/searchbar/Searchbar';
 import MenuBar from '../widgets/menubar/MenuBar';
@@ -8,32 +9,23 @@ import MenuItem from '../widgets/menu_item/MenuItem';
 import HeaderSearchSideBar from './HeaderSearchSidebar';
 import './Header.css';
 
-const hasProfile = (userProfile) => {
-    return userProfile !== null && userProfile !== undefined && userProfile.username && userProfile.username !== "";
-}
-
-function Header({setLoggedIn, onSearchSubmit, setShowNewAlbumModal, setShowTagModal, searchQuery, onMenuSelect}) {
-    const [userProfile, setUserProfile] = useState(null);
+function Header({onSearchSubmit, setShowNewAlbumModal, setShowTagModal, searchQuery, onMenuSelect}) {
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector(selectUserLoggedIn);
 
     const onLogout = () => {
-        get_logout().then(() => {
-            window.location.replace('/');
-        });
+        dispatch(logout());
+        window.location.replace('/');
     }
 
     useEffect(()=> {
-        get_userProfile().then(data => {
-            if (hasProfile(data) && !hasProfile(userProfile)) {
-                setUserProfile(data)
-                setLoggedIn(true);
-            }
-        });
-    }, [userProfile, setLoggedIn, setUserProfile]);
+        if (!isLoggedIn) dispatch(loadUserProfile());
+    }, [dispatch, isLoggedIn]);
 
     return (
         <div className="header">
-            {!hasProfile(userProfile) && <HomeBanner />}
-            {hasProfile(userProfile) && <Searchbar
+            {!isLoggedIn && <HomeBanner />}
+            {isLoggedIn && <Searchbar
                     menuContent={
                         <MenuBar
                             onSelect={onMenuSelect}

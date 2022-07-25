@@ -1,7 +1,8 @@
 import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from "react-router-dom";
+import { selectUserLoggedIn } from '../model/reducers/userSlice';
 import { searchAlbums } from '../model/reducers/albumSlice';
 import Modal from '../components/widgets/modal/Modal';
 import Container from '../components/widgets/container/Container';
@@ -22,7 +23,7 @@ function AlbumPage(props) {
     const albumId = albumSearchQuery.length > 0 ? null : query.get('albumId') ?? 0;
     const history = decodeURIComponent(query.get('history') ?? '');
 
-    const [loggedIn, setLoggedIn] = useState(false);
+    const isLoggedIn = useSelector(selectUserLoggedIn);
     const [showNewAlbumModal, setShowNewAlbumModal] = useState(false);
     const [showTagModal, setShowTagModal] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,7 +34,6 @@ function AlbumPage(props) {
     }, [dispatch]);
 
     const onSearchRefresh = (query) => {
-        console.log('refreshing search');
         const url = '/album?searchQuery=' + encodeURIComponent(query);
         window.location = url;
     }
@@ -58,13 +58,12 @@ function AlbumPage(props) {
     return (
         <div>
             <Header
-                setLoggedIn={setLoggedIn}
                 onSearchSubmit={onSearchRefresh}
                 setShowNewAlbumModal={setShowNewAlbumModal}
                 setShowTagModal={setShowTagModal}
                 searchQuery={albumSearchQuery}
                 onMenuSelect={onMenuSelect} />
-            <Container isLoggedIn={loggedIn} containerClass={isMenuOpen ? "menubar_offset" : ""}>
+            <Container isLoggedIn={isLoggedIn} containerClass={isMenuOpen ? "menubar_offset" : ""}>
                 <Modal
                     content={<CreateAlbum onDone={hideNewAlbumModal} />}
                     isShown={showNewAlbumModal}
