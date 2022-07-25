@@ -27,7 +27,7 @@ function AlbumPage(props) {
     const [showNewAlbumModal, setShowNewAlbumModal] = useState(false);
     const [showTagModal, setShowTagModal] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [tagQueryMap, setTagQueryMap] = useState(new Map());
+    const [tagQuery, setTagQuery] = useState({ and: new Map(), or: new Map(), not: new Map()});
 
     const onSearch = useCallback((query) => {
         dispatch(searchAlbums(query));
@@ -44,7 +44,7 @@ function AlbumPage(props) {
 
     const hideTagModal = () => {
         setShowTagModal(false);
-        setTagQueryMap(new Map());
+        setTagQuery({ and: new Map(), or: new Map(), not: new Map()});
     }
 
     const onMenuSelect = (isOpen) => {
@@ -69,7 +69,7 @@ function AlbumPage(props) {
                     isShown={showNewAlbumModal}
                     onHide={hideNewAlbumModal} />
                 <Modal
-                    content={<TagList tagQueryMap={tagQueryMap} />}
+                    content={<TagList tagQuery={tagQuery} />}
                     isShown={showTagModal}
                     onHide={hideTagModal} />
                 <AlbumsContainer

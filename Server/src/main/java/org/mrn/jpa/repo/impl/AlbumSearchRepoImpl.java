@@ -34,6 +34,24 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	private List<Predicate> addTagPredicate(Map<String, List<String>> categoryTags,
+			CriteriaBuilder cb,
+			@SuppressWarnings("rawtypes") CriteriaQuery query,
+			Root<AlbumEntity> album,
+			boolean not) {
+		List<Predicate> whereTags = new ArrayList<>();
+		if (!categoryTags.isEmpty()) {
+			for (Entry<String, List<String>> tags : categoryTags.entrySet()) {
+				for (String tag : tags.getValue()) {
+					Subquery<Long> tagQuery = generateSubQueryTagFilter(cb, query.subquery(Long.class), tags.getKey(), tag);
+					if (not) whereTags.add(cb.not(cb.in(album.get("id")).value(tagQuery)));
+					else whereTags.add(cb.in(album.get("id")).value(tagQuery));
+				}
+			}
+		}
+		return whereTags;
+	}
+
 	private Predicate generateFilters(CriteriaBuilder cb,
 			@SuppressWarnings("rawtypes") CriteriaQuery query,
 			Root<AlbumEntity> album, UserEntity user, SearchQuery searchQuery) {
@@ -42,23 +60,22 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 		if (!StringUtils.isEmpty(searchQuery.getName())) {
 			whereTags.add(cb.like(cb.upper(album.get("name")), '%' + searchQuery.getName().toUpperCase() + '%'));
 		}
-		if (!searchQuery.getTags().isEmpty()) {
-			Map<String, List<String>> categoryTags = searchQuery.getTags();
-			for (Entry<String, List<String>> tags : categoryTags.entrySet()) {
-				for (String tag : tags.getValue()) {
-					Subquery<Long> tagQuery = generateSubQueryTagFilter(cb, query.subquery(Long.class), tags.getKey(), tag);
-					whereTags.add(cb.in(album.get("id")).value(tagQuery));
-				}
-			}
-		}
 
 		if (searchQuery.getRatingRangeLower() != null && searchQuery.getRatingRangeUpper() != null) {
 			whereTags.add(cb.between(album.get("rating"), searchQuery.getRatingRangeLower() , searchQuery.getRatingRangeUpper()));
 		}
 
+		whereTags.addAll(addTagPredicate(searchQuery.getAndTags(), cb, query, album, false));
+		List<Predicate> notTags = addTagPredicate(searchQuery.getNotTags(), cb, query, album, true);
+		List<Predicate> orTags = addTagPredicate(searchQuery.getOrTags(), cb, query, album, false);
+
 		return cb.and(
 				cb.equal(album.get("owner"), user),
-				cb.and(whereTags.toArray(new Predicate[whereTags.size()]))
+				cb.and(notTags.toArray(new Predicate[notTags.size()])),
+				cb.or(
+					cb.and(whereTags.toArray(new Predicate[whereTags.size()])),
+					cb.or(orTags.toArray(new Predicate[orTags.size()]))
+				)
 			);
 	}
 

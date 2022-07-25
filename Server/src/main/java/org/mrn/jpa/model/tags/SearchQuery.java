@@ -12,16 +12,19 @@ public class SearchQuery {
 
 	private static final String SPACE_DELIMITER = " ";
 	private static final String CATEGORY_DELIMITER = "::";
+	private static final String CATEGORY_DELIMITER_AND = ":&:";
+	private static final String CATEGORY_DELIMITER_OR = ":^:";
+	private static final String CATEGORY_DELIMITER_NOT = ":!:";
 	private static final String RATING_DELIMITER = "^^";
 
 	private String name;
-	private Map<String, List<String>> tags;
+	private Map<String, List<String>> andTags = new HashMap<>();
+	private Map<String, List<String>> notTags = new HashMap<>();
+	private Map<String, List<String>> orTags = new HashMap<>();
 	private Integer ratingRangeLower;
 	private Integer ratingRangeUpper;
 
-	public SearchQuery() {
-		tags = new HashMap<>();
-	}
+	public SearchQuery() {}
 
 	public static SearchQuery parse(String query) {
 		Pattern splitSpaceRegex = Pattern.compile(" (?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)");
@@ -36,23 +39,30 @@ public class SearchQuery {
 		return str;
 	}
 
+	private void addToTags(String token, Map<String, List<String>> tags, String delimiter) {
+		String[] categoryToken = token.substring(delimiter.length()).split(CATEGORY_DELIMITER);
+		if (categoryToken.length == 1) {
+			if (tags.get(Categories.Tags) == null)
+				tags.put(Categories.Tags, new ArrayList<>());
+			tags.get(Categories.Tags).add(removeQuotes(categoryToken[0]).toLowerCase());
+		} else if (categoryToken.length == 2) {
+			if (!tags.containsKey(categoryToken[0])) tags.put(categoryToken[0], new ArrayList<>());
+			tags.get(removeQuotes(categoryToken[0])).add(removeQuotes(categoryToken[1]).toLowerCase());
+		}
+	}
+
 	private SearchQuery(String[] tokens) {
-		tags = new HashMap<>();
 		List<String> names = new ArrayList<>();
 
 		for (String token : tokens) {
 			if (StringUtils.isBlank(token))
 				continue;
-			if (token.startsWith(CATEGORY_DELIMITER)) {
-				String[] categoryToken = token.substring(2).split(CATEGORY_DELIMITER);
-				if (categoryToken.length == 1) {
-					if (tags.get(Categories.Tags) == null)
-						tags.put(Categories.Tags, new ArrayList<>());
-					tags.get(Categories.Tags).add(removeQuotes(categoryToken[0]).toLowerCase());
-				} else if (categoryToken.length == 2) {
-					if (!tags.containsKey(categoryToken[0])) tags.put(categoryToken[0], new ArrayList<>());
-					tags.get(removeQuotes(categoryToken[0])).add(removeQuotes(categoryToken[1]).toLowerCase());
-				}
+			if (token.startsWith(CATEGORY_DELIMITER_AND)) {
+				addToTags(token, andTags, CATEGORY_DELIMITER_AND);
+			} else if (token.startsWith(CATEGORY_DELIMITER_OR)) {
+				addToTags(token, orTags, CATEGORY_DELIMITER_OR);
+			} else if (token.startsWith(CATEGORY_DELIMITER_NOT)) {
+				addToTags(token, notTags, CATEGORY_DELIMITER_NOT);
 			} else if (token.startsWith(RATING_DELIMITER)) {
 				String[] ratingRangeToken = token.substring(2).split("-");
 				if (ratingRangeToken.length == 2) {
@@ -76,12 +86,28 @@ public class SearchQuery {
 		this.name = name;
 	}
 
-	public Map<String, List<String>> getTags() {
-		return tags;
+	public Map<String, List<String>> getAndTags() {
+		return andTags;
 	}
 
-	public void setTags(Map<String, List<String>> tags) {
-		this.tags = tags;
+	public void setAndTags(Map<String, List<String>> andTags) {
+		this.andTags = andTags;
+	}
+
+	public Map<String, List<String>> getNotTags() {
+		return notTags;
+	}
+
+	public void setNotTags(Map<String, List<String>> notTags) {
+		this.notTags = notTags;
+	}
+
+	public Map<String, List<String>> getOrTags() {
+		return orTags;
+	}
+
+	public void setOrTags(Map<String, List<String>> orTags) {
+		this.orTags = orTags;
 	}
 
 	public Integer getRatingRangeLower() {

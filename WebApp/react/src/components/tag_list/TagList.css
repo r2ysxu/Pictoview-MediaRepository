@@ -76,8 +76,16 @@
     color: #9fa9e1;
 }
 
-.tag_list_item_content_item_selected {
+.tag_list_item_content_item_selected_and {
     color: #5369de;
+}
+
+.tag_list_item_content_item_selected_or {
+    color: #53de6d;
+}
+
+.tag_list_item_content_item_selected_not {
+    color: #de5353;
 }
 
 .tag_list_search_button {

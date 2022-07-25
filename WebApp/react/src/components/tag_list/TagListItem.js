@@ -10,8 +10,8 @@ function TagListItem({category, onSelectCategory, onSelectTag}) {
         setShowExpand(!showExpand);
     }
 
-    const onSelectItem = (tag) => {
-        onSelectTag(category, tag);
+    const onSelectItem = (tag, type) => {
+        onSelectTag(category, tag, type);
     }
 
     return (
