@@ -34,7 +34,7 @@
     filter: invert(50%) sepia(1) hue-rotate(310deg) saturate(10);
 }
 
-.dot {
+.album_info_tag_category_tagToken_dot {
     margin: 7px 3px;
     height: 0.2em;
     width: 0.2em;

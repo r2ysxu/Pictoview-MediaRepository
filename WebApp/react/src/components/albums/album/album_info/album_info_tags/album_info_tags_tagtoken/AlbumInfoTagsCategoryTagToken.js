@@ -6,7 +6,6 @@ const between = (value, beg, end) => {
 }
 
 function AlbumInfoTagsCategoryTagToken({tagToken}) {
-    console.log('tagToken', tagToken);
 
     const relevanceTag = () => {
         const relevance = tagToken.relevance;
@@ -18,7 +17,7 @@ function AlbumInfoTagsCategoryTagToken({tagToken}) {
 
     return (
         <div className={"album_info_tags_category_tagToken_container" } >
-            <div class="dot" />
+            <div className="album_info_tag_category_tagToken_dot" />
             <span className={relevanceTag()}>{tagToken.value}</span>
         </div>
     );

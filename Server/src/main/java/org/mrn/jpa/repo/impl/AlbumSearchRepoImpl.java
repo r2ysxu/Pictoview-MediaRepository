@@ -51,6 +51,9 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 				}
 			}
 		}
+		if (searchQuery.getRatingRangeLower() != null && searchQuery.getRatingRangeUpper() != null) {
+			whereTags.add(cb.between(album.get("rating"), searchQuery.getRatingRangeLower() , searchQuery.getRatingRangeUpper()));
+		}
 
 		return cb.and(
 				cb.equal(album.get("owner"), user),

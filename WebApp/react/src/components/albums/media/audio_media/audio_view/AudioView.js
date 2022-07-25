@@ -74,10 +74,10 @@ function AudioView({audioItems, selectedIndex}) {
                     </audio>
                     <input type="range" onChange={onChangeTrackTime} max={MAX_VALUE} value={audioDuration} ref={audioSliderRef} />
                 </div>
-                <div class="audio_view_audio_content_left_info">
+                <div className="audio_view_audio_content_left_info">
                     <span>{audioCurrentTime}</span>
                 </div>
-                <div class="audio_view_audio_content_right_info">
+                <div className="audio_view_audio_content_right_info">
                     <span>{audioTotalTime}</span>
                 </div>
                 <input className="audio_view_content_play_button" type="image" alt="play" src={isPaused ? "/assets/icons/play-circle.svg" : "/assets/icons/pause-circle.svg"} onClick={onTogglePlay} />

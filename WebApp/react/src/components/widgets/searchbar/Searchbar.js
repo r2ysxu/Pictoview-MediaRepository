@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import './Searchbar.css';
 
-function Searchbar({onSearch, searchQuery = '', sideContent}) {
+function Searchbar({onSearch, searchQuery = '', menuContent, sideContent}) {
     const [searchInput, setSearchInput] = useState(searchQuery);
 
     const onSubmit = (event) => {
@@ -14,13 +14,14 @@ function Searchbar({onSearch, searchQuery = '', sideContent}) {
 
     return (
         <div className="searchbar">
-            {sideContent}
+            {menuContent}
             <form className="searchbar_context" onSubmit={onSubmit}>
                 <input className="searchbar_input_text"
                     type="text"
                     value={searchInput}
                     onChange={(event) => {setSearchInput(event.target.value)}} />
             </form>
+            {sideContent}
         </div>
     );
 }

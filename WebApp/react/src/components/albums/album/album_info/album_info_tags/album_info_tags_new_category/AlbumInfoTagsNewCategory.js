@@ -8,11 +8,9 @@ import './AlbumInfoTagsNewCategory.css';
 
 function AlbumInfoTagsNewCategory({albumId, existingCategories}) {
     const dispatch = useDispatch();
-    const [selectedCategory, setSelectedCategory] = useState(null);
     const [categories, setCategories] = useState([]);
 
     const onAddCategory = (selectedCategory) => {
-        setSelectedCategory(selectedCategory);
         if (selectedCategory) {
             selectedCategory.tags = [];
             dispatch(addCategory({albumId, newCategory: selectedCategory}));

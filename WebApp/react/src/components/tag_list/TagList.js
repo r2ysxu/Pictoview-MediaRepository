@@ -1,13 +1,15 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadCategories, loadTagsByCategory, selectCategories } from '../../model/reducers/tagSlice';
 import TagListItem from './TagListItem';
+import RatingItem from './RatingItem';
 import './TagList.css';
 
 function TagList({tagQueryMap}) {
     const dispatch = useDispatch();
     const { categories } = useSelector(selectCategories);
+    const [searchRating, setSearchRating] = useState({lower: 0, upper: 100});
 
 
     const onSelectCategory = (categoryId) => {
@@ -26,8 +28,16 @@ function TagList({tagQueryMap}) {
         }
     }
 
+    const onSelectRatingLower = (value) => {
+        setSearchRating({ ...searchRating, lower: value });
+    }
+
+    const onSelectRatingUpper = (value) => {
+        setSearchRating({ ...searchRating, upper: value });
+    }
+
     const onSearch = () => {
-        const searchQuery = Array.from(tagQueryMap.values()).join(" ");
+        const searchQuery = Array.from(tagQueryMap.values()).join(" ") + "^^" + searchRating.lower + "-" + searchRating.upper;
         const url = '/album?searchQuery=' + encodeURIComponent(searchQuery);
         window.location = url;
     }
@@ -38,10 +48,12 @@ function TagList({tagQueryMap}) {
 
     return (
         <div>
+            <div className="tag_list_rating_wrapper">
+                <RatingItem value={searchRating} onSetLower={onSelectRatingLower} onSetUpper={onSelectRatingUpper} />
+            </div>
             {(categories || []).map( (category, index) => 
                 <TagListItem
                     key={category.id}
-                    index={index}
                     category={category}
                     onSelectCategory={onSelectCategory}
                     onSelectTag={onSelectTag} />

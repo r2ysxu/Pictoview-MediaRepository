@@ -28,3 +28,23 @@
     cursor: pointer;
     user-select: none;
 }
+
+.header_sidebar_container {
+    display: flex;
+}
+
+.header_sidebar_tag_icon {
+    position: relative;
+    width: 30pt;
+    height: 30pt;
+    margin: 10px 10px 0 0;
+}
+
+.header_sidebar_tag_icon img {
+    position: absolute;
+    height: 20pt;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    filter: invert(60%);
+}

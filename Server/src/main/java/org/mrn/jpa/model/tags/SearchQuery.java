@@ -12,9 +12,12 @@ public class SearchQuery {
 
 	private static final String SPACE_DELIMITER = " ";
 	private static final String CATEGORY_DELIMITER = "::";
+	private static final String RATING_DELIMITER = "^^";
 
 	private String name;
 	private Map<String, List<String>> tags;
+	private Integer ratingRangeLower;
+	private Integer ratingRangeUpper;
 
 	public SearchQuery() {
 		tags = new HashMap<>();
@@ -47,9 +50,16 @@ public class SearchQuery {
 						tags.put(Categories.Tags, new ArrayList<>());
 					tags.get(Categories.Tags).add(removeQuotes(categoryToken[0]).toLowerCase());
 				} else if (categoryToken.length == 2) {
-					if (!tags.containsKey(categoryToken[0]))
-						tags.put(categoryToken[0], new ArrayList<>());
+					if (!tags.containsKey(categoryToken[0])) tags.put(categoryToken[0], new ArrayList<>());
 					tags.get(removeQuotes(categoryToken[0])).add(removeQuotes(categoryToken[1]).toLowerCase());
+				}
+			} if (token.startsWith(RATING_DELIMITER)) {
+				String[] ratingRangeToken = token.substring(2).split("-");
+				if (ratingRangeToken.length == 2) {
+					try {
+						ratingRangeLower = Integer.parseInt(ratingRangeToken[0]);
+						ratingRangeUpper = Integer.parseInt(ratingRangeToken[1]);
+					} catch(NumberFormatException ex) {}
 				}
 			} else {
 				names.add(token);
@@ -72,5 +82,21 @@ public class SearchQuery {
 
 	public void setTags(Map<String, List<String>> tags) {
 		this.tags = tags;
+	}
+
+	public Integer getRatingRangeLower() {
+		return ratingRangeLower;
+	}
+
+	public void setRatingRangeLower(Integer ratingRangeLower) {
+		this.ratingRangeLower = ratingRangeLower;
+	}
+
+	public Integer getRatingRangeUpper() {
+		return ratingRangeUpper;
+	}
+
+	public void setRatingRangeUpper(Integer ratingRangeUpper) {
+		this.ratingRangeUpper = ratingRangeUpper;
 	}
 }
