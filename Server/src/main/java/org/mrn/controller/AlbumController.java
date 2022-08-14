@@ -37,7 +37,7 @@ import com.mpatric.mp3agic.UnsupportedTagException;
 @RestController
 public class AlbumController extends BaseController {
 
-	private static final int PAGE_SIZE = 10;
+	private static final int PAGE_SIZE = 20;
 
 	@Autowired
 	private AlbumService mediaAlbumService;
@@ -142,7 +142,7 @@ public class AlbumController extends BaseController {
 	 * @throws InvalidDataException
 	 * @throws UnauthenticatedUserException
 	 */
-	@PostMapping(value = "/album/update/filepath")
+	@PostMapping(value = "/album/update/filepath", consumes = "application/json;charset=UTF-8")
 	public Album uploadAlbum(@RequestBody String path)
 			throws IOException, AlbumNotFound, UnsupportedTagException, InvalidDataException, UnauthenticatedUserException {
 		EndUserEntity user = getUser();

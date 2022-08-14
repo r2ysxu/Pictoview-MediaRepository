@@ -70,11 +70,15 @@ public class TagService {
 		findAndSetPreexistingTags(newTags);
 		List<Long> existingTagIds = newTags.stream().filter(tag -> tag.getId() != null).map(Tag::getId).toList();
 		List<TagEntity> newTagEntities = newTags.stream().filter(tag -> tag.getId() == null)
-				.map(tag -> new TagEntity(new CategoryEntity(tag.getCategoryId()), tag.getValue(), tag.getRelevance()))
+				.map(tag -> new TagEntity(new CategoryEntity(tag.getCategoryId()), tag.getValue()))
 				.toList();
 
+		Map<String, Integer> newTagRelevances = newTags.stream()
+				.collect(Collectors.toMap(newTag -> newTag.getCategoryId() + "_" + newTag.getValue(), newTag -> newTag.getRelevance()));
+
 		List<TagEntity> existingTags = tagRepo.findAllByIdIn(existingTagIds);
-		tagRepo.saveAll(newTagEntities).forEach(tag -> existingTags.add(tag));
+		tagRepo.saveAll(newTagEntities).forEach(existingTags::add);
+		existingTags.stream().forEach(tag -> tag.setRelevance(newTagRelevances.getOrDefault(tag.getCategory().getId() + "_" + tag.getName(), 0)));
 		return existingTags;
 	}
 

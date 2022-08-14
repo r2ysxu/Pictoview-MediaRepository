@@ -26,10 +26,9 @@ public class TagEntity implements EntityModel {
 	public TagEntity() {
 	}
 
-	public TagEntity(CategoryEntity category, String name, Integer relevance) {
+	public TagEntity(CategoryEntity category, String name) {
 		this.category = category;
 		this.name = name;
-		this.relevance = relevance;
 	}
 
 	public Long getId() {
