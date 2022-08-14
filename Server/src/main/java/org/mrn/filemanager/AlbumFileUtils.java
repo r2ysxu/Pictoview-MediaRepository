@@ -49,33 +49,21 @@ public class AlbumFileUtils {
 		ImageIO.write(scaledImageBuffer, ext, destinationFile);
 	}
 
-	private static BufferedImage scaleImage(File sourceFile, int width, int height) throws IOException {
-		// Scale Image
-		BufferedImage image = ImageIO.read(sourceFile);
-		Image scaledImage = image.getScaledInstance(width, height, Image.SCALE_DEFAULT);
-		int imageType = image.getType();
-		if (imageType == 0) imageType = BufferedImage.TYPE_INT_ARGB;
-		BufferedImage retImage = new BufferedImage(width, height, imageType);
-		retImage.getGraphics().drawImage(scaledImage, 0, 0, null);
-		return retImage;
-	}
-
-	private static BufferedImage scaleImageRatio(File sourceFile, int width, int height) throws IOException {
+	private static BufferedImage scaleImageRatio(File sourceFile, int maxWidth, int maxHeight) throws IOException {
 		BufferedImage image = ImageIO.read(sourceFile);
 
 		// Find scale dimensions
-		double scaleH = height, scaleW = width;
-		if (image.getWidth() > 800 || image.getHeight() > 600) {
-			double ratio = 1;
-			if (image.getHeight() > image.getWidth()) {
-				ratio = ((double) height) / ((double) image.getHeight());
-				scaleH = height;
-				scaleW = image.getWidth() * ratio;
-			} else {
-				ratio = ((double) width) / ((double) image.getWidth());
-				scaleW = width;
-				scaleH = (double) image.getHeight() * ratio;
-			}
+		double scaleH = image.getHeight();
+		double scaleW = image.getWidth();
+		if (scaleW > maxWidth) {
+			double ratio = ((double) maxWidth) / scaleW;
+			scaleW = maxWidth;
+			scaleH = scaleH * ratio;
+		}
+		if (scaleH > maxHeight) {
+			double ratio = ((double) maxHeight) / scaleH;
+			scaleH = maxHeight;
+			scaleW = scaleW * ratio;
 		}
 
 		Image scaledImage = image.getScaledInstance((int) scaleW, (int) scaleH, Image.SCALE_SMOOTH);
@@ -92,7 +80,7 @@ public class AlbumFileUtils {
 		File thumbnailFile = new File(destination);
 		if (!thumbnailFile.getParentFile().exists()) thumbnailFile.getParentFile().mkdirs();
 
-		BufferedImage scaledImageBuffer = scaleImage(sourceFile, 256, 256);
+		BufferedImage scaledImageBuffer = scaleImageRatio(sourceFile, 256, 256);
 		ImageIO.write(scaledImageBuffer, ext, thumbnailFile);
 	}
 
@@ -180,7 +168,7 @@ public class AlbumFileUtils {
 		List<File> subFiles = Arrays.asList(albumFile.listFiles());
 		for (File file : subFiles) {
 			if (file.isDirectory()) {
-				albumFolder.addAlbumDirectory(generateAlbumFolder(file.getAbsolutePath(), loadMetadata));
+				albumFolder.addAlbumDirectory(generateAlbumFolder(file.getAbsolutePath(), false));
 			} else if (INFO_FILE.equals(file.getName())) {
 			} else {
 				AlbumMediaFile mediaFile = generateAlbumMediaFile(file);
