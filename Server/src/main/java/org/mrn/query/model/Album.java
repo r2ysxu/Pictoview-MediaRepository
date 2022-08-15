@@ -4,6 +4,7 @@ public class Album implements QueryModel {
 
 	private Long id;
 	private String name;
+	private String altname;
 	private String publisher;
 	private String description;
 	private Long coverPhotoId;
@@ -13,9 +14,10 @@ public class Album implements QueryModel {
 	public Album() {
 	}
 
-	public Album(Long id, String name, String description, String subtitle, Long coverPhotoId, Integer rating, String metaType) {
+	public Album(Long id, String name, String altname, String description, String subtitle, Long coverPhotoId, Integer rating, String metaType) {
 		this.id = id;
 		this.name = name;
+		this.altname = altname;
 		this.publisher = subtitle;
 		this.description = description;
 		this.coverPhotoId = coverPhotoId;
@@ -38,6 +40,14 @@ public class Album implements QueryModel {
 	public Album setName(String name) {
 		this.name = name;
 		return this;
+	}
+
+	public String getAltname() {
+		return altname;
+	}
+
+	public void setAltname(String altname) {
+		this.altname = altname;
 	}
 
 	public String getPublisher() {

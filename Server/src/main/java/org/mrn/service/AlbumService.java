@@ -120,16 +120,17 @@ public class AlbumService {
 		return AlbumFileUtils.generateAlbumFolder(albumFolderPath, loadMetadata);
 	}
 
-	public Album createAlbum(EndUserEntity user, String name, String subtitle, String description) {
-		AlbumEntity albumEntity = mediaAlbumRepo.save(new AlbumEntity(user, name, subtitle, description));
+	public Album createAlbum(EndUserEntity user, String name, String altname, String subtitle, String description) {
+		AlbumEntity albumEntity = mediaAlbumRepo.save(new AlbumEntity(user, name, altname, subtitle, description));
 		return new AlbumBuilder().build(albumEntity);
 	}
 
-	public Album updateAlbum(EndUserEntity user, Long albumId, String name, String subtitle, String description, Integer rating, String metaType)
+	public Album updateAlbum(EndUserEntity user, Long albumId, String name, String altname, String subtitle, String description, Integer rating, String metaType)
 			throws AlbumNotFound {
 		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).get();
 		if (albumEntity != null) {
 			if (name != null) albumEntity.setName(name);
+			if (altname != null) albumEntity.setAltname(altname);
 			if (subtitle != null) albumEntity.setSubtitle(subtitle);
 			if (description != null) albumEntity.setDescription(description);
 			if (rating != null) albumEntity.setRating(rating);

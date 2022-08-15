@@ -40,6 +40,7 @@ public class AlbumFileUtils {
 
 	public static void createCoverPhotoFile(String source, String destination) throws IOException {
 		File sourceFile = new File(source);
+		if (!sourceFile.exists()) throw new IOException("Image file " + source + " does not exist");
 		createMediumPhoto(sourceFile, new File(destination));
 	}
 

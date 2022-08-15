@@ -28,6 +28,8 @@ public class AlbumEntity implements EntityModel {
 	private Date updatedAt;
 	@Column(nullable = false)
 	private String name;
+	@Column
+	private String altname;
 	@ManyToOne
 	private UserEntity owner;
 	@ManyToOne
@@ -55,15 +57,16 @@ public class AlbumEntity implements EntityModel {
 		this.name = name;
 	}
 
-	public AlbumEntity(UserEntity owner, String name, String subtitle, String description, Integer rating) {
+	public AlbumEntity(UserEntity owner, String name, String altname, String subtitle, String description, Integer rating) {
 		this(owner, name);
+		this.altname = altname;
 		this.subtitle = subtitle;
 		this.description = description;
 		this.rating = rating;
 	}
 
-	public AlbumEntity(UserEntity owner, String name, String subtitle, String description) {
-		this(owner, name, subtitle, description, null);
+	public AlbumEntity(UserEntity owner, String name, String altname, String subtitle, String description) {
+		this(owner, name, altname, subtitle, description, null);
 	}
 
 	public Long getId() {
@@ -85,6 +88,15 @@ public class AlbumEntity implements EntityModel {
 
 	public AlbumEntity setName(String name) {
 		this.name = name;
+		return this;
+	}
+
+	public String getAltname() {
+		return altname;
+	}
+
+	public AlbumEntity setAltname(String altname) {
+		this.altname = altname;
 		return this;
 	}
 

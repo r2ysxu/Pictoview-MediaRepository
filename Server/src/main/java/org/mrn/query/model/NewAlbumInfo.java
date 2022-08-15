@@ -5,6 +5,7 @@ import java.util.List;
 public class NewAlbumInfo implements QueryModel {
 
 	private String name;
+	private String altname;
 	private String subtitle;
 	private String description;
 	private String coverPhotoName;
@@ -29,6 +30,14 @@ public class NewAlbumInfo implements QueryModel {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getAltname() {
+		return altname;
+	}
+
+	public void setAltname(String altname) {
+		this.altname = altname;
 	}
 
 	public String getSubtitle() {

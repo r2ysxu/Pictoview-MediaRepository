@@ -28,7 +28,7 @@ public class AlbumBuilder implements ModelBuilder<Album, AlbumEntity> {
 	@Override
 	public Album build(AlbumEntity entity) {
 		ImageMediaEntity coverPhoto = entity.getCoverPhoto();
-		return new Album(entity.getId(), entity.getName(), entity.getDescription(), entity.getSubtitle(),
+		return new Album(entity.getId(), entity.getName(), entity.getAltname(), entity.getDescription(), entity.getSubtitle(),
 				coverPhoto == null ? 0 : coverPhoto.getId(), entity.getRating(), entity.getMetaType());
 	}
 }

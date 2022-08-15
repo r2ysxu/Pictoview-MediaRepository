@@ -92,14 +92,14 @@ public class AlbumController extends BaseController {
 	@PostMapping(value = "/album/create", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Album createAlbum(@RequestBody Album album) throws UnauthenticatedUserException {
 		EndUserEntity user = getUser();
-		return mediaAlbumService.createAlbum(user, album.getName(), album.getPublisher(), album.getDescription());
+		return mediaAlbumService.createAlbum(user, album.getName(), album.getAltname(), album.getPublisher(), album.getDescription());
 	}
 
 	@ResponseBody
 	@PostMapping(value = "/album/update", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Album updateAlbum(@RequestBody Album album) throws UnauthenticatedUserException, AlbumNotFound {
 		EndUserEntity user = getUser();
-		return mediaAlbumService.updateAlbum(user, album.getId(), album.getName(), album.getPublisher(), album.getDescription(),
+		return mediaAlbumService.updateAlbum(user, album.getId(), album.getAltname(), album.getName(), album.getPublisher(), album.getDescription(),
 				album.getRating(), album.getMetaType());
 	}
 
@@ -112,7 +112,7 @@ public class AlbumController extends BaseController {
 		mediaAlbumService.createMediaFromFile(user, albumId, albumDirectory);
 		if (fromMetadata) {
 			NewAlbumInfo newAlbum = AlbumInfoParserUtil.loadAlbumInfoFromJson(albumDirectory.getInfoJson());
-			mediaAlbumService.updateAlbum(user, albumId, newAlbum.getName(), newAlbum.getSubtitle(), newAlbum.getDescription(),
+			mediaAlbumService.updateAlbum(user, albumId, newAlbum.getName(), newAlbum.getAltname(), newAlbum.getSubtitle(), newAlbum.getDescription(),
 					newAlbum.getRating(), newAlbum.getMetaType());
 			mediaAlbumService.setCoverPhotoByName(user, albumId, newAlbum.getCoverPhotoName());
 			tagService.tagAlbum(user, albumId, newAlbum.getTags());
@@ -149,9 +149,9 @@ public class AlbumController extends BaseController {
 		if (user.getRole() != Role.ADMIN) return null;
 		AlbumDirectory albumDirectory = AlbumFileUtils.generateAlbumFolder(path, true);
 		NewAlbumInfo newAlbum = AlbumInfoParserUtil.loadAlbumInfoFromJson(albumDirectory.getInfoJson());
-		Album album = mediaAlbumService.createAlbum(user, newAlbum.getName(), newAlbum.getSubtitle(),
+		Album album = mediaAlbumService.createAlbum(user, newAlbum.getName(), newAlbum.getAltname(), newAlbum.getSubtitle(),
 				newAlbum.getDescription());
-		mediaAlbumService.updateAlbum(user, album.getId(), newAlbum.getName(), newAlbum.getSubtitle(),
+		mediaAlbumService.updateAlbum(user, album.getId(), newAlbum.getName(), newAlbum.getAltname(), newAlbum.getSubtitle(),
 				newAlbum.getDescription(), newAlbum.getRating(), newAlbum.getMetaType());
 		mediaAlbumService.createMediaFromFile(user, album.getId(), albumDirectory);
 		mediaAlbumService.setCoverPhotoByName(user, album.getId(), newAlbum.getCoverPhotoName());

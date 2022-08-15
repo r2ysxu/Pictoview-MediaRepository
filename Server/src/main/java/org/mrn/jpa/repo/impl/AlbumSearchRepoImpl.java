@@ -58,7 +58,10 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 		List<Predicate> whereTags = new ArrayList<>();
 
 		if (!StringUtils.isEmpty(searchQuery.getName())) {
-			whereTags.add(cb.like(cb.upper(album.get("name")), '%' + searchQuery.getName().toUpperCase() + '%'));
+			whereTags.add(cb.or(
+					cb.like(cb.upper(album.get("name")), '%' + searchQuery.getName().toUpperCase() + '%'),
+					cb.like(cb.upper(album.get("altname")), '%' + searchQuery.getName().toUpperCase() + '%')
+				));
 		}
 
 		if (searchQuery.getRatingRangeLower() != null && searchQuery.getRatingRangeUpper() != null) {
