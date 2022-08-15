@@ -17,11 +17,11 @@
 
 
 .rating_slider_tier1 {
-    background-color: rgb(255, 255, 150);
+    background-color: rgb(120, 120, 0);
 }
 
-.arating_slider_tier2 {
-    background-color: rgb(255, 255, 0);
+.rating_slider_tier2 {
+    background-color: rgb(255, 255, 150);
 }
 
 .rating_slider_tier3 {
