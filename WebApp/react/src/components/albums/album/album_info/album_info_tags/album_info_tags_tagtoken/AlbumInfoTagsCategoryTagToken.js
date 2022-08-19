@@ -18,7 +18,7 @@ function AlbumInfoTagsCategoryTagToken({tagToken}) {
     return (
         <div className={"album_info_tags_category_tagToken_container" } >
             <div className="album_info_tag_category_tagToken_dot" />
-            <span className={relevanceTag()}>{tagToken.value}</span>
+            <span className={relevanceTag()} title={tagToken.relevance + '%'}>{tagToken.value}</span>
         </div>
     );
 }

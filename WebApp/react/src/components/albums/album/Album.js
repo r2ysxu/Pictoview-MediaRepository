@@ -87,7 +87,7 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
                 </div>}
             </div>
             <div className="album_title">
-                {!isEditing && <h2 className={albumNameSizeClass}>{currentAlbum.name}</h2>}
+                {!isEditing && <h2 className={albumNameSizeClass} title={currentAlbum.altname}>{currentAlbum.name}</h2>}
                 {isEditing && <input className="album_text_field album_name_text_field" type="text" placeholder="Name" value={currentAlbum.name} onChange={ (event) => setCurrentAlbum({...currentAlbum, name: event.target.value}) } />}
                 <AlbumRating album={album} />
             </div>
