@@ -73,12 +73,12 @@ public class TagService {
 				.map(tag -> new TagEntity(new CategoryEntity(tag.getCategoryId()), tag.getValue()))
 				.toList();
 
-		Map<String, Integer> newTagRelevances = newTags.stream()
-				.collect(Collectors.toMap(newTag -> newTag.getCategoryId() + "_" + newTag.getValue(), newTag -> newTag.getRelevance()));
+		Map<String, Tag> newTagRelevances = newTags.stream()
+				.collect(Collectors.toMap(newTag -> newTag.getCategoryId() + "_" + newTag.getValue(), Function.identity()));
 
 		List<TagEntity> existingTags = tagRepo.findAllByIdIn(existingTagIds);
 		tagRepo.saveAll(newTagEntities).forEach(existingTags::add);
-		existingTags.stream().forEach(tag -> tag.setRelevance(newTagRelevances.getOrDefault(tag.getCategory().getId() + "_" + tag.getName(), 0)));
+		existingTags.stream().forEach(tag -> tag.setRelevance(newTagRelevances.getOrDefault(tag.getCategory().getId() + "_" + tag.getName(), new Tag()).getRelevance()));
 		return existingTags;
 	}
 

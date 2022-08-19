@@ -5,6 +5,5 @@ body {
 .container_content {
   position: relative;
   top: 50pt;
-  margin: 5px 15px 5px 15px;
   min-width: 800px;
 }

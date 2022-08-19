@@ -7,18 +7,22 @@ public class Tag implements QueryModel {
 	private String value;
 	private Integer relevance;
 
-	public Tag() {}
+	public Tag() {
+		this.relevance = 100;
+	}
 
 	public Tag(Long id, String value) {
 		this.id = id;
 		this.categoryId = 0L;
 		this.value = value;
+		this.relevance = 100;
 	}
 
 	public Tag(Long id, Long categoryId, String value) {
 		this.id = id;
 		this.categoryId = categoryId;
 		this.value = value;
+		this.relevance = 100;
 	}
 	
 	public Tag(Long id, Long categoryId, String value, Integer relevance) {
