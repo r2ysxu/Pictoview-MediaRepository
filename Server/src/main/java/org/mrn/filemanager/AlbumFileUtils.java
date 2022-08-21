@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -165,11 +164,11 @@ public class AlbumFileUtils {
 	public static AlbumDirectory generateAlbumFolder(String filePath, Boolean loadMetadata) throws IOException {
 		AlbumDirectory albumFolder = new AlbumDirectory(filePath);
 		File albumFile = new File(filePath);
-		if (loadMetadata) albumFolder.setInfoJson(FileUtils.readFileToString(new File(filePath + "/" + INFO_FILE), "UTF-8"));
-		List<File> subFiles = Arrays.asList(albumFile.listFiles());
-		for (File file : subFiles) {
+		File albumInfoFile = new File(filePath + "/" + INFO_FILE);
+		if (loadMetadata && albumInfoFile.exists()) albumFolder.setInfoJson(FileUtils.readFileToString(albumInfoFile, "UTF-8"));
+		for (File file : albumFile.listFiles()) {
 			if (file.isDirectory()) {
-				albumFolder.addAlbumDirectory(generateAlbumFolder(file.getAbsolutePath(), false));
+				albumFolder.addAlbumDirectory(generateAlbumFolder(file.getAbsolutePath(), loadMetadata));
 			} else if (INFO_FILE.equals(file.getName())) {
 			} else {
 				AlbumMediaFile mediaFile = generateAlbumMediaFile(file);

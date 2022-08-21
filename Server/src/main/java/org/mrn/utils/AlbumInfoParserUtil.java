@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AlbumInfoParserUtil {
 
 	public static NewAlbumInfo loadAlbumInfoFromJson(String jsonStr) throws JsonMappingException, JsonProcessingException {
+		if (jsonStr == null) return null;
 		return new ObjectMapper().readValue(jsonStr, NewAlbumInfo.class);
 	}
 }

@@ -119,9 +119,16 @@ public class AlbumService {
 		AlbumFileUtils.unzipFolder(zippedFile.getAbsolutePath(), albumFolderPath);
 		return AlbumFileUtils.generateAlbumFolder(albumFolderPath, loadMetadata);
 	}
-
 	public Album createAlbum(EndUserEntity user, String name, String altname, String subtitle, String description) {
-		AlbumEntity albumEntity = mediaAlbumRepo.save(new AlbumEntity(user, name, altname, subtitle, description));
+		return createAlbum(user, name, altname, subtitle, description, null);
+	}
+
+	public Album createAlbum(EndUserEntity user, String name, String altname, String subtitle, String description, Long parentId) {
+		AlbumEntity newAlbum = new AlbumEntity(user, name, altname, subtitle, description);
+		if (parentId != null && parentId > 0) {
+			newAlbum.setParent(mediaAlbumRepo.findById(parentId).orElse(null));
+		}
+		AlbumEntity albumEntity = mediaAlbumRepo.save(newAlbum);
 		return new AlbumBuilder().build(albumEntity);
 	}
 

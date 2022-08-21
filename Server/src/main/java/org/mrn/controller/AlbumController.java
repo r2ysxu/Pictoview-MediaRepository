@@ -2,6 +2,7 @@ package org.mrn.controller;
 
 import java.io.IOException;
 
+import org.mrn.exceptions.AlbumInfoNotFound;
 import org.mrn.exceptions.AlbumNotFound;
 import org.mrn.exceptions.InvalidMediaAlbumException;
 import org.mrn.exceptions.UnauthenticatedUserException;
@@ -141,22 +142,34 @@ public class AlbumController extends BaseController {
 	 * @throws UnsupportedTagException
 	 * @throws InvalidDataException
 	 * @throws UnauthenticatedUserException
+	 * @throws AlbumInfoNotFound
 	 */
 	@PostMapping(value = "/album/update/filepath", consumes = "application/json;charset=UTF-8")
 	public Album uploadAlbum(@RequestBody String path)
-			throws IOException, AlbumNotFound, UnsupportedTagException, InvalidDataException, UnauthenticatedUserException {
+			throws IOException, AlbumNotFound, AlbumInfoNotFound, UnsupportedTagException, InvalidDataException, UnauthenticatedUserException {
 		EndUserEntity user = getUser();
 		if (user.getRole() != Role.ADMIN) return null;
 		AlbumDirectory albumDirectory = AlbumFileUtils.generateAlbumFolder(path, true);
+		return createAlbumFromFileInfo(user, albumDirectory, null);
+	}
+
+	private Album createAlbumFromFileInfo(EndUserEntity user, AlbumDirectory albumDirectory, Long parentAlbumId) throws IOException, AlbumNotFound, AlbumInfoNotFound, UnsupportedTagException, InvalidDataException {
 		NewAlbumInfo newAlbum = AlbumInfoParserUtil.loadAlbumInfoFromJson(albumDirectory.getInfoJson());
-		Album album = mediaAlbumService.createAlbum(user, newAlbum.getName(), newAlbum.getAltname(), newAlbum.getSubtitle(),
-				newAlbum.getDescription());
-		mediaAlbumService.updateAlbum(user, album.getId(), newAlbum.getName(), newAlbum.getAltname(), newAlbum.getSubtitle(),
-				newAlbum.getDescription(), newAlbum.getRating(), newAlbum.getMetaType());
-		mediaAlbumService.createMediaFromFile(user, album.getId(), albumDirectory);
-		mediaAlbumService.setCoverPhotoByName(user, album.getId(), newAlbum.getCoverPhotoName());
-		tagService.tagAlbum(user, album.getId(), newAlbum.getTags());
-		return album;
+		if (newAlbum != null) {
+			Album album = mediaAlbumService.createAlbum(user, newAlbum.getName(), newAlbum.getAltname(), newAlbum.getSubtitle(),
+					newAlbum.getDescription(), parentAlbumId);
+			mediaAlbumService.updateAlbum(user, album.getId(), newAlbum.getName(), newAlbum.getAltname(), newAlbum.getSubtitle(),
+					newAlbum.getDescription(), newAlbum.getRating(), newAlbum.getMetaType());
+			mediaAlbumService.createMediaFromFile(user, album.getId(), albumDirectory);
+			mediaAlbumService.setCoverPhotoByName(user, album.getId(), newAlbum.getCoverPhotoName());
+			tagService.tagAlbum(user, album.getId(), newAlbum.getTags());
+			for (AlbumDirectory subAlbumDirectory : albumDirectory.getSubAlbums()) {
+				try { createAlbumFromFileInfo(user, subAlbumDirectory, album.getId()); } catch (AlbumInfoNotFound ex) {}
+			}
+			return album;
+		} else {
+			throw new AlbumInfoNotFound(albumDirectory.getAbsolutePath());
+		}
 	}
 
 	@ResponseBody
