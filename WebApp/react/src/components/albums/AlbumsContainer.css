@@ -1,6 +1,10 @@
 .albums_container {
 }
 
+.album_tabs_panel_hidden {
+    visibility: hidden;
+}
+
 .album_media_list {
     display: flex;
     flex-wrap: wrap;

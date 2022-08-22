@@ -6,8 +6,8 @@ function TabSelector({footerContent, selectorClass= "", sideContent, defaultTab,
     const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
     useEffect(() => {
-        setSelectedTabIndex(tabs.findIndex( tab => tab.value === defaultTab ) || 0);
-    }, [setSelectedTabIndex, tabs, defaultTab]);
+        setSelectedTabIndex(selectedTabIndex || tabs.findIndex( tab => tab.value === defaultTab ) || 0);
+    }, [selectedTabIndex, setSelectedTabIndex, tabs, defaultTab]);
 
     return (
         <div className="tab_selector_container">

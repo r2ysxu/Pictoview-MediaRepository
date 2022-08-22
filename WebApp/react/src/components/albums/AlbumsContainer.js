@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAlbums, loadCurrentAlbumInfo } from '../../model/reducers/albumSlice';
 import TabSelector from '../widgets/tab_selector/TabSelector';
@@ -14,6 +14,7 @@ import './AlbumsContainer.css';
 
 function AlbumsContainer({albumId, history, selectorClass}) {
     const dispatch = useDispatch();
+    const [ hideTabPanel, setHideTabPanel ] = useState(false);
     const { metaType, albumName, albums, images, videos, audios} = useSelector(selectAlbums);
 
     const changeCurrentAlbum = (id, openNew) => {
@@ -50,7 +51,7 @@ function AlbumsContainer({albumId, history, selectorClass}) {
         <TabSelector
             tabs={tabs}
             defaultTab={metaType}
-            selectorClass={selectorClass}
+            selectorClass={selectorClass + (hideTabPanel ? " album_tabs_panel_hidden" : "")}
             footerContent={<Breadcrumbs history={history} current={albumName} />}
             sideContent={
                 <div>
@@ -63,7 +64,7 @@ function AlbumsContainer({albumId, history, selectorClass}) {
                 </div>
             }>
             <SubAlbums albumId={albumId} changeCurrentAlbum={changeCurrentAlbum}/>
-            <ImageMedia albumId={albumId} />
+            <ImageMedia albumId={albumId} onFullViewOpen={setHideTabPanel} />
             <VideoMedia albumId={albumId} />
             <AudioMedia albumId={albumId} />
         </TabSelector>

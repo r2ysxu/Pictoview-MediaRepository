@@ -6,7 +6,7 @@ import NewAlbumPathManager from '../components/admin/NewAlbumPathManager';
 function AdminManager() {
     return (
         <div>
-            <Container isLoggedIn={false}>
+            <Container isLoggedIn={true}>
                 <CategoryManager />
                 <NewAlbumPathManager />
             </Container>
