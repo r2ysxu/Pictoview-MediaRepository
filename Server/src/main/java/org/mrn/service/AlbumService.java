@@ -90,9 +90,7 @@ public class AlbumService {
 	}
 
 	public PageItems<Album> listMediaAlbums(UserEntity user, Long parentId, Pageable pageable) {
-		Page<AlbumEntity> albums;
-		if (parentId == null || parentId < 1) albums = mediaAlbumRepo.findAllByOwner(user, pageable);
-		else albums = mediaAlbumRepo.findAllByOwnerAndParent_Id(user, parentId, pageable);
+		Page<AlbumEntity> albums = mediaAlbumRepo.findAllByOwnerAndParent_Id(user, parentId, pageable);
 		return new PageItemBuilder<Album, AlbumEntity>().build(albums, new AlbumBuilder());
 	}
 

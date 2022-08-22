@@ -74,6 +74,7 @@ public class AlbumSearchRepoImpl implements AlbumSearchRepo {
 
 		return cb.and(
 				cb.equal(album.get("owner"), user),
+				cb.isNull(album.get("parent")),
 				cb.and(notTags.toArray(new Predicate[notTags.size()])),
 				cb.or(
 					cb.and(whereTags.toArray(new Predicate[whereTags.size()])),

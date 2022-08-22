@@ -2,10 +2,13 @@ package org.mrn.service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 
 import org.mrn.exceptions.AlbumNotFound;
+import org.mrn.exceptions.ImageNotFound;
 import org.mrn.jpa.model.album.AlbumEntity;
 import org.mrn.jpa.model.album.ImageMediaEntity;
 import org.mrn.jpa.model.user.UserEntity;
@@ -30,23 +33,28 @@ public class ImageService {
 		return base + album.getId() + "_" + imageMedia.getId() + imageMedia.getTypeExtension();
 	}
 
-	public InputStream fetchCoverPhotoStream(UserEntity owner, Long albumId) throws FileNotFoundException, AlbumNotFound {
+	public ImageInputStream fetchCoverPhotoStream(UserEntity owner, Long albumId) throws AlbumNotFound, IOException, ImageNotFound {
 		AlbumEntity album = imageAlbumRepo.findByOwnerAndId(owner, albumId);
 		if (album == null) throw new AlbumNotFound(owner, albumId);
 		if (album.getCoverPhoto() == null) return null;
 		ImageMediaEntity imageMedia = imageMediaRepo.findByOwnerAndId(owner, album.getCoverPhoto().getId());
 		if (imageMedia == null) return null;
-		return new FileInputStream(
-				new File(generateCoverPhotoPath(adminCoverSource, album, imageMedia)));
+		File file = new File(generateCoverPhotoPath(adminCoverSource, album, imageMedia));
+		if (!file.exists()) throw new ImageNotFound(imageMedia.getId());
+		return ImageIO.createImageInputStream(new FileInputStream(file));
 	}
 
-	public InputStream fetchImageThumbnailStream(UserEntity owner, Long mediaId) throws FileNotFoundException {
+	public ImageInputStream fetchImageThumbnailStream(UserEntity owner, Long mediaId) throws IOException, ImageNotFound {
 		ImageMediaEntity imageMedia = imageMediaRepo.findByOwnerAndId(owner, mediaId);
-		return new FileInputStream(new File(imageMedia.getThumbnailSource()));
+		File file = new File(imageMedia.getThumbnailSource());
+		if (!file.exists()) throw new ImageNotFound(mediaId);
+		return ImageIO.createImageInputStream(new FileInputStream(file));
 	}
 
-	public InputStream fetchImageStream(UserEntity owner, Long mediaId) throws FileNotFoundException {
+	public ImageInputStream fetchImageStream(UserEntity owner, Long mediaId) throws ImageNotFound, IOException {
 		ImageMediaEntity imageMedia = imageMediaRepo.findByOwnerAndId(owner, mediaId);
-		return new FileInputStream(new File(imageMedia.getSource()));
+		File file = new File(imageMedia.getSource());
+		if (!file.exists()) throw new ImageNotFound(mediaId);
+		return ImageIO.createImageInputStream(new FileInputStream(file));
 	}
 }

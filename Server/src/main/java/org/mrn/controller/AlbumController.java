@@ -68,6 +68,7 @@ public class AlbumController extends BaseController {
 			@RequestParam(name = "page") Integer page, @RequestParam(name = "sortField", required = false) String sortBy,
 			@RequestParam(name = "ascending", required = false) Boolean asc) throws UnauthenticatedUserException {
 		if (asc == null) asc = true;
+		if (parentId == 0L) parentId = null;
 		EndUserEntity user = getUser();
 		Pageable pageable = PageRequest.of(page, PAGE_SIZE, SortBy.getSortField(sortBy, asc));
 		PageItems<Album> albums = mediaAlbumService.listMediaAlbums(user, parentId, pageable);
