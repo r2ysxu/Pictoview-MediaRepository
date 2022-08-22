@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react';
 import './TabSelector.css';
 
 function TabSelector({footerContent, selectorClass= "", sideContent, defaultTab, tabs, children}) {
-    const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+    const [selectedTabIndex, setSelectedTabIndex] = useState(-1);
 
     useEffect(() => {
-        setSelectedTabIndex(selectedTabIndex || tabs.findIndex( tab => tab.value === defaultTab ) || 0);
+        setSelectedTabIndex(selectedTabIndex < 0 ? (tabs.findIndex( tab => tab.value === defaultTab ) || -1) : selectedTabIndex);
     }, [selectedTabIndex, setSelectedTabIndex, tabs, defaultTab]);
 
     return (
