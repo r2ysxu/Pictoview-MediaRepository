@@ -1,6 +1,8 @@
 package org.mrn.controller;
 
 import java.io.IOException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.mrn.exceptions.AlbumInfoNotFound;
 import org.mrn.exceptions.AlbumNotFound;
@@ -13,6 +15,7 @@ import org.mrn.jpa.model.user.EndUserEntity;
 import org.mrn.jpa.model.user.UserEntity.Role;
 import org.mrn.query.model.Album;
 import org.mrn.query.model.AlbumTag;
+import org.mrn.query.model.Category;
 import org.mrn.query.model.CoverImage;
 import org.mrn.query.model.NewAlbumInfo;
 import org.mrn.query.model.PageItems;
@@ -86,7 +89,8 @@ public class AlbumController extends BaseController {
 	@PostMapping(value = "/album/tag/create", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public AlbumTag tagAlbum(@RequestBody AlbumTag albumTag) throws UnauthenticatedUserException, AlbumNotFound {
 		EndUserEntity user = getUser();
-		tagService.tagAlbum(user, albumTag.getAlbumId(), albumTag.getTags());
+		Set<Long> categoryIds = albumTag.getCategories().stream().map(Category::getId).collect(Collectors.toSet());
+		tagService.tagAlbum(user, albumTag.getAlbumId(), albumTag.getTags(), categoryIds);
 		return tagService.listAlbumTags(albumTag.getAlbumId());
 	}
 

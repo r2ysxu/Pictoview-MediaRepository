@@ -98,8 +98,13 @@ public class TagService {
 
 	@Transactional
 	public void tagAlbum(EndUserEntity user, Long albumId, List<Tag> newTags) throws AlbumNotFound {
-		Set<Long> categoryIds = newTags.stream().map(tag -> tag.getCategoryId()).filter(Objects::nonNull)
-				.collect(Collectors.toSet());
+		tagAlbum(user, albumId, newTags, new HashSet<>());
+	}
+
+	@Transactional
+	public void tagAlbum(EndUserEntity user, Long albumId, List<Tag> newTags, Set<Long> categoryIds) throws AlbumNotFound {
+		categoryIds.addAll(newTags.stream().map(tag -> tag.getCategoryId()).filter(Objects::nonNull)
+				.collect(Collectors.toSet()));
 		AlbumEntity imageAlbum = imageAlbumRepo.findByOwnerAndId(user, albumId);
 		if (imageAlbum == null) throw new AlbumNotFound(user, albumId);
 		List<TagEntity> tagEntity = persistAndFetchTags(removeDuplicateTags(newTags));

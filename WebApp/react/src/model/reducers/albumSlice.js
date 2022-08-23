@@ -144,9 +144,9 @@ export const loadAlbumTags = createAsyncThunk('album/load/tags', async (albumId,
     }
 });
 
-export const updateCategoryTags = createAsyncThunk('album/tags/update', async ({albumId, tags}, thunkAPI) => {
+export const updateCategoryTags = createAsyncThunk('album/tags/update', async ({albumId, tags, category}, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
-    const categoryTags = await post_tagAlbum({albumId, tags});
+    const categoryTags = await post_tagAlbum({albumId, tags, categories: [ category ]});
     const newTags = buildCategoryTags(categoryTags);
     const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
     const currentAlbum = {...currentState.albums.items[currentAlbumIndex], tags: newTags };

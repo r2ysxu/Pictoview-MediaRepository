@@ -24,7 +24,8 @@ function AlbumInfoTagEdit({albumId, category, onClose}) {
     const onSave = () => {
         dispatch(updateCategoryTags({
             albumId,
-            tags
+            tags,
+            category,
         }));
     }
 
