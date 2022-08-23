@@ -1,14 +1,7 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import './TabSelector.css';
 
-function TabSelector({footerContent, selectorClass= "", sideContent, defaultTab, tabs, children}) {
-    const [selectedTabIndex, setSelectedTabIndex] = useState(-1);
-
-    useEffect(() => {
-        setSelectedTabIndex(selectedTabIndex < 0 ? (tabs.findIndex( tab => tab.value === defaultTab ) || -1) : selectedTabIndex);
-    }, [selectedTabIndex, setSelectedTabIndex, tabs, defaultTab]);
-
+function TabSelector({footerContent, selectorClass= "", sideContent, selectedTab, onChangeTab, tabs, children}) {
     return (
         <div className="tab_selector_container">
             <div className={"tab_selector_row tab_selector_row_container " + selectorClass}>
@@ -18,8 +11,8 @@ function TabSelector({footerContent, selectorClass= "", sideContent, defaultTab,
                             <div key={index}
                               className={"tab_selector_button " +
                                     (tab.disabled === true ? "tab_selector_button_disabled " : " ") +
-                                    (selectedTabIndex === index ? "tab_selector_button_selected " : " ")}
-                              onClick={() => {if (!tab.disabled) setSelectedTabIndex(index)} }>
+                                    (selectedTab === index ? "tab_selector_button_selected " : " ")}
+                              onClick={() => {if (!tab.disabled) onChangeTab(index)} }>
                                 {tab.label}
                                 {tab.badgeLabel !== undefined && <div className="tab_selector_badge">{tab.badgeLabel}</div>}
                             </div>
@@ -35,7 +28,7 @@ function TabSelector({footerContent, selectorClass= "", sideContent, defaultTab,
             </div>
             <div className="tab_selector_content">
                 {children.map( (child, index) => {
-                    return <div key={index} style={{display: index === selectedTabIndex ? 'block' : 'none'}}>{child}</div>
+                    return <div key={index} style={{display: index === selectedTab ? 'block' : 'none'}}>{child}</div>
                 } )}
             </div>
         </div>

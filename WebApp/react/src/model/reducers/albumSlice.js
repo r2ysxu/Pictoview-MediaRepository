@@ -165,6 +165,10 @@ export const addCategory = createAsyncThunk('/album/tags/category/new', async ({
     };
 });
 
+export const changeMetaType = createAsyncThunk('/album/metaType/change', async ({metaType}) => {
+    return metaType;
+});
+
 export const albumSlice = createSlice({
     name: 'album',
     initialState,
@@ -246,6 +250,8 @@ export const albumSlice = createSlice({
                 state.albums.items[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
             }).addCase(addCategory.fulfilled, (state, action) => {
                 state.albums.items[action.payload.currentAlbumIndex].tags.categories.push(action.payload.newCategory);
+            }).addCase(changeMetaType.fulfilled, (state, action) => {
+                state.metaType = action.payload;
             });
     },
 });

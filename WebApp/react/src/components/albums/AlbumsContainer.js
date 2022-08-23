@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAlbums, loadCurrentAlbumInfo } from '../../model/reducers/albumSlice';
+import { selectAlbums, loadCurrentAlbumInfo, changeMetaType } from '../../model/reducers/albumSlice';
 import TabSelector from '../widgets/tab_selector/TabSelector';
 import SortField from '../widgets/sort_field/SortField';
 import Breadcrumbs from '../breadcrumbs/Breadcrumbs';
@@ -30,6 +30,10 @@ function AlbumsContainer({albumId, history, selectorClass}) {
         dispatch(loadCurrentAlbumInfo({ albumId, sort }));
     }
 
+    const onChangeTab = (index) => {
+        dispatch(changeMetaType({ metaType: tabs[index].value }));
+    }
+
     useEffect(()=> {
         if (albumId !== null) dispatch(loadCurrentAlbumInfo({ albumId, sort: { field: 'name', ascending: true } }));
     }, [dispatch, albumId]);
@@ -50,7 +54,8 @@ function AlbumsContainer({albumId, history, selectorClass}) {
     return (
         <TabSelector
             tabs={tabs}
-            defaultTab={metaType}
+            selectedTab={tabs.findIndex( tab => tab.value === metaType )}
+            onChangeTab={onChangeTab}
             selectorClass={selectorClass + (hideTabPanel ? " album_tabs_panel_hidden" : "")}
             footerContent={<Breadcrumbs history={history} current={albumName} />}
             sideContent={
