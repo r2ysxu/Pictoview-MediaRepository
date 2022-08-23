@@ -2,15 +2,14 @@ import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loadAlbumTags, updateAlbum } from '../../../model/reducers/albumSlice';
-import AlbumInfoTagView from './album_info/album_info_tags/album_info_tags_view/AlbumInfoTagsView';
+import AlbumInfo from './album_info/AlbumInfo';
 import AlbumRating from './album_rating/AlbumRating';
 import './Album.css';
 
-function Album({album, onChangeAlbum, isEditting, setEditting}) {
+function Album({album, onChangeAlbum}) {
     const dispatch = useDispatch();
     const [showMoreInfo, setShowMoreInfo] = useState(false);
     const [isEditing, setEditing] = useState(false);
-    const [isTagging, setTagging] = useState(false);
     const [currentAlbum, setCurrentAlbum] = useState(album);
 
     const onAlbumClick = (event) => {
@@ -32,12 +31,16 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
 
     const onUpdateAlbum = () => {
         dispatch(updateAlbum({
-            id: currentAlbum.id,
+            id: album.id,
             name: currentAlbum.name,
             publisher: currentAlbum.publisher,
             description: currentAlbum.description,
         }));
         setEditing(false);
+    }
+
+    const setDescription = (value) => {
+        setCurrentAlbum({...currentAlbum, description: value});
     }
 
     let albumNameSizeClass = "";
@@ -56,38 +59,16 @@ function Album({album, onChangeAlbum, isEditting, setEditting}) {
                         <imge className="album_image" src="/assets/icons/image.svg" /> :
                         <img className="album_image" src={'/album/image/cover?albumid=' + album.id} alt="" />}
                 </div>
-                {showMoreInfo && <div className="album_info_container">
-                    <img className={"album_info_edit_icon " + (isTagging ? "album_info_edit_icon_enabled" : "")}
-                        src="/assets/icons/tags.svg" alt="" title="Edit Tags (Select category to edit)"
-                        onClick={() => {
-                            setTagging(!isTagging);
-                        }}
-                    />
-                    {!isEditing && <img className="album_info_edit_icon"
-                        src="/assets/icons/pencil.svg" alt="" title="Edit Title &amp; Description"
-                        onClick={() => {
-                            setEditing(!isEditing);
-                        }}
-                    />}
-                    {isEditing && <div className="album_info_edit_buttons">
-                        <img className="album_info_edit_buttons_save" src="/assets/icons/check.svg" alt="" onClick={onUpdateAlbum} />
-                        <img className="album_info_edit_buttons_cancel" src="/assets/icons/x.svg" alt="" onClick={() => setEditing(false)} />
-                    </div>}
-                    <div className="album_info_description_container">
-                        <h3>Description</h3>
-                        {!isEditing && <div className="album_info_description_text">{currentAlbum.description}</div>}
-                        {isEditing && <textarea className="album_info_description_text" placeholder="Description" value={currentAlbum.description} onChange={ (event) => setCurrentAlbum({...currentAlbum, description: event.target.value}) } />}
-                    </div>
-                    <AlbumInfoTagView
-                        albumId={album.id}
-                        tags={album.tags}
-                        isTagging={isTagging}
-                        onClose={() => {setTagging(false)}}
-                    />
-                </div>}
+                {showMoreInfo && <AlbumInfo
+                    album={album}
+                    isEditing={isEditing}
+                    setEditing={setEditing}
+                    description={currentAlbum.description}
+                    setDescription={setDescription}
+                    onUpdateAlbum={onUpdateAlbum} />}
             </div>
             <div className="album_title">
-                {!isEditing && <h2 className={albumNameSizeClass} title={currentAlbum.altname}>{currentAlbum.name}</h2>}
+                {!isEditing && <h2 className={albumNameSizeClass} title={album.altname}>{album.name}</h2>}
                 {isEditing && <input className="album_text_field album_name_text_field" type="text" placeholder="Name" value={currentAlbum.name} onChange={ (event) => setCurrentAlbum({...currentAlbum, name: event.target.value}) } />}
                 <AlbumRating album={album} />
             </div>

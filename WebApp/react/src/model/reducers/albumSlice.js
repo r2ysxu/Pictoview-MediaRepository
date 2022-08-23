@@ -50,8 +50,7 @@ export const updateAlbum = createAsyncThunk('album/update/info', async (updatedA
     const currentState = thunkAPI.getState().album;
     const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === updatedAlbum.id);
     const categoryTags = await get_listAlbumTags(updatedAlbum.id);
-    const tags = buildCategoryTags(categoryTags);
-    const currentAlbum = {...await post_updateAlbum(updatedAlbum), tags };
+    const currentAlbum = {...await post_updateAlbum(updatedAlbum), tags: buildCategoryTags(categoryTags) };
     return {
         currentAlbumIndex,
         currentAlbum,
