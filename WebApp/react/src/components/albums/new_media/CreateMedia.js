@@ -7,7 +7,7 @@ import '../../widgets/common/Common.css';
 
 function CreateMedia({onDone}) {
     const dispatch = useDispatch();
-    const albumId = useSelector(selectAlbums).albumId;
+    const albumId = useSelector(selectAlbums).id;
     const [isLoading, setIsLoading] = useState(false);
     const [newMediaFile, setNewMediaFile] = useState({
         albumId,

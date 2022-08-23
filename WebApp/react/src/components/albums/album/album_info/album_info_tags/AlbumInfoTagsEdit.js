@@ -1,12 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { updateCategoryTags } from '../../../../../model/reducers/albumSlice';
+import { updateCategoryTags, updateCurrentAlbumCategoryTags } from '../../../../../model/reducers/albumSlice';
 import { get_searchTags } from '../../../../../model/apis/tag_apis.js';
 import Tokenizer from '../../../../widgets/tokenizer/Tokenizer';
 import './album_info_tags_view/AlbumInfoTagsView.css';
 
-function AlbumInfoTagEdit({albumId, category, onClose}) {
+function AlbumInfoTagEdit({albumId, category, onClose, currentAlbum = false}) {
     const dispatch = useDispatch();
     const [autoCompleteTokens, setAutoCompleteTokens] = useState([]);
     const [tags, setTags] = useState([...category.tags]);
@@ -22,11 +22,11 @@ function AlbumInfoTagEdit({albumId, category, onClose}) {
     }
 
     const onSave = () => {
-        dispatch(updateCategoryTags({
-            albumId,
-            tags,
-            category,
-        }));
+        if (currentAlbum) {
+            dispatch(updateCurrentAlbumCategoryTags({ albumId, tags, category }));
+        } else {
+            dispatch(updateCategoryTags({ albumId, tags, category }));
+        }
     }
 
     const addNewTag = (value) => {

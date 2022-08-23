@@ -5,7 +5,7 @@ import AlbumInfoTagsCategoryTagToken from '../album_info_tags_tagtoken/AlbumInfo
 import AlbumInfoTagsNewCategory  from '../album_info_tags_new_category/AlbumInfoTagsNewCategory';
 import './AlbumInfoTagsView.css';
 
-function AlbumInfoTagView({albumId, tags, onClose, isTagging}) {
+function AlbumInfoTagView({albumId, tags, onClose, isTagging, currentAlbum = false}) {
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     const onStopEdit = () => {
@@ -38,7 +38,7 @@ function AlbumInfoTagView({albumId, tags, onClose, isTagging}) {
                 })}
                 {isTagging && <AlbumInfoTagsNewCategory albumId={albumId} existingCategories={tags.categories} />}
             </div>
-            {selectedCategory && isTagging && <AlbumInfoTagEdit albumId={albumId} category={selectedCategory} onClose={onStopEdit} />}
+            {selectedCategory && isTagging && <AlbumInfoTagEdit albumId={albumId} category={selectedCategory} onClose={onStopEdit} currentAlbum={currentAlbum} />}
         </div>
     );
 };

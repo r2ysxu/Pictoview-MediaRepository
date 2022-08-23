@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { loadAlbumTags, updateAlbum } from '../../../../model/reducers/albumSlice';
 import AlbumInfoTagView from './album_info_tags/album_info_tags_view/AlbumInfoTagsView';
 import '../Album.css';
 
-function AlbumInfo({album, isEditing, setEditing, description, setDescription, onUpdateAlbum }) {
-    const dispatch = useDispatch();
+function AlbumInfo({album, isEditing, setEditing, description, setDescription, onUpdateAlbum, currentAlbum = false}) {
     const [isTagging, setTagging] = useState(false);
 
     const onClose = () => {
@@ -37,6 +34,7 @@ function AlbumInfo({album, isEditing, setEditing, description, setDescription, o
                 {isEditing && <textarea className="album_info_description_text" placeholder="Description" value={description} onChange={(event) => setDescription(event.target.value)} />}
             </div>
             <AlbumInfoTagView
+                currentAlbum={currentAlbum}
                 albumId={album.id}
                 tags={album.tags}
                 isTagging={isTagging}

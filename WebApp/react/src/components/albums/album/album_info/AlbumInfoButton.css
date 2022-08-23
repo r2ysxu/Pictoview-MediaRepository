@@ -1,0 +1,8 @@
+.album_info_modal_content {
+    position: relative;
+    height: 300px;
+}
+
+.album_info_modal_container {
+	background-color: #000;
+}

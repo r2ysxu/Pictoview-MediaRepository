@@ -18,8 +18,9 @@ import { post_tagAlbum } from '../apis/tag_apis.js';
 const pendingMoreRequests = new Set();
 
 const initialState = {
-    albumId: 0,
+    id: 0,
     albumName: '',
+    description: '',
     metaType: 'albums',
     albums: { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } },
     images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } },
@@ -65,7 +66,7 @@ export const searchAlbums = createAsyncThunk('album/search', async (query, thunk
     const page = 0;
     const albums = await get_searchAlbums(page, query, "name");
     return {
-        albumId: null,
+        id: null,
         albumName: '',
         albumQuery: query,
         albums,
@@ -84,8 +85,9 @@ export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async ({album
     const audios = get_listAlbumAudios(0, albumId);
     const currentAlbumInfo = await currentAlbum;
     return {
-        albumId,
+        id: albumId,
         albumName: currentAlbumInfo.name,
+        description: currentAlbumInfo.description,
         metaType: currentAlbumInfo.metaType,
         albums: await albums,
         images: await images,
@@ -130,6 +132,12 @@ const buildCategoryTags = (categoryTags) => {
     return { categories: [...categoryMap.values()] };
 }
 
+export const loadCurrentAlbumTags = createAsyncThunk('album/load/current/tags', async (albumId) => {
+    const categoryTags = await get_listAlbumTags(albumId);
+    const tags = buildCategoryTags(categoryTags);
+    return { tags };
+});
+
 export const loadAlbumTags = createAsyncThunk('album/load/tags', async (albumId, thunkAPI) => {
     const currentState = thunkAPI.getState().album;
     const categoryTags = await get_listAlbumTags(albumId);
@@ -140,7 +148,13 @@ export const loadAlbumTags = createAsyncThunk('album/load/tags', async (albumId,
     return {
         currentAlbumIndex,
         currentAlbum,
-    }
+    };
+});
+
+export const updateCurrentAlbumCategoryTags = createAsyncThunk('album/tags/current/update', async ({albumId, tags, category}, thunkAPI) => {
+    const categoryTags = await post_tagAlbum({albumId, tags, categories: [ category ]});
+    const newTags = buildCategoryTags(categoryTags);
+    return { tags: newTags };
 });
 
 export const updateCategoryTags = createAsyncThunk('album/tags/update', async ({albumId, tags, category}, thunkAPI) => {
@@ -152,7 +166,7 @@ export const updateCategoryTags = createAsyncThunk('album/tags/update', async ({
     return {
         currentAlbumIndex,
         currentAlbum,
-    }
+    };
 });
 
 export const addCategory = createAsyncThunk('/album/tags/category/new', async ({albumId, newCategory}, thunkAPI) => {
@@ -245,8 +259,12 @@ export const albumSlice = createSlice({
                 state.albums.items[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
             }).addCase(loadAlbumTags.fulfilled, (state, action) => {
                 state.albums.items[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
+            }).addCase(loadCurrentAlbumTags.fulfilled, (state, action) => {
+                state.tags = action.payload.tags;
             }).addCase(updateCategoryTags.fulfilled, (state, action) => {
                 state.albums.items[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
+            }).addCase(updateCurrentAlbumCategoryTags.fulfilled, (state, action) => {
+                state.tags = action.payload.tags;
             }).addCase(addCategory.fulfilled, (state, action) => {
                 state.albums.items[action.payload.currentAlbumIndex].tags.categories.push(action.payload.newCategory);
             }).addCase(changeMetaType.fulfilled, (state, action) => {

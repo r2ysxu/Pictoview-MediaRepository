@@ -9,7 +9,7 @@ import SubAlbums from './subalbums/SubAlbums';
 import ImageMedia from './media/image_media/ImageMedia';
 import VideoMedia from './media/video_media/VideoMedia';
 import AudioMedia from './media/audio_media/AudioMedia';
-import CreateMediaButton  from './new_media/CreateMediaButton';
+import AlbumInfoButton  from './album/album_info/AlbumInfoButton';
 import './AlbumsContainer.css';
 
 function AlbumsContainer({albumId, history, selectorClass}) {
@@ -65,7 +65,9 @@ function AlbumsContainer({albumId, history, selectorClass}) {
                         dropdownClass="album_side_button_dropdown"
                         onSortField={onSortField}
                         values={sortFields} />}
-                    {albumId > 0 && <CreateMediaButton iconClass="albums_side_button albums_side_button_add" />}
+                    {albumId > 0 && <div>
+                        <AlbumInfoButton iconClass="albums_side_button" />
+                    </div>}
                 </div>
             }>
             <SubAlbums albumId={albumId} changeCurrentAlbum={changeCurrentAlbum}/>

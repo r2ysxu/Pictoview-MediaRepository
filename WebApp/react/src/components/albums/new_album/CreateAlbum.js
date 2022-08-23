@@ -42,7 +42,7 @@ function CreateAlbum({onDone}) {
     const onSubmit = () => {
         setIsLoading(true);
         createAlbum(newAlbum).then( album => {
-            newAlbumFile.albumId = album.id;
+            newAlbumFile.id = album.id;
             if (newAlbumFile.albumId && newAlbumFile.file) {
                 onFileUpload();
             } else {
