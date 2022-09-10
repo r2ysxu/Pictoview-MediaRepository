@@ -19,10 +19,11 @@ import reactor.core.publisher.Mono;
 @Service
 public class VideoService {
 	@Value("${app.admin.main.cache.size}")
-	private Integer maxCacheItemSize = 1;
+	private Integer maxCacheItemSize = 5;
 
-	Cache<String, String> resourceCache = CacheBuilder.newBuilder().maximumSize(maxCacheItemSize)
-			.expireAfterAccess(4L, TimeUnit.HOURS).build();
+	Cache<String, Mono<Resource>> resourceCache = CacheBuilder.newBuilder().maximumSize(maxCacheItemSize)
+			.expireAfterAccess(4L, TimeUnit.HOURS)
+			.build();
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -30,14 +31,12 @@ public class VideoService {
 	private VideoMediaRepo videoMediaRepo;
 
 	public Mono<Resource> fetchVideoStream(UserDetails owner, Long mediaId) {
-		final String resourcePath = resourceCache.getIfPresent(owner.getUsername() + mediaId);
-		if (resourcePath == null) {
-			final String unCachedResourcePath = findVideo(owner, mediaId).getSource();
-			resourceCache.put(owner.getUsername() + mediaId, unCachedResourcePath);
-			return Mono.fromSupplier(() -> resourceLoader.getResource("file:" + unCachedResourcePath));
-		} else {
-			return Mono.fromSupplier(() -> resourceLoader.getResource("file:" + resourcePath));
+		Mono<Resource> resource = resourceCache.getIfPresent(owner.getUsername() + mediaId);
+		if (resource == null) {
+			resource = Mono.fromSupplier(() -> resourceLoader.getResource("file:" + findVideo(owner, mediaId).getSource()));
+			resourceCache.put(owner.getUsername() + mediaId, resource);
 		}
+		return resource;
 	}
 
 	public VideoMediaEntity findVideo(UserDetails owner, Long mediaId) {

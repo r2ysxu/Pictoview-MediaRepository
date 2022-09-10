@@ -5,7 +5,6 @@ import org.mrn.jpa.model.user.EndUserEntity;
 import org.mrn.query.model.MediaItem;
 import org.mrn.query.model.PageItems;
 import org.mrn.service.AlbumService;
-import org.mrn.service.UserService;
 import org.mrn.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -41,6 +40,7 @@ public class VideoController extends BaseController {
 
 	@GetMapping(value = "/album/video", produces = "video/mp4")
 	public Mono<Resource> getVideo(@RequestParam("mediaId") Long mediaId) throws UnauthenticatedUserException {
-		return videoService.fetchVideoStream(UserService.getAuthenticatedUser(), mediaId);
+		Mono<Resource> resource = videoService.fetchVideoStream(getUser(), mediaId);
+		return resource;
 	}
 }

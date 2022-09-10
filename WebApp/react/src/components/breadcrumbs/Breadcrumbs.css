@@ -41,4 +41,8 @@
     margin-left: 20px;
     margin-top: 3px;
     display: inline-block;
+    max-width: 300px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
