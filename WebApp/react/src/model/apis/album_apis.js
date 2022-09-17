@@ -100,3 +100,11 @@ export const post_changeAlbumCover = async(albumId, imageId) => {
         body: JSON.stringify({albumId, imageId}),
     }).then(onResponseJson);
 }
+
+export const delete_album = async(albumId) => {
+    return fetch('/album/delete', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: albumId
+    })
+}

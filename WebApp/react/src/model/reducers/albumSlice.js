@@ -12,6 +12,7 @@ import {
     post_uploadMedia,
     post_updateAlbum,
     post_changeAlbumCover,
+    delete_album,
 } from '../apis/album_apis';
 import { post_tagAlbum } from '../apis/tag_apis.js';
 
@@ -174,12 +175,21 @@ export const addCategory = createAsyncThunk('/album/tags/category/new', async ({
     const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
     return {
         currentAlbumIndex,
-        newCategory
+        newCategory,
     };
 });
 
 export const changeMetaType = createAsyncThunk('/album/metaType/change', async ({metaType}) => {
     return metaType;
+});
+
+export const deleleAlbum = createAsyncThunk('/album/delete', async ({albumId}, thunkAPI) => {
+    const currentState = thunkAPI.getState().album;
+    await delete_album(albumId);
+    const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
+    return {
+        currentAlbumIndex,
+    }
 });
 
 export const albumSlice = createSlice({
@@ -269,6 +279,8 @@ export const albumSlice = createSlice({
                 state.albums.items[action.payload.currentAlbumIndex].tags.categories.push(action.payload.newCategory);
             }).addCase(changeMetaType.fulfilled, (state, action) => {
                 state.metaType = action.payload;
+            }).addCase(deleleAlbum.fulfilled, (state, action) => {
+                state.albums.items.splice(action.payload.currentAlbumIndex, 1);
             });
     },
 });

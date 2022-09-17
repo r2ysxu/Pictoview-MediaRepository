@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -137,7 +138,7 @@ public class AlbumController extends BaseController {
 	}
 
 	/**
-	 * This allows an admin to dangerously create an album by giving a filepath of the file on the server. Please remove this when deploying to public domains for security.
+	 * This allows an admin to create an album by giving a filepath of the file on the server. Please remove this when deploying to public domains for security.
 	 *
 	 * @param path
 	 *            file path of the album on the server
@@ -182,5 +183,11 @@ public class AlbumController extends BaseController {
 	public Album updateCoverId(@RequestBody CoverImage coverImage)
 			throws AlbumNotFound, InvalidMediaAlbumException, UnauthenticatedUserException, IOException {
 		return mediaAlbumService.updateCoverPhotoById(getUser(), coverImage.getAlbumId(), coverImage.getImageId());
+	}
+
+	@DeleteMapping(value ="/album/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Boolean deleteAlbum(@RequestBody String albumId) throws UnauthenticatedUserException, AlbumNotFound {
+		mediaAlbumService.deleteAlbum(getUser(), Long.parseLong(albumId));
+		return true;
 	}
 }

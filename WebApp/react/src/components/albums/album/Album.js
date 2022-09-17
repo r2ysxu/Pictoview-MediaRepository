@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadAlbumTags, updateAlbum } from '../../../model/reducers/albumSlice';
+import { loadAlbumTags, updateAlbum, deleleAlbum } from '../../../model/reducers/albumSlice';
 import AlbumInfo from './album_info/AlbumInfo';
 import AlbumRating from './album_rating/AlbumRating';
 import './Album.css';
@@ -39,6 +39,14 @@ function Album({album, onChangeAlbum}) {
         setEditing(false);
     }
 
+    const onDeleteAlbum = (event) => {
+        if (event.ctrlKey && event.shiftKey) {
+            dispatch(deleleAlbum({
+                albumId: album.id,
+            }));
+        }
+    }
+
     const setDescription = (value) => {
         setCurrentAlbum({...currentAlbum, description: value});
     }
@@ -65,7 +73,8 @@ function Album({album, onChangeAlbum}) {
                     setEditing={setEditing}
                     description={currentAlbum.description}
                     setDescription={setDescription}
-                    onUpdateAlbum={onUpdateAlbum} />}
+                    onUpdateAlbum={onUpdateAlbum}
+                    onDeleteAlbum={onDeleteAlbum} />}
             </div>
             <div className="album_title">
                 {!isEditing && <h2 className={albumNameSizeClass} title={album.altname}>{album.name}</h2>}

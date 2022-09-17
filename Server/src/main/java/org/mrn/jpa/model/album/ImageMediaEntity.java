@@ -4,13 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.PrimaryKeyJoinColumn;
 
 import org.mrn.jpa.model.EntityModel;
 import org.mrn.jpa.model.user.UserEntity;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "mediaid")
 public class ImageMediaEntity extends MediaEntity implements EntityModel {
 	@Enumerated(EnumType.ORDINAL)
 	private MediaType type;

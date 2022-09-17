@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,7 +35,7 @@ public class AlbumEntity implements EntityModel {
 	private UserEntity owner;
 	@ManyToOne
 	private AlbumEntity parent;
-	@OneToMany(mappedBy = "album")
+	@OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
 	private List<AlbumTagEntity> albumTags;
 	@Column
 	private String subtitle;
@@ -46,7 +47,7 @@ public class AlbumEntity implements EntityModel {
 	private String metaType;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private ImageMediaEntity coverPhoto;
-	@OneToMany(mappedBy = "album")
+	@OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
 	private List<MediaEntity> media;
 
 	protected AlbumEntity() {

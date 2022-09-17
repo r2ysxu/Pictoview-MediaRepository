@@ -312,4 +312,9 @@ public class AlbumService {
 		albumEntity.setCoverPhoto(imageMedia);
 		return mediaAlbumRepo.save(albumEntity);
 	}
+
+	public void deleteAlbum(EndUserEntity user, Long albumId) throws AlbumNotFound {
+		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
+		mediaAlbumRepo.delete(albumEntity);
+	}
 }

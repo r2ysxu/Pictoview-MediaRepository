@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AlbumInfoTagView from './album_info_tags/album_info_tags_view/AlbumInfoTagsView';
 import '../Album.css';
 
-function AlbumInfo({album, isEditing, setEditing, description, setDescription, onUpdateAlbum, currentAlbum = false}) {
+function AlbumInfo({album, isEditing, setEditing, description, setDescription, onUpdateAlbum, onDeleteAlbum, currentAlbum = false}) {
     const [isTagging, setTagging] = useState(false);
 
     const onClose = () => {
@@ -24,6 +24,10 @@ function AlbumInfo({album, isEditing, setEditing, description, setDescription, o
                     setEditing(!isEditing);
                 }}
             />}
+            <img className="album_info_edit_icon"
+                src="/assets/icons/x.svg" alt="" title="Delete Album"
+                onClick={onDeleteAlbum}
+            />
             {isEditing && <div className="album_info_edit_buttons">
                 <img className="album_info_edit_buttons_save" src="/assets/icons/check.svg" alt="" onClick={onUpdateAlbum} />
                 <img className="album_info_edit_buttons_cancel" src="/assets/icons/x.svg" alt="" onClick={onClose} />

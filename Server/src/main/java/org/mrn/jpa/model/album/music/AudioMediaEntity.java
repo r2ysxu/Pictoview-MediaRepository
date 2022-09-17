@@ -18,7 +18,6 @@ import org.mrn.jpa.model.album.MediaType;
 import org.mrn.jpa.model.user.UserEntity;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "mediaid")
 public class AudioMediaEntity extends MediaEntity implements EntityModel {
 
 	@Enumerated(EnumType.ORDINAL)

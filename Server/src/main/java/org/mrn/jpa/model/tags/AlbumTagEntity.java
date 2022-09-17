@@ -16,7 +16,7 @@ public class AlbumTagEntity implements EntityModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected long id;
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.DETACH)
 	private TagEntity tag;
 	@OneToOne(cascade = CascadeType.ALL)
 	private AlbumEntity album;
