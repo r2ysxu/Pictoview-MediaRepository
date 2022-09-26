@@ -24,8 +24,8 @@ function AlbumInfo({album, isEditing, setEditing, description, setDescription, o
                     setEditing(!isEditing);
                 }}
             />}
-            <img className="album_info_edit_icon"
-                src="/assets/icons/x.svg" alt="" title="Delete Album"
+            <img className="album_info_edit_icon album_info_edit_icon_delete"
+                src="/assets/icons/x.svg" alt="" title="Delete Album (Hold Ctrl & Shift)"
                 onClick={onDeleteAlbum}
             />
             {isEditing && <div className="album_info_edit_buttons">

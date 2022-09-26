@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import './Tokenizer.css';
 
 /* Token : [{ id: ID, value: String}] */
-function Tokenizer({title, tokens, setTokens, addNewToken, autoCompleteValues, onAutoComplete, onRemove, onSave, onClose}) {
+function Tokenizer({title, tokens, setTokens, addNewToken, autoCompleteValues, onAutoComplete, onRemove, onSave, onClose, relevanceClass}) {
     const inputRef = useRef(null);
     const [inputValue, setInputValue] = useState('');
 
@@ -55,6 +55,7 @@ function Tokenizer({title, tokens, setTokens, addNewToken, autoCompleteValues, o
         setTokens([...tokens, autoCompleteValues[index]]);
         setInputValue('');
         onAutoComplete('');
+        inputRef.current.focus();
     }
 
     return (
@@ -83,7 +84,7 @@ function Tokenizer({title, tokens, setTokens, addNewToken, autoCompleteValues, o
             <div className="tokenizer_tokens_container">
                 {tokens.map( (token, index) =>
                     <div key={index + '-' + token.id} className="tokenizer_token_container">
-                        <span>{token.value}</span>
+                        <span className={relevanceClass(token.relevance)} >{token.value}</span>
                         <div className="tokenizer_token_delete_icon_container" onClick={() => onRemovePressed(index)}>
                             <img className="tokenizer_token_delete_icon" src="/assets/icons/x.svg" alt="" />
                         </div>

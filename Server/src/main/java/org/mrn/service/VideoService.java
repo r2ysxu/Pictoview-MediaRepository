@@ -1,5 +1,6 @@
 package org.mrn.service;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import org.mrn.jpa.model.album.VideoMediaEntity;
@@ -21,8 +22,8 @@ public class VideoService {
 	@Value("${app.admin.main.cache.size}")
 	private Integer maxCacheItemSize = 5;
 
-	Cache<String, Mono<Resource>> resourceCache = CacheBuilder.newBuilder().maximumSize(maxCacheItemSize)
-			.expireAfterAccess(4L, TimeUnit.HOURS)
+	Cache<String, Resource> resourceCache = CacheBuilder.newBuilder().maximumSize(maxCacheItemSize)
+			.expireAfterAccess(5L, TimeUnit.MINUTES)
 			.build();
 
 	@Autowired
@@ -31,12 +32,16 @@ public class VideoService {
 	private VideoMediaRepo videoMediaRepo;
 
 	public Mono<Resource> fetchVideoStream(UserDetails owner, Long mediaId) {
-		Mono<Resource> resource = resourceCache.getIfPresent(owner.getUsername() + mediaId);
+		final Resource resource = resourceCache.getIfPresent(owner.getUsername() + mediaId);
+		Mono<Resource> monoResource;
 		if (resource == null) {
-			resource = Mono.fromSupplier(() -> resourceLoader.getResource("file:" + findVideo(owner, mediaId).getSource()));
-			resourceCache.put(owner.getUsername() + mediaId, resource);
+			Resource newResource = resourceLoader.getResource("file:" + findVideo(owner, mediaId).getSource());
+			resourceCache.put(owner.getUsername() + mediaId, newResource);
+			monoResource = Mono.fromSupplier(() -> newResource);
+		} else {
+			monoResource = Mono.fromSupplier(() -> resource);
 		}
-		return resource;
+		return monoResource.timeout(Duration.ofMinutes(1L));
 	}
 
 	public VideoMediaEntity findVideo(UserDetails owner, Long mediaId) {

@@ -125,6 +125,10 @@
     float: right;
 }
 
+.album_info_edit_icon_delete:hover {
+    filter: invert(50%) sepia(1) hue-rotate(320deg) saturate(5) !important;
+}
+
 .album_info_edit_icon:hover {
     filter: invert(50%) sepia(1) hue-rotate(90deg) saturate(3);
 }
