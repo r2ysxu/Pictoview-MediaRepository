@@ -12,12 +12,7 @@ function Tokenizer({title, tokens, setTokens, addNewToken, autoCompleteValues, o
     }, []);
 
     const onAddToken = () => {
-        let token;
-        if (autoCompleteValues?.length > 0) {
-            token = autoCompleteValues[0];
-        } else {
-            token = addNewToken(inputValue);
-        }
+        let token = addNewToken(inputValue);
         if (inputValue.trim().length && !tokens.some( token => token.value === inputValue )) {
             setTokens([...tokens, token]);
         }

@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import './MenuBar.css';
 
-function MenuBar({children, footerItem, selectedIndex, onSelect}) {
+function MenuBar({children, footerItem, onSelect}) {
     const ref = useRef();
     const [showExpand, setShowExpand] = useState(false);
 
