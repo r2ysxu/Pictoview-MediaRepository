@@ -37,7 +37,7 @@ public class ImageService {
 		AlbumEntity album = imageAlbumRepo.findByOwnerAndId(owner, albumId);
 		if (album == null) throw new AlbumNotFound(owner, albumId);
 		if (album.getCoverPhoto() == null) return null;
-		ImageMediaEntity imageMedia = imageMediaRepo.findByOwnerAndId(owner, album.getCoverPhoto().getId());
+		ImageMediaEntity imageMedia = imageMediaRepo.findByOwnerAndAlbum_IdAndId(owner, albumId, album.getCoverPhoto().getId());
 		if (imageMedia == null) return null;
 		File file = new File(generateCoverPhotoPath(adminCoverSource, album, imageMedia));
 		if (!file.exists()) throw new ImageNotFound(imageMedia.getId());

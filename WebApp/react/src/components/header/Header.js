@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadUserProfile, logout, selectUserLoggedIn } from '../../model/reducers/userSlice';
+import { loadUserProfile, logout, toggleHeader, selectUser } from '../../model/reducers/userSlice';
 import HomeBanner from '../home_banner/HomeBanner';
 import Searchbar from '../widgets/searchbar/Searchbar';
 import MenuBar from '../widgets/menubar/MenuBar';
@@ -11,11 +11,20 @@ import './Header.css';
 
 function Header({onSearchSubmit, setShowNewAlbumModal, setShowTagModal, searchQuery, onMenuSelect}) {
     const dispatch = useDispatch();
-    const isLoggedIn = useSelector(selectUserLoggedIn);
+    const { isLoggedIn, showHeader } = useSelector(selectUser);
 
     const onLogout = () => {
         dispatch(logout());
         window.location.replace('/');
+    }
+
+    const onCollapseMenu = () => {
+        if (showHeader) {
+            document.getElementsByClassName('tab_selector_row')[0].classList.add('header_offset');
+        } else {
+            document.getElementsByClassName('tab_selector_row')[0].classList.remove('header_offset');
+        }
+        dispatch(toggleHeader({ showHeader: !showHeader }));
     }
 
     useEffect(()=> {
@@ -23,7 +32,7 @@ function Header({onSearchSubmit, setShowNewAlbumModal, setShowTagModal, searchQu
     }, [dispatch, isLoggedIn]);
 
     return (
-        <div className="header">
+        <div className={"header " + (showHeader ? "" : "header_hidden")}>
             {!isLoggedIn && <HomeBanner />}
             {isLoggedIn && <Searchbar
                     menuContent={
@@ -40,6 +49,7 @@ function Header({onSearchSubmit, setShowNewAlbumModal, setShowTagModal, searchQu
                     }
                     searchQuery={searchQuery}
                     onSearch={onSearchSubmit} />}
+            <div className="header_collapse" onClick={onCollapseMenu}></div>
         </div>
     );
 }

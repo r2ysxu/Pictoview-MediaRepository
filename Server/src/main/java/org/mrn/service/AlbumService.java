@@ -294,8 +294,8 @@ public class AlbumService {
 	public Album updateCoverPhotoById(EndUserEntity user, Long albumId, Long imageId)
 			throws AlbumNotFound, InvalidMediaAlbumException, IOException {
 		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
-		ImageMediaEntity imageMedia = imageMediaRepo.findByOwnerAndId(user, imageId);
-		if (imageMedia == null || imageMedia.getAlbum().getId() != albumEntity.getId())
+		ImageMediaEntity imageMedia = imageMediaRepo.findByOwnerAndAlbum_IdAndId(user, albumId, imageId);
+		if (imageMedia == null)
 			throw new InvalidMediaAlbumException(albumId, imageId);
 		AlbumFileUtils.createCoverPhotoFile(imageMedia.getSource(),
 				ImageService.generateCoverPhotoPath(adminCoverSource, albumEntity, imageMedia));

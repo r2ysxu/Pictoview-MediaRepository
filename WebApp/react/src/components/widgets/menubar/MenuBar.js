@@ -26,7 +26,7 @@ function MenuBar({children, footerItem, onSelect}) {
             <div className="menubar_icon" onClick={() => onMenuSelect(!showExpand)}>
                 <img className="searchbar_iv_icon" src="/assets/icons/list.svg" alt="" />
             </div>
-            {showExpand && <div className="menubar_content_container">
+            <div className={"menubar_content_container " + (showExpand ? "menubar_shown" : "menubar_hidden")}>
                     <div className="menubar_content">
                     { (children || []).map( (child, index) =>
                         <div key={index} className="menubar_child">
@@ -37,7 +37,7 @@ function MenuBar({children, footerItem, onSelect}) {
                         {footerItem}
                     </div>
                 </div>
-            </div>}
+            </div>
         </div>
     );
 }

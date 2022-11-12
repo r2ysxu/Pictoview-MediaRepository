@@ -5,6 +5,7 @@ const initialState = {
     isLoading: false,
     isLoggedIn: false,
     username: "",
+    showHeader: true,
 }
 
 export const loadUserProfile = createAsyncThunk('user/profile', async () => {
@@ -13,6 +14,10 @@ export const loadUserProfile = createAsyncThunk('user/profile', async () => {
 
 export const logout = createAsyncThunk('user/logout', async ({ mediaId }) => {
     return await get_logout();
+});
+
+export const toggleHeader = createAsyncThunk('user/header/toggle',  async ({ showHeader}) => {
+    return showHeader;
 });
 
 
@@ -36,6 +41,8 @@ export const videoSlice = createSlice({
             }).addCase(logout.fulfilled, (state) => {
                 state.isLoading = false;
                 state.isLoggedIn = false;
+            }).addCase(toggleHeader.fulfilled, (state, { payload }) => {
+                state.showHeader = payload;
             });
     },
 });

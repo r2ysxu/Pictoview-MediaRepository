@@ -49,6 +49,13 @@ function AlbumPage(props) {
 
     const onMenuSelect = (isOpen) => {
         setIsMenuOpen(isOpen);
+        if (isOpen) {
+            document.getElementsByClassName('tab_selector_row')[0].classList.add('album_selector_offset');
+            document.getElementsByClassName('container_content')[0].classList.add('menubar_offset');
+        } else {
+            document.getElementsByClassName('tab_selector_row')[0].classList.remove('album_selector_offset');
+            document.getElementsByClassName('container_content')[0].classList.remove('menubar_offset');
+        } 
     }
 
     useEffect( () => {
@@ -63,7 +70,7 @@ function AlbumPage(props) {
                 setShowTagModal={setShowTagModal}
                 searchQuery={albumSearchQuery}
                 onMenuSelect={onMenuSelect} />
-            <Container isLoggedIn={isLoggedIn} containerClass={isMenuOpen ? "menubar_offset" : ""}>
+            <Container isLoggedIn={isLoggedIn}>
                 <Modal
                     content={<CreateAlbum onDone={hideNewAlbumModal} />}
                     isShown={showNewAlbumModal}
@@ -75,7 +82,7 @@ function AlbumPage(props) {
                 <AlbumsContainer
                     albumId={albumId}
                     history={history}
-                    selectorClass={"album_selector " + (isMenuOpen ? "album_selector_offset" : "") } />
+                    selectorClass="album_selector" />
             </Container>
         </div>
     );

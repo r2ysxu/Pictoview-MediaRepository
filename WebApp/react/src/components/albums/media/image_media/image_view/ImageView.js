@@ -1,11 +1,13 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateCoverImage } from '../../../../../model/reducers/albumSlice';
+import { selectUser } from '../../../../../model/reducers/userSlice';
 import ImageViewControls from './image_view_controls/ImageViewControls';
 import './ImageView.css';
 
 function ImageView({albumId, imageItems, selectedIndex, onSelectIndex}) {
     const dispatch = useDispatch();
+    const { showHeader } = useSelector(selectUser);
     const onCloseModal = () => {
         onSelectIndex(null);
     }
@@ -20,7 +22,7 @@ function ImageView({albumId, imageItems, selectedIndex, onSelectIndex}) {
     }
 
     return ((selectedIndex != null && selectedIndex >= 0 && imageItems[selectedIndex]) ?
-        <div className="image_view_container">
+        <div className={"image_view_container " + (showHeader ? "" : "image_view_container_full") }>
             <div className="image_view_content">
                 <div className="image_view_container_modal" onClick={onCloseModal}></div>
                 <img className="image_view_image" src={'/album/image/full?mediaid=' + imageItems[selectedIndex].id} alt={imageItems[selectedIndex].name} title={imageItems[selectedIndex].name} />

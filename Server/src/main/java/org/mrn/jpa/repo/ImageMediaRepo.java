@@ -9,6 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface ImageMediaRepo extends PagingAndSortingRepository<ImageMediaEntity, Long> {
 	ImageMediaEntity findByOwnerAndId(UserEntity owner, Long id);
+	ImageMediaEntity findByOwnerAndAlbum_IdAndId(UserEntity owner, Long albumId, Long id);
 	Page<ImageMediaEntity> findAllByOwnerAndAlbum_Id(UserEntity owner, Long albumId, Pageable pageable);
 	ImageMediaEntity findByOwnerAndAlbum(UserEntity owner, AlbumEntity album);
 	ImageMediaEntity findFirstByAlbumAndName(AlbumEntity album, String name);

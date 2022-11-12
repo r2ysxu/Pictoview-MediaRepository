@@ -8,6 +8,15 @@
     height: 50pt;
     background-color: rgba(17,17,17,0.75);
     box-shadow: 0 3px 7px 0 rgb(0 0 0 / 35%);
+    transition: 0.5s;
+}
+
+.header_hidden {
+    top: -50pt;
+}
+
+.header_offset {
+    top: 0 !important;
 }
 
 .header_signin {
@@ -47,4 +56,16 @@
     bottom: 0;
     margin: auto;
     filter: invert(60%);
+}
+
+.header_collapse {
+    position: absolute;
+    bottom: -5pt;
+    left: 0;
+    height: 5pt;
+    width: 100%;
+}
+
+.header_collapse:hover {
+    background-image: linear-gradient(rgba(0 0 0 / 15%), rgba(0 0 0 / 0%)); ;
 }

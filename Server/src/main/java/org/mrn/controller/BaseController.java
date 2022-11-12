@@ -17,4 +17,8 @@ public abstract class BaseController {
 		UserDetails user = UserService.getAuthenticatedUser();
 		return userService.findByUserName(user.getUsername());
 	}
+
+	protected UserDetails getUserDetails() throws UnauthenticatedUserException {
+		return UserService.getAuthenticatedUser();
+	}
 }

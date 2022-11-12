@@ -16,7 +16,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 @ComponentScan
 @SpringBootApplication
 public class PvrnApplication {
-	
+
 	private static final long SHUT_DOWN_TIME = 16200000; // 4.5 Hours
 
 	public static void main(String[] args) {

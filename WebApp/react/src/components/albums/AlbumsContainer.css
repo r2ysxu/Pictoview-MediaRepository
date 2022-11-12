@@ -3,6 +3,7 @@
 
 .album_tabs_panel_hidden {
     visibility: hidden;
+    transition: 0s;
 }
 
 .album_media_list {

@@ -6,6 +6,11 @@
     left: 0;
 }
 
+.image_view_container_full {
+    top: 0 !important;
+    height: 100vh !important;
+}
+
 .image_view_content {
     position: relative;
     height: 100%;

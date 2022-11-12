@@ -40,7 +40,6 @@ public class VideoController extends BaseController {
 
 	@GetMapping(value = "/album/video", produces = "video/mp4")
 	public Mono<Resource> getVideo(@RequestParam("mediaId") Long mediaId) throws UnauthenticatedUserException {
-		Mono<Resource> resource = videoService.fetchVideoStream(getUser(), mediaId);
-		return resource;
+		return videoService.fetchVideoStream(getUserDetails(), mediaId);
 	}
 }

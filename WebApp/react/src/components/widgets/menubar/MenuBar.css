@@ -46,5 +46,14 @@
 
 .menubar_offset {
     left: 70pt !important;
-    width: calc(100% - 70pt - 30px) !important;
+    width: calc(100% - 70pt) !important;
+}
+
+.menubar_hidden {
+    left: -70pt;
+    transition: 0.5s;
+}
+
+.menubar_shown {
+    transition: 0.5s;
 }
