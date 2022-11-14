@@ -26,7 +26,6 @@ function AlbumPage(props) {
     const isLoggedIn = useSelector(selectUserLoggedIn);
     const [showNewAlbumModal, setShowNewAlbumModal] = useState(false);
     const [showTagModal, setShowTagModal] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [tagQuery, setTagQuery] = useState({ and: new Map(), or: new Map(), not: new Map()});
 
     const onSearch = useCallback((query) => {
@@ -48,7 +47,6 @@ function AlbumPage(props) {
     }
 
     const onMenuSelect = (isOpen) => {
-        setIsMenuOpen(isOpen);
         if (isOpen) {
             document.getElementsByClassName('tab_selector_row')[0].classList.add('album_selector_offset');
             document.getElementsByClassName('container_content')[0].classList.add('menubar_offset');

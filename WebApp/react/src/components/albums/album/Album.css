@@ -54,7 +54,6 @@
 
 .album_banner {
     margin: 0;
-    background-color: #fff;
     position: relative;
     height: 15px;
     transition: 1s;
@@ -64,7 +63,19 @@
     border-top-right-radius: 5px;
 }
 
-.album_banner:hover {
+.album_banner_video {
+    background-color: #fff;
+}
+
+.album_banner_images {
+    background-color: #fff9e9;
+}
+
+.album_banner_images:hover {
+    background-color: #ffd35d;
+}
+
+.album_banner_video:hover {
     background-color: #98a8fd;
 }
 

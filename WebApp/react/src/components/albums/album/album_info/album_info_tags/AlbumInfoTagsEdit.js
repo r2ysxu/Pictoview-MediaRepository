@@ -18,6 +18,7 @@ function AlbumInfoTagEdit({albumId, category, onClose, currentAlbum = false}) {
         }
         if (value && value.trim().length > 0) {
             get_searchTags(value, category.id).then( (response) => {
+                response.forEach( tag => tag.relevance = 80 );
                 setAutoCompleteTokens(response);
             });
         } else {
@@ -34,7 +35,7 @@ function AlbumInfoTagEdit({albumId, category, onClose, currentAlbum = false}) {
     }
 
     const addNewTag = (value) => {
-        let relevance = 0;
+        let relevance = 80;
         if (value.includes(':')) {
             const delimIndex = value.indexOf(':');
             relevance = parseInt(value.substring(delimIndex + 1));

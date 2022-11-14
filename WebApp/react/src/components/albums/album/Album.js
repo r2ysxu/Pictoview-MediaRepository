@@ -55,9 +55,15 @@ function Album({album, onChangeAlbum}) {
     if (currentAlbum.name.length > 80) albumNameSizeClass = "album_title_40";
     else if (currentAlbum.name.length > 20) albumNameSizeClass = "album_title_20";
 
+    let albumMetaTypeClass = "";
+    switch(album.metaType) {
+    case 'images': albumMetaTypeClass = 'album_banner_images'; break;
+    case 'videos': albumMetaTypeClass = 'album_banner_video'; break;
+    }
+
     return (
         <div className="album_container">
-            <div className="album_banner" onClick={() => onShowMoreInfo(album.id)}>
+            <div className={"album_banner " + albumMetaTypeClass} onClick={() => onShowMoreInfo(album.id)}>
                 {!isEditing && <h4>{album.publisher}</h4>}
                 {isEditing && <input className="album_text_field album_publisher_text_field" placeholder="Publisher" value={currentAlbum.publisher} onChange={ (event) => setCurrentAlbum({...currentAlbum, publisher: event.target.value}) } />}
             </div>

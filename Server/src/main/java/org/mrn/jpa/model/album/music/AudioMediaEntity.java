@@ -9,7 +9,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 
 import org.mrn.jpa.model.EntityModel;
 import org.mrn.jpa.model.album.AlbumEntity;
