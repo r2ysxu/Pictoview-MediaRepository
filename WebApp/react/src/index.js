@@ -14,13 +14,13 @@ import AdminManager from './page/AdminManager';
 
 function App() {
   return(
-      <Router>
-      <Switch>
-        <Route path="/album" component={AlbumPage} />
-        <Route path="/admin" component={AdminManager} />
-        <Route path="/" component={Home} />
-      </Switch>
-      </Router>
+    <Router>
+    <Switch>
+      <Route path="/album" component={AlbumPage} />
+      <Route path="/admin" component={AdminManager} />
+      <Route path="/" component={Home} />
+    </Switch>
+    </Router>
   );
 }
 

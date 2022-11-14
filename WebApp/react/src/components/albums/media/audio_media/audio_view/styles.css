@@ -1,0 +1,68 @@
+.audio_view_container {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 5.5em;
+  background-color: rgba(0 0 0 / 25%);
+}
+
+.audio_view_audio_info {
+}
+
+.audio_view_audio_tag {
+  display: none;
+}
+
+.audio_view_audio_content_container {
+  position: relative;
+  text-align: center;
+}
+
+.audio_view_audio_content_left_info {
+  position: absolute;
+  left: 0;
+}
+
+.audio_view_audio_content_right_info {
+  position: absolute;
+  right: 0;
+}
+
+.audio_view_content_play_button {
+  height: 4em;
+  width: 4em;
+}
+
+audio::-webkit-media-controls-panel {
+  background: none;
+}
+
+.audio_view_content_slider input[type="range"] {
+  width: 100%;
+  height: 5px;
+  -webkit-appearance: none;
+  background: transparent;
+  color: transparent;
+  box-shadow: inset 0 0 2px 1px rgb(0 0 0 / 25%);
+}
+
+.audio_view_content_slider input[type="range"]::-webkit-slider-thumb {
+  opacity: 0;
+}
+
+.audio_view_content_slider input[type="range"]::before {
+  position: absolute;
+  content: "";
+  top: 2;
+  left: 0;
+  width: var(--seek-before-width);
+  height: 5px;
+  background-image: linear-gradient(to right, #0075ff 90%, #0075ff, transparent);
+  boder: solid 1px rgba(0 0 0 / 25%);
+  cursor: pointer;
+}
+
+.audio_view_content_slider input[type="range"]::-webkit-slider-runnable-track {
+  cursor: pointer;
+}

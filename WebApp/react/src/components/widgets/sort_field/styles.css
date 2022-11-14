@@ -1,0 +1,10 @@
+.sort_field_container {
+  display: inline-block;
+}
+
+.sort_field_selector_container {
+  position: absolute;
+  top: 60px;
+  right: 100px;
+  color: #fff;
+}

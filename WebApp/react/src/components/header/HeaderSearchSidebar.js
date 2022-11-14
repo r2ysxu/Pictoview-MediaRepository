@@ -1,15 +1,15 @@
 import React from 'react';
-import './Header.css';
+import './styles.css';
 
 function HeaderSearchSidebar({setShowTagModal}) {
 
-    return (
-        <div className="header_sidebar_container">
-            <div className="header_sidebar_tag_icon" onClick={() => {setShowTagModal(true)}}>
-                <img src="/assets/icons/tags.svg" alt="" />
-            </div>
-        </div>
-    );
+  return (
+    <div className="header_sidebar_container">
+      <div className="header_sidebar_tag_icon" onClick={() => {setShowTagModal(true)}}>
+        <img src="/assets/icons/tags.svg" alt="" />
+      </div>
+    </div>
+  );
 }
 
 export default HeaderSearchSidebar;

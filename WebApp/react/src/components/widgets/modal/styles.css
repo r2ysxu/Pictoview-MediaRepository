@@ -1,0 +1,67 @@
+.modal_container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+
+.modal_background {
+  position: fixed;
+  left: 0;
+  top: 66px;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(0 0 0 / 50%);
+}
+
+.modal_dialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 66px;
+  margin: auto;
+  width: 80%;
+  min-width: 800px;
+  background-color: #fff;
+  border-radius: 0px 0px 0px 4px;
+  box-shadow: 0 3px 7px 0 rgb(0 0 0 / 35%);
+}
+
+.modal_header {
+  height: 10px;
+}
+
+.modal_header img {
+  margin-top: 5px;
+  margin-right: 5px;
+  float: right;
+}
+
+.modal_content {
+  padding: 20px 40px;
+  min-width: 700px;
+  max-height: calc(100vh - 100pt);
+  overflow: auto;
+}
+
+.modal_dialog_float_out {
+  animation-name: float_out;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  -webkit-animation-name: float_out;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-timing-function: ease-in-out;
+  -webkit-animation-iteration-count: 1;
+  -moz-animation-name: float_out;
+  -moz-animation-duration: 1s;
+  -moz-animation-timing-function: ease-in-out;
+  -moz-animation-iteration-count: 1;
+}
+
+@keyframes float_out {
+  from {transform:translate(0px, -500px);}
+  to {transform: translate(0px, 0px);}
+}

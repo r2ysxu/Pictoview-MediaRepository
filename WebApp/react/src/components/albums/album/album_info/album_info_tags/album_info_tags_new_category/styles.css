@@ -1,0 +1,10 @@
+.album_info_tags_new_category_container {
+  display: flex;
+  margin-top: 5px;
+}
+
+.album_info_tags_new_category_icon {
+  position: relative;
+  width: 12pt;
+  margin-right: 5px;
+}
