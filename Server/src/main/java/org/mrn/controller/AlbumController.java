@@ -106,7 +106,7 @@ public class AlbumController extends BaseController {
 	@PostMapping(value = "/album/update", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Album updateAlbum(@RequestBody Album album) throws UnauthenticatedUserException, AlbumNotFound {
 		EndUserEntity user = getUser();
-		return mediaAlbumService.updateAlbum(user, album.getId(), album.getAltname(), album.getName(), album.getPublisher(), album.getDescription(),
+		return mediaAlbumService.updateAlbum(user, album.getId(), album.getName(), album.getAltname(), album.getPublisher(), album.getDescription(),
 				album.getRating(), album.getMetaType());
 	}
 

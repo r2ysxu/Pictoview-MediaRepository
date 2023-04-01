@@ -48,3 +48,5 @@ public class VideoService {
 		return videoMediaRepo.findByOwner_UsernameAndId(owner.getUsername(), mediaId);
 	}
 }
+
+/** Note: ResourceLoader: spaces between square brackets does not encode properly. eg. [word1 word2] **/

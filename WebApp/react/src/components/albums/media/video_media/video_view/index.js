@@ -16,17 +16,34 @@ function VideoView({videoItems, selectedIndex, onSelectIndex}) {
   useEffect( () => {
     const useKeyControls = (event) => {
       if (selectedIndex === null) return;
-      if (event.keyCode === 67) { // C
+      if (event.keyCode === 86) { // V
+        onSkipTime(300);
+      } else if (event.keyCode ===  67) { // C
         onSkipTime(60);
-      } else if (event.keyCode === 99) { // c
-        onSkipTime(10);
-      } else if (event.keyCode === 88) { // X
+      } else if (event.keyCode ===  88) { // X
         onSkipTime(-60);
+      } else if (event.keyCode ===  90) { // Z
+        onSkipTime(-300);
+      } else if (event.keyCode === 118) { // v
+        onSkipTime(30);
+      } else if (event.keyCode ===  99) { // c
+        onSkipTime(10);
       } else if (event.keyCode === 120) { // x
         onSkipTime(-10);
+      } else if (event.keyCode === 122) { // z
+        onSkipTime(-30);
       }
       event.preventDefault();
     };
+
+    const videoTag = videoRef.current;
+    if (videoTag?.webkitRequestFullScreen) {
+      videoTag.webkitRequestFullScreen();
+    } else if (videoTag?.mozRequestFullScreen) {
+      videoTag.mozRequestFullScreen();
+    } else if (videoTag?.msRequestFullscreen) {
+      videoTag.msRequestFullscreen();
+    }
 
     document.addEventListener('keypress', useKeyControls);
     return () => document.removeEventListener('keypress', useKeyControls);
