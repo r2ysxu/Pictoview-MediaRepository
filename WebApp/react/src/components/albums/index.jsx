@@ -12,6 +12,8 @@ import AudioMedia from './media/audio_media';
 import AlbumInfoButton  from './album/album_info/album_info_button';
 import './styles.css';
 
+const iconClass = "album_tabs_sort_icon";
+
 function AlbumsContainer({albumId, history, selectorClass}) {
   const dispatch = useDispatch();
   const { metaType, albumName, albums, images, videos, audios} = useSelector(selectAlbums);
@@ -53,9 +55,9 @@ function AlbumsContainer({albumId, history, selectorClass}) {
   ]
 
   const sortFields = [
-    {name: "Unsorted", value: "unsorted"},
-    {name: "Name", value: "name"},
-    {name: "Updated", value: "updatedAt"}
+    {name: "Unsorted", value: "unsorted", icon: "/assets/icons/journal-medical.svg", iconClass },
+    {name: "Name", value: "name", icon: "/assets/icons/journal-text.svg", iconClass },
+    {name: "Updated", value: "updatedAt", icon: "/assets/icons/journal-arrow-up.svg", iconClass }
   ]
 
   return (

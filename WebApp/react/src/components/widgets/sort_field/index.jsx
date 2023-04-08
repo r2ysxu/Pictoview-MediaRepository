@@ -17,11 +17,11 @@ function SortField({iconClass, dropdownClass, onSortField, values}) {
       <img className={iconClass} src={ascending ? "/assets/icons/sort-alpha-up.svg" : "/assets/icons/sort-alpha-down.svg" } alt="" onClick={() => setAscending(!ascending)} />
       <Dropdown
           className={dropdownClass}
+          itemClassName={""}
           selectedValue={selectedValue}
           onSelect={onSort}
           values={values}
-          placeholder="Sorting"
-          width="100px" />
+          placeholder="Sorting" />
     </div>
   );
 }

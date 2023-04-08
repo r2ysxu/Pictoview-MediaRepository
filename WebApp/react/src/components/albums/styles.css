@@ -32,6 +32,11 @@
   color: #fff;
   margin: 0 10px;
   float: right;
+  min-width: 115px;
+}
+
+.album_tabs_sort_icon {
+  display: none;
 }
 
 .albums_side_button_sort {
@@ -75,5 +80,15 @@
 @media only screen and (max-width: 600px) {
   .albums_albums_container {
     justify-content: space-around;
+  }
+  .album_side_button_dropdown {
+    min-width: unset;
+    margin: 0 0 0 3px;
+  }
+  .album_side_button_dropdown span {
+    display: none;
+  }
+  .album_tabs_sort_icon {
+    display: block;
   }
 }

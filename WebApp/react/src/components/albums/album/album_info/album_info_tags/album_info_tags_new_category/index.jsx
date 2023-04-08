@@ -33,7 +33,7 @@ function AlbumInfoTagsNewCategory({albumId, existingCategories}) {
         placeholder="Category"
         onSelect={onAddCategory}
         values={categories}
-        width="115px" />
+        width="100%" />
     </div>
   );
 }

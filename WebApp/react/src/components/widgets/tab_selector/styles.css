@@ -94,4 +94,7 @@
     .tab_selector_row {
         flex-wrap: wrap;
     }
+    .tab_selector_button {
+        margin: 10px 2px 10px 2px;
+    }
 }
