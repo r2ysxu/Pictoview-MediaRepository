@@ -23,14 +23,14 @@
   top: 66px;
   margin: auto;
   width: 80%;
-  min-width: 800px;
   background-color: #fff;
   border-radius: 0px 0px 0px 4px;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 35%);
 }
 
 .modal_header {
-  height: 10px;
+  position: absolute;
+  width: 100%;
 }
 
 .modal_header img {
@@ -40,8 +40,7 @@
 }
 
 .modal_content {
-  padding: 20px 40px;
-  min-width: 700px;
+  padding: 25px 40px;
   max-height: calc(100vh - 100pt);
   overflow: auto;
 }
@@ -64,4 +63,13 @@
 @keyframes float_out {
   from {transform:translate(0px, -500px);}
   to {transform: translate(0px, 0px);}
+}
+
+@media only screen and (max-width: 600px) {
+  .modal_dialog {
+    width: 95%;
+  }
+  .modal_content {
+    padding: 25px 5px;
+  }
 }

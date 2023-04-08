@@ -4,8 +4,8 @@ import Dropdown from '../dropdown';
 import './styles.css';
 
 function SortField({iconClass, dropdownClass, onSortField, values}) {
-  const [ascending, setAscending] = useState(true);
-  const [selectedValue, setSelectedValue] = useState(values[0]);
+  const [ascending, setAscending] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(values[0]?.value);
 
   const onSort = (field) => {
     setSelectedValue(field.value);

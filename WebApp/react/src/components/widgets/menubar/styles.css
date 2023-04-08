@@ -57,3 +57,10 @@
 .menubar_shown {
   transition: 0.5s;
 }
+
+
+@media only screen and (max-width: 600px) {
+  .menubar_container {
+    width: 30px;
+  }
+}

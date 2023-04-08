@@ -1,5 +1,8 @@
 .sort_field_container {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 5px;
 }
 
 .sort_field_selector_container {

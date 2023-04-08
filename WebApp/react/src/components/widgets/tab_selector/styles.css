@@ -15,7 +15,6 @@
     background-color: rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     justify-content: space-between;
-    min-width: 700px;
 }
 
 .tab_selector_tabs {
@@ -23,6 +22,8 @@
 }
 
 .tab_selector_button {
+    display: flex;
+    align-items: center;
     margin: 10px 5px 10px 10px;
     background-color: rgba(0, 0, 0, 0.9);
     color: #fff;
@@ -50,7 +51,6 @@
 }
 
 .tab_selector_badge {
-    float: right;
     margin-left: 5px;
     padding: 0 5px;
     background: rgb(255 255 255 / 25%);
@@ -68,4 +68,30 @@
 .tab_selector_footer {
     margin: 7px 0 5px 0;
     padding-left: 40pt;
+}
+
+.tab_selector_text {
+    display: inline-block;
+}
+
+.tab_selector_icon {
+    display: none;
+    height: 1.2rem;
+    margin-right: 0.2rem;
+    filter: invert(80%);
+}
+
+@media only screen and (max-width: 600px) {
+    .tab_selector_footer {
+        display: none;
+    }
+    .tab_selector_text {
+        display: none;
+    }
+    .tab_selector_icon {
+        display: inline-block;
+    }
+    .tab_selector_row {
+        flex-wrap: wrap;
+    }
 }

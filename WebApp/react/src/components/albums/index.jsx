@@ -46,10 +46,10 @@ function AlbumsContainer({albumId, history, selectorClass}) {
   }, [dispatch, albumId]);
 
   const tabs = [
-    {label: "Albums", value: "albums", badgeLabel: albums.pageInfo.total},
-    {label: "Images", value: "images", badgeLabel: images.pageInfo.total},
-    {label: "Videos", value: "videos", badgeLabel: videos.pageInfo.total},
-    {label: "Music",  value: "music", badgeLabel: audios.pageInfo.total},
+    { label: "Albums", value: "albums", badgeLabel: albums.pageInfo.total, icon: "/assets/icons/journal-album.svg" },
+    { label: "Images", value: "images", badgeLabel: images.pageInfo.total, icon: "/assets/icons/images.svg" },
+    { label: "Videos", value: "videos", badgeLabel: videos.pageInfo.total, icon: "/assets/icons/film.svg" },
+    { label: "Music",  value: "music", badgeLabel: audios.pageInfo.total, icon: '/assets/icons/music-note-list.svg' },
   ]
 
   const sortFields = [
@@ -66,7 +66,7 @@ function AlbumsContainer({albumId, history, selectorClass}) {
         selectorClass={selectorClass}
         footerContent={<Breadcrumbs history={history} current={albumName} />}
         sideContent={
-        <div>
+        <>
           {albumId === 0 && <SortField
               iconClass="albums_side_button albums_side_button_sort"
               dropdownClass="album_side_button_dropdown"
@@ -75,7 +75,7 @@ function AlbumsContainer({albumId, history, selectorClass}) {
           {albumId > 0 && <div>
             <AlbumInfoButton iconClass="albums_side_button" />
           </div>}
-        </div>
+        </>
       }>
       <SubAlbums albumId={albumId} changeCurrentAlbum={changeCurrentAlbum}/>
       <ImageMedia albumId={albumId} onFullViewOpen={onHideTabPanel} />

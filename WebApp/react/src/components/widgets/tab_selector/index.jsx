@@ -13,7 +13,8 @@ function TabSelector({footerContent, selectorClass= "", sideContent, selectedTab
                   (tab.disabled === true ? "tab_selector_button_disabled " : " ") +
                   (selectedTab === index ? "tab_selector_button_selected " : " ")}
                 onClick={() => {if (!tab.disabled) onChangeTab(index)} }>
-                  {tab.label}
+                  <span className="tab_selector_text">{tab.label}</span>
+                  <img className="tab_selector_icon" src={tab.icon} alt={tab.label} title={tab.label} />
                   {tab.badgeLabel !== undefined && <div className="tab_selector_badge">{tab.badgeLabel}</div>}
               </div>
             )}

@@ -1,8 +1,8 @@
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
 
 function ImageViewControls({imageCount, selectedIndex, onIndexChange, onChangeCoverImage}) {
+  const [touchPosition, setTouchPosition] = useState(null);
 
   const onPrevIndex = () => {
     if (selectedIndex > 0) onIndexChange(selectedIndex - 1);
@@ -14,6 +14,22 @@ function ImageViewControls({imageCount, selectedIndex, onIndexChange, onChangeCo
 
   const onCancel = () => {
     onIndexChange(null);
+  }
+
+  const handleTouchStart = (event) => {
+    setTouchPosition(event.touches[0].clientX);
+    event.preventDefault();
+  }
+
+  const handleTouchMove = (event) => {
+    if (touchPosition === null) return;
+    const currentTouch = event.touches[0].clientX;
+    if (touchPosition - currentTouch > 0) {
+      onNextIndex();
+    } else if (touchPosition - currentTouch < 0) {
+      onPrevIndex();
+    }
+    setTouchPosition(null);
   }
 
   const useKeyControls = (event) => {
@@ -54,7 +70,9 @@ function ImageViewControls({imageCount, selectedIndex, onIndexChange, onChangeCo
               event.preventDefault();
           }} />
       </div>
-      <div className="image_view_controls_container">
+      <div className="image_view_controls_container" 
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove} >
         <img className={'image_vie_controls_icons image_view_controls_icons_small' + (selectedIndex > 0 ? ' ' : ' image_view_controls_hidden')}
           src="/assets/icons/arrow-left-circle.svg" alt=""
           onClick={onPrevIndex} />

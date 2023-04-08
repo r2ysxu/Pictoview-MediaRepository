@@ -12,8 +12,8 @@ function Album({album, onChangeAlbum}) {
   const [isEditing, setEditing] = useState(false);
   const [currentAlbum, setCurrentAlbum] = useState(album);
 
-  const onAlbumClick = (event) => {
-    return onChangeAlbum(album.id, event.ctrlKey || event.shiftKey);
+  const generateAlbumLink = () => {
+    return '/album?albumId=' + encodeURIComponent(album.id) + '&history=' + encodeURIComponent([]);
   }
 
   const onShowMoreInfo = (albumId) => {
@@ -68,11 +68,11 @@ function Album({album, onChangeAlbum}) {
         {isEditing && <input className="album_text_field album_publisher_text_field" placeholder="Publisher" value={currentAlbum.publisher} onChange={ (event) => setCurrentAlbum({...currentAlbum, publisher: event.target.value}) } />}
       </div>
       <div className="album_center_container">
-        <div className="album_wrapper" onClick={onAlbumClick}>
-          {album.id === 0 ? 
-            <imge className="album_image" src="/assets/icons/image.svg" /> :
-            <img className="album_image" src={'/album/image/cover?albumid=' + album.id} alt="" />}
-        </div>
+        <a href={generateAlbumLink()} className="album_wrapper">
+            {album.id === 0 ? 
+              <imge className="album_image" src="/assets/icons/image.svg" /> :
+              <img className="album_image" src={'/album/image/cover?albumid=' + album.id} alt="" />}
+        </a>
         {showMoreInfo && <AlbumInfo
           album={album}
           isEditing={isEditing}

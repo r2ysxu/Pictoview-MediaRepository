@@ -1,6 +1,8 @@
 .searchbar {
   height: 100%;
+  width: 100%;
   display: flex;
+  justify-content: space-between;
 }
 
 .searchbar_iv_icon {
@@ -36,4 +38,11 @@
 .searchbar_input_text:focus {
   outline: none !important;
   border: 1px solid #5369de;
+}
+
+@media only screen and (max-width: 600px) {
+  .searchbar_iv_icon {
+    height: 20pt;
+    width: 20pt;
+  }
 }

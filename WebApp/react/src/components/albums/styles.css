@@ -23,14 +23,14 @@
 }
 
 .albums_side_button {
-  margin: 15px 10px 10px 10px;
+  margin: 10px 10px;
   width: 16pt;
   height: 16pt;
 }
 
 .album_side_button_dropdown {
   color: #fff;
-  margin: 15px 10px 10px 10px;
+  margin: 0 10px;
   float: right;
 }
 
@@ -70,4 +70,10 @@
 .album_selector_offset {
   left: 70pt;
   width: calc(100% - 70pt);
+}
+
+@media only screen and (max-width: 600px) {
+  .albums_albums_container {
+    justify-content: space-around;
+  }
 }

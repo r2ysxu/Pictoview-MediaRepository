@@ -3,7 +3,6 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  min-width: 800px;
   background-color: rgba(17,17,17,0.75);
   z-index: 200;
 }
@@ -59,7 +58,7 @@
 }
 
 .tokenizer_token_container {
-  margin: 0 3px;
+  margin: 1px 3px;
   padding: 0 3px;
   position: relative;
   display: flex;
