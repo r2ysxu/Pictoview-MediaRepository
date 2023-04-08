@@ -32,7 +32,10 @@
 }
 
 .album_title {
-  padding-left: 10px;
+  margin: 5px 5px 0 5px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .album_title h2 {
@@ -45,11 +48,15 @@
 }
 
 .album_title_20 {
-  font-size: 1em;
+  font-size: 0.8em !important;
 }
 
-.album_title_40 {
-  font-size: 0.5em;
+.album_title_80 {
+  font-size: 0.6em !important;
+}
+
+.album_title_120 {
+  font-size: 0.4em !important;
 }
 
 .album_banner {
@@ -220,12 +227,14 @@ border-radius: 5px;
 }
 
 .album_rating_container {
-  float: left;
 }
 
 @media only screen and (max-width: 600px) {
   .album_container {
     width: 100%;
+  }
+  .album_container h2 {
+    max-width: unset;
   }
   .album_center_container {
     height: unset;

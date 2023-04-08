@@ -52,13 +52,15 @@ function Album({album, onChangeAlbum}) {
   }
 
   let albumNameSizeClass = "";
-  if (currentAlbum.name.length > 80) albumNameSizeClass = "album_title_40";
+  if (currentAlbum.name.length > 80) albumNameSizeClass = "album_title_120";
+  if (currentAlbum.name.length > 80) albumNameSizeClass = "album_title_80";
   else if (currentAlbum.name.length > 20) albumNameSizeClass = "album_title_20";
 
   let albumMetaTypeClass = "";
   switch(album.metaType) {
     case 'images': albumMetaTypeClass = 'album_banner_images'; break;
     case 'videos': albumMetaTypeClass = 'album_banner_video'; break;
+    default: break;
   }
 
   return (
@@ -83,9 +85,9 @@ function Album({album, onChangeAlbum}) {
           onDeleteAlbum={onDeleteAlbum} />}
       </div>
       <div className="album_title">
+        <AlbumRating album={album} />
         {!isEditing && <h2 className={albumNameSizeClass} title={album.altname}>{album.name}</h2>}
         {isEditing && <input className="album_text_field album_name_text_field" type="text" placeholder="Name" value={currentAlbum.name} onChange={ (event) => setCurrentAlbum({...currentAlbum, name: event.target.value}) } />}
-        <AlbumRating album={album} />
       </div>
     </div>
   );

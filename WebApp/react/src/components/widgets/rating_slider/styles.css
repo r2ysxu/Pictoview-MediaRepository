@@ -1,14 +1,21 @@
 .rating_slider_container {
   width: 14pt;
   height: 14pt;
-  border-radius: 50%;
+  border-radius: 25px;
   margin: 6px 5px 5px 5px;
   display: inline-block;
   box-shadow: inset -1px -1px 7px, 1px 1px 5px;
 }
 
+.rating_slider_container_open {
+  position: absolute;
+  width: 190px;
+  border-radius: 25px;
+}
+
 .rating_slider_slider {
-  margin-top: 0px;
+  margin-top: -2px;
+  margin-left: 20pt;
 }
 
 .rating_slider_no_rating {

@@ -19,6 +19,7 @@ function RatingSlider({ ratings, onChange, tickMarkId, className = "" }) {
 
   const onChangeRating = (event) => {
     setRating(event.target.value);
+    event.preventDefault();
   }
 
   const onChangeRatingDone = (event) => {
@@ -27,23 +28,20 @@ function RatingSlider({ ratings, onChange, tickMarkId, className = "" }) {
   }
 
   return (
-    <>
-      <div className={"rating_slider_container " + className + " " + computeRatingClass(rating)}
-          onClick={onEditRating} />
-      {isEditRating && 
-        <>
-          <input className="rating_slider_slider" type="range" min="0" max="100" step="20" value={rating} onChange={onChangeRating} onBlur={onChangeRatingDone} list={"rating_tickmarks_" + tickMarkId} />
-          <datalist id={"rating_tickmarks_" + tickMarkId}>
-            <option value="0"></option>
-            <option value="20"></option>
-            <option value="40"></option>
-            <option value="60"></option>
-            <option value="80"></option>
-            <option value="100"></option>
-          </datalist>
-        </>
-        }
-    </>
+    <div className={`rating_slider_container ${className} ${computeRatingClass(rating)} ${isEditRating ? "rating_slider_container_open" : ""}`}
+          onClick={onEditRating} >
+      {isEditRating && <>
+        <input className="rating_slider_slider" type="range" min="0" max="100" step="20" value={rating} onChange={onChangeRating} onBlur={onChangeRatingDone} list={"rating_tickmarks_" + tickMarkId} />
+        <datalist id={"rating_tickmarks_" + tickMarkId}>
+          <option value="0"></option>
+          <option value="20"></option>
+          <option value="40"></option>
+          <option value="60"></option>
+          <option value="80"></option>
+          <option value="100"></option>
+        </datalist>
+      </>}
+    </div>
   );
 }
 
