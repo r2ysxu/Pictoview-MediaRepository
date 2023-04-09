@@ -90,6 +90,7 @@ export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async ({album
     albumName: currentAlbumInfo.name,
     description: currentAlbumInfo.description,
     metaType: currentAlbumInfo.metaType,
+    rating: currentAlbumInfo.rating,
     albums: await albums,
     images: await images,
     videos: await videos,

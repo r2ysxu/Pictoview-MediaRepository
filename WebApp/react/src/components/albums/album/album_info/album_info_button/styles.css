@@ -1,8 +1,41 @@
 .album_info_modal_content {
-  position: relative;
-  height: 300px;
+}
+
+.album_info_modal_content h2 {
+  color: #fff;
+  text-align: center;
 }
 
 .album_info_modal_container {
   background-color: #000;
+}
+
+.album_info_modal_info {
+  position: relative;
+  width: 100%;
+  height: 300px;
+}
+
+.album_info_button_options {
+  position: relative;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.album_info_buttons_option_rating {
+  position: relative;
+  width: 100%;
+  height: 25px;
+}
+
+.album_info_button_img_container {
+  height: 200px;
+  display: flex;
+  justify-content: center;
+}
+
+.album_info_button_image {
+  max-height: 1500px;
 }
