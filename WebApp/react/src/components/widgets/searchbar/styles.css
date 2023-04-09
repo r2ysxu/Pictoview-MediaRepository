@@ -45,4 +45,7 @@
     height: 20pt;
     width: 20pt;
   }
+  .searchbar_input_text {
+    font-size: 14px;
+  }
 }

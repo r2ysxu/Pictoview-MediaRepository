@@ -14,7 +14,7 @@ import {
   post_changeAlbumCover,
   delete_album,
 } from '../apis/album_apis';
-import { post_tagAlbum } from '../apis/tag_apis.js';
+import { post_tagAlbum } from '../apis/tag_apis';
 
 const pendingMoreRequests = new Set();
 

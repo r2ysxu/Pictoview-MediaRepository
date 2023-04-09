@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateCategoryTags, updateCurrentAlbumCategoryTags } from '../../../../../model/reducers/albumSlice';
-import { get_searchTags } from '../../../../../model/apis/tag_apis.js';
+import { get_searchTags } from 'model/apis/tag_apis';
 import Tokenizer from '../../../../widgets/tokenizer';
 import { relevanceTag } from './album_info_tags_tagtoken';
 import './album_info_tags_view/styles.css';

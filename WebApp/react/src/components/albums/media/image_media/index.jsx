@@ -33,6 +33,10 @@ function ImageMedia({albumId, onFullViewOpen}) {
       loadMore();
     }
     onFullViewOpen(true);
+    const item = document.getElementsByClassName("album_media_list")[0].children[index];
+    if (item !== null && item !== undefined) {
+      item.scrollIntoView();
+    }
   }
 
   return (

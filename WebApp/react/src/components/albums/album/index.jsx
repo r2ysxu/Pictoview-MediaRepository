@@ -1,7 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadAlbumTags, updateAlbum, deleleAlbum } from '../../../model/reducers/albumSlice';
+import { loadAlbumTags, updateAlbum, deleleAlbum } from 'model/reducers/albumSlice';
+
+import { MetaType } from 'model/constants/dataConstants';
+
 import AlbumInfo from './album_info';
 import AlbumRating from './album_rating';
 import './styles.css';
@@ -58,8 +61,8 @@ function Album({album, onChangeAlbum}) {
 
   let albumMetaTypeClass = "";
   switch(album.metaType) {
-    case 'images': albumMetaTypeClass = 'album_banner_images'; break;
-    case 'videos': albumMetaTypeClass = 'album_banner_video'; break;
+    case MetaType.IMAGES: albumMetaTypeClass = 'album_banner_images'; break;
+    case MetaType.VIDEOS: albumMetaTypeClass = 'album_banner_video'; break;
     default: break;
   }
 
