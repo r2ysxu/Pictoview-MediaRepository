@@ -2,6 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAlbums, loadMoreAlbums, loadMoreSearchAlbums } from '../../../model/reducers/albumSlice';
+
+import ClipLoader from "react-spinners/ClipLoader";
 import ScrollLoader from '../../widgets/scroll_loader';
 import Album from '../album';
 import '../styles.css';
@@ -36,6 +38,11 @@ function SubAlbums({albumId, changeCurrentAlbum}) {
           />)}
         </div>
       </ScrollLoader>
+      {isLoading && <div className="album_load_spinner">
+        <ClipLoader loading={isLoading} size={50} color={"GREY"} cssOverride={{
+          borderWidth: '10px',
+        }} />
+      </div>}
     </div>
   );
 };
