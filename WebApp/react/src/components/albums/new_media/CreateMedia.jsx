@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ClipLoader from "react-spinners/ClipLoader";
-import { uploadAlbumMediaFile, loadCurrentAlbumInfo, selectAlbums } from '../../../model/reducers/albumSlice';
+import { uploadAlbumMediaFile, loadRootAlbumInfo, selectAlbums } from '../../../model/reducers/albumSlice';
 import '../../widgets/common/Common.css';
 
 function CreateMedia({onDone}) {
@@ -22,7 +22,7 @@ function CreateMedia({onDone}) {
   const onFileUpload = () => {
     uploadAlbumMediaFile(newMediaFile).then( () => {
       setIsLoading(false);
-      dispatch(loadCurrentAlbumInfo({ albumId })).then(onDone);
+      dispatch(loadRootAlbumInfo({ albumId })).then(onDone);
     });
   }
 

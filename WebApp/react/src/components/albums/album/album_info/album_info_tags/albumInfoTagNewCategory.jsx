@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { get_categories } from '../../../../../../model/apis/tag_apis';
-import { addCategory } from '../../../../../../model/reducers/albumSlice';
-import Dropdown from '../../../../../widgets/dropdown';
+import { get_categories } from 'model/apis/tag_apis';
+import { addCategory } from 'model/reducers/albumSlice';
+import Dropdown from 'components/widgets/dropdown';
 import './styles.css';
 
 function AlbumInfoTagsNewCategory({albumId, existingCategories}) {

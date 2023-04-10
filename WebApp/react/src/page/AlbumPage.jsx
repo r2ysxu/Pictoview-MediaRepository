@@ -12,7 +12,7 @@ import CreateAlbum from '../components/albums/new_album/CreateAlbum';
 import TagList from '../components/tag_list/TagList';
 
 function useQuery() {
-return new URLSearchParams(useLocation().search);
+  return new URLSearchParams(useLocation().search);
 }
 
 function AlbumPage(props) {
@@ -20,7 +20,6 @@ function AlbumPage(props) {
   const dispatch = useDispatch();
   const albumSearchQuery = decodeURIComponent(query.get('searchQuery') ?? '');
   const albumId = albumSearchQuery.length > 0 ? null : query.get('albumId') ?? 0;
-  const history = decodeURIComponent(query.get('history') ?? '');
 
   const isLoggedIn = useSelector(selectUserLoggedIn);
   const [showNewAlbumModal, setShowNewAlbumModal] = useState(false);
@@ -28,7 +27,7 @@ function AlbumPage(props) {
   const [tagQuery, setTagQuery] = useState({ and: new Map(), or: new Map(), not: new Map()});
 
   const onSearch = useCallback((query) => {
-    dispatch(searchAlbums(query));
+    dispatch(searchAlbums({ query, sort: { field: 'name', ascending: true } }));
   }, [dispatch]);
 
   const onSearchRefresh = (query) => {
@@ -78,7 +77,6 @@ function AlbumPage(props) {
             onHide={hideTagModal} />
         <AlbumsContainer
             albumId={albumId}
-            history={history}
             selectorClass="album_selector" />
       </Container>
     </div>

@@ -18,17 +18,36 @@ import { post_tagAlbum } from '../apis/tag_apis';
 
 const pendingMoreRequests = new Set();
 
-const initialState = {
-  id: 0,
-  albumName: '',
-  description: '',
-  metaType: 'albums',
-  albums: { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } },
-  images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } },
-  videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } },
-  audios: { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } },
+const emptyPageItems = { items: [], pageInfo: { page: 0, total: 0, hasNext: false }, sortedBy: { field: 'unsorted', asc: true } };
+const emptySearchQuery = { query: '', sort: { field: 'unsorted', asc: true }, isSearch: false };
 
+const getState = (thunkAPI) => {
+  return thunkAPI.getState().albumState;
+}
+
+const updateAlbumByIndex = (state, index, album) => {
+  if (index === null) state.rootAlbum = album;
+  else state.albums.items[index] = album;
+}
+
+const buildCategoryTags = (categoryTags) => {
+  const categoryMap = categoryTags.categories.reduce( (map, category) => {
+    category.tags = [];
+    map.set(category.id, category);
+    return map;
+  }, new Map());
+  categoryTags.tags.forEach( tag => categoryMap.get(tag.categoryId).tags.push(tag));
+  return { categories: [...categoryMap.values()] };
+}
+
+const initialState = {
   isLoading: false,
+  rootAlbum: null,
+  search: emptySearchQuery,
+  albums: emptyPageItems,
+  images: emptyPageItems,
+  videos: emptyPageItems,
+  audios: emptyPageItems,
 }
 
 export const createAlbum = async ({name, publisher, description}) => {
@@ -48,14 +67,14 @@ export const uploadAlbumMediaFile = async({albumId, file}) => {
   return await post_uploadMedia(albumId, file);
 }
 
-export const updateAlbum = createAsyncThunk('album/update/info', async (updatedAlbum, thunkAPI) => {
-  const currentState = thunkAPI.getState().album;
-  const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === updatedAlbum.id);
-  const categoryTags = await get_listAlbumTags(updatedAlbum.id);
-  const currentAlbum = {...await post_updateAlbum(updatedAlbum), tags: buildCategoryTags(categoryTags) };
+export const updateAlbum = createAsyncThunk('album/update/info', async (changedAlbum, thunkAPI) => {
+  const { rootAlbum, albums } = getState(thunkAPI);
+  const categoryTags = await get_listAlbumTags(changedAlbum.id);
+  const updatedAlbum = {...await post_updateAlbum(changedAlbum), tags: buildCategoryTags(categoryTags) };
+  const index = (rootAlbum?.id === changedAlbum.id) ? null : albums.items.findIndex(album => album.id === changedAlbum.id);
   return {
-    currentAlbumIndex,
-    currentAlbum,
+    index,
+    updatedAlbum,
   }
 });
 
@@ -63,119 +82,81 @@ export const updateCoverImage = createAsyncThunk('album/update/cover', async ({a
   return await post_changeAlbumCover(albumId, imageId);
 });
 
-export const searchAlbums = createAsyncThunk('album/search', async (query, thunkAPI) => {
+export const searchAlbums = createAsyncThunk('album/search', async ({ query, sort }, thunkAPI) => {
   const page = 0;
-  const albums = await get_searchAlbums(page, query, "name");
+  const albums = await get_searchAlbums(page, query, sort);
   return {
-    id: null,
-    albumName: '',
-    albumQuery: query,
+    rootAlbum: await get_album(0),
+    search: { query, sort, isSearch: true },
     albums,
-    images: { items: [], pageInfo: { page: 0, total: 0, hasNext: false, sortedBy: { field: 'unsorted', asc: true } } },
-    videos: { items: [], pageInfo: { page: 0, total: 0, hasNext: false, sortedBy: { field: 'unsorted', asc: true } } },
-    audios: { items: [], pageInfo: { page: 0, total: 0, hasNext: false, sortedBy: { field: 'unsorted', asc: true } } },
+    images: emptyPageItems,
+    videos: emptyPageItems,
+    audios: emptyPageItems,
   };
 });
 
-export const loadCurrentAlbumInfo = createAsyncThunk('album/load', async ({albumId, sort}) => {
+export const loadRootAlbumInfo = createAsyncThunk('album/load', async ({albumId, sort}) => {
   pendingMoreRequests.clear();
-  const currentAlbum = get_album(albumId);
-  const albums = get_listAlbums(0, albumId, sort);
-  const images = get_listAlbumImages(0, albumId);
-  const videos = get_listAlbumVideos(0, albumId);
-  const audios = get_listAlbumAudios(0, albumId);
-  const currentAlbumInfo = await currentAlbum;
-  return {
-    id: albumId,
-    albumName: currentAlbumInfo.name,
-    description: currentAlbumInfo.description,
-    metaType: currentAlbumInfo.metaType,
-    rating: currentAlbumInfo.rating,
-    albums: await albums,
-    images: await images,
-    videos: await videos,
-    audios: await audios,
-  };
+  const [ rootAlbum, albums, images, videos, audios ] = await Promise.all([
+    get_album(albumId),
+    get_listAlbums(0, albumId, sort),
+    get_listAlbumImages(0, albumId),
+    get_listAlbumVideos(0, albumId),
+    get_listAlbumAudios(0, albumId),
+  ]);
+  return { rootAlbum, albums, images, videos, audios, search: emptySearchQuery };
 });
 
-export const loadMoreSearchAlbums = createAsyncThunk('album/search/album/more', async ({page}, thunkAPI) => {
-  const currentState = thunkAPI.getState().album;
-  const albumsPage = await get_searchAlbums(page, currentState.albumQuery, "name");
-  return { albumsPage };
+export const loadMoreSearchAlbums = createAsyncThunk('album/search/album/more', async ({ page, sort }, thunkAPI) => {
+  const { search } = getState(thunkAPI);
+  return { albumsPage: await get_searchAlbums(page, search.query, search.sort ) };
 });
 
 export const loadMoreAlbums = createAsyncThunk('album/load/album/more', async ({albumId, page, sort}) => {
-  const albumsPage = await get_listAlbums(page, albumId, sort);
-  return { albumsPage };
+  return { albumsPage: await get_listAlbums(page, albumId, sort) };
 });
 
 export const loadMoreImages = createAsyncThunk('album/load/image/more', async ({albumId, page}) => {
-  const imagesPage = await get_listAlbumImages(page, albumId);
-  return { imagesPage };
+  return { imagesPage: await get_listAlbumImages(page, albumId) };
 });
 
 export const loadMoreVideos = createAsyncThunk('album/load/video/more', async ({albumId, page}) => {
-  const videosPage = await get_listAlbumVideos(page, albumId);
-  return { videosPage };
+  return { videosPage: await get_listAlbumVideos(page, albumId) };
 });
 
 export const loadMoreAudio = createAsyncThunk('album/load/audio/more', async({albumId, page}) => {
-  const audiosPage = await get_listAlbumAudios(page, albumId);
-  return { audiosPage };
-});
-
-const buildCategoryTags = (categoryTags) => {
-  const categoryMap = categoryTags.categories.reduce( (map, category) => {
-    category.tags = [];
-    map.set(category.id, category);
-    return map;
-  }, new Map());
-  categoryTags.tags.forEach( tag => categoryMap.get(tag.categoryId).tags.push(tag));
-  return { categories: [...categoryMap.values()] };
-}
-
-export const loadCurrentAlbumTags = createAsyncThunk('album/load/current/tags', async (albumId) => {
-  const categoryTags = await get_listAlbumTags(albumId);
-  const tags = buildCategoryTags(categoryTags);
-  return { tags };
+  return { audiosPage: await get_listAlbumAudios(page, albumId) };
 });
 
 export const loadAlbumTags = createAsyncThunk('album/load/tags', async (albumId, thunkAPI) => {
-  const currentState = thunkAPI.getState().album;
+  const { rootAlbum, albums } = getState(thunkAPI);
   const categoryTags = await get_listAlbumTags(albumId);
   const tags = buildCategoryTags(categoryTags);
-
-  const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
-  const currentAlbum = {...currentState.albums.items[currentAlbumIndex], tags };
+  const index = (rootAlbum?.id === albumId) ? null : albums.items.findIndex(album => album.id === albumId);
+  const album = (rootAlbum?.id === albumId) ? { ...rootAlbum, tags} : {...albums.items[index], tags };
   return {
-    currentAlbumIndex,
-    currentAlbum,
+    index,
+    album,
   };
 });
 
-export const updateCurrentAlbumCategoryTags = createAsyncThunk('album/tags/current/update', async ({albumId, tags, category}, thunkAPI) => {
-  const categoryTags = await post_tagAlbum({albumId, tags, categories: [ category ]});
+export const updateCategoryTags = createAsyncThunk('album/tags/update', async ({ albumId, tags, category }, thunkAPI) => {
+  const { rootAlbum, albums } = getState(thunkAPI);
+  const categoryTags = await post_tagAlbum({ albumId, tags, categories: [ category ]});
   const newTags = buildCategoryTags(categoryTags);
-  return { tags: newTags };
-});
-
-export const updateCategoryTags = createAsyncThunk('album/tags/update', async ({albumId, tags, category}, thunkAPI) => {
-  const currentState = thunkAPI.getState().album;
-  const categoryTags = await post_tagAlbum({albumId, tags, categories: [ category ]});
-  const newTags = buildCategoryTags(categoryTags);
-  const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
-  const currentAlbum = {...currentState.albums.items[currentAlbumIndex], tags: newTags };
+  const index = (rootAlbum?.id === albumId) ? null : albums.items.findIndex(album => album.id === albumId);
+  const updatedAlbum = (rootAlbum?.id === albumId) ? { ...rootAlbum, tags: newTags } : { ...albums.items[index], tags: newTags };
   return {
-    currentAlbumIndex,
-    currentAlbum,
+    index,
+    updatedAlbum,
   };
 });
 
 export const addCategory = createAsyncThunk('/album/tags/category/new', async ({albumId, newCategory}, thunkAPI) => {
-  const currentState = thunkAPI.getState().album;
-  const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
+  const { rootAlbum, albums } = getState(thunkAPI);
+  const index = (rootAlbum?.id === albumId) ? null : albums.items.findIndex(album => album.id === albumId);
   return {
-    currentAlbumIndex,
+    index,
     newCategory,
   };
 });
@@ -185,109 +166,104 @@ export const changeMetaType = createAsyncThunk('/album/metaType/change', async (
 });
 
 export const deleleAlbum = createAsyncThunk('/album/delete', async ({albumId}, thunkAPI) => {
-  const currentState = thunkAPI.getState().album;
+  const { albums } = getState(thunkAPI);
   await delete_album(albumId);
-  const currentAlbumIndex = currentState.albums.items.findIndex(album => album.id === albumId);
-  return {
-    currentAlbumIndex,
-  }
+  const index = albums.items.findIndex(album => album.id === albumId);
+  return { index };
 });
 
 export const albumSlice = createSlice({
-  name: 'album',
+  name: 'albumState',
   initialState,
   reducers: {},
   extraReducers(builder) {
     builder
-        .addCase(loadCurrentAlbumInfo.fulfilled, (state, action) => {
-        Object.assign(state,action.payload);
+        .addCase(loadRootAlbumInfo.fulfilled, (state, { payload }) => {
+        Object.assign(state, payload);
         state.isLoading = false;
-      }).addCase(loadCurrentAlbumInfo.pending, (state,  action) => {
-        pendingMoreRequests.add(action.meta.requestId);
+      }).addCase(loadRootAlbumInfo.pending, (state,  { meta }) => {
+        pendingMoreRequests.add(meta.requestId);
         state.isLoading = true;
-      }).addCase(searchAlbums.fulfilled, (state, action) => {
-        Object.assign(state, action.payload);
+      }).addCase(searchAlbums.fulfilled, (state, { payload }) => {
+        Object.assign(state, payload);
         state.isLoading = false;
-      }).addCase(loadMoreSearchAlbums.pending, (state, action) => {
-        pendingMoreRequests.add(action.meta.requestId);
+      }).addCase(loadMoreSearchAlbums.pending, (state, { meta }) => {
+        pendingMoreRequests.add(meta.requestId);
         state.isLoading = true;
-      }).addCase(loadMoreSearchAlbums.fulfilled, (state, action) => {
-        if (pendingMoreRequests.has(action.meta.requestId)) {
-          state.albums.pageInfo = action.payload.albumsPage.pageInfo;
-          state.albums.items.push(...action.payload.albumsPage.items || []);
-          pendingMoreRequests.delete(action.meta.requestId);
+      }).addCase(loadMoreSearchAlbums.fulfilled, (state, { meta, payload }) => {
+        if (pendingMoreRequests.has(meta.requestId)) {
+          state.albums.pageInfo = payload.albumsPage.pageInfo;
+          state.albums.items.push(...payload.albumsPage.items || []);
+          pendingMoreRequests.delete(meta.requestId);
         }
         state.isLoading = false;
-      }).addCase(loadMoreAlbums.fulfilled, (state, action) => {
-        if (pendingMoreRequests.has(action.meta.requestId)) {
-          state.albums.pageInfo = action.payload.albumsPage.pageInfo;
-          state.albums.items.push(...action.payload.albumsPage.items || []);
-          pendingMoreRequests.delete(action.meta.requestId);
+      }).addCase(loadMoreAlbums.fulfilled, (state, { meta, payload }) => {
+        if (pendingMoreRequests.has(meta.requestId)) {
+          state.albums.pageInfo = payload.albumsPage.pageInfo;
+          state.albums.items.push(...payload.albumsPage.items || []);
+          pendingMoreRequests.delete(meta.requestId);
         }
         state.isLoading = false;
-      }).addCase(loadMoreAlbums.pending, (state, action) => {
-        pendingMoreRequests.add(action.meta.requestId);
+      }).addCase(loadMoreAlbums.pending, (state, { meta }) => {
+        pendingMoreRequests.add(meta.requestId);
         state.isLoading = true;
       }).addCase(loadMoreAlbums.rejected, (state, action) => {
         state.isLoading = false;
-      }).addCase(loadMoreImages.fulfilled, (state, action) => {
-        if (pendingMoreRequests.has(action.meta.requestId)) {
-          state.images.pageInfo = action.payload.imagesPage.pageInfo;
-          state.images.items.push(...action.payload.imagesPage.items || []);
-          pendingMoreRequests.delete(action.meta.requestId);
+      }).addCase(loadMoreImages.fulfilled, (state, { meta, payload }) => {
+        if (pendingMoreRequests.has(meta.requestId)) {
+          state.images.pageInfo = payload.imagesPage.pageInfo;
+          state.images.items.push(...payload.imagesPage.items || []);
+          pendingMoreRequests.delete(meta.requestId);
         }
         state.isLoading = false;
-      }).addCase(loadMoreImages.pending, (state, action) => {
-        pendingMoreRequests.add(action.meta.requestId);
+      }).addCase(loadMoreImages.pending, (state, { meta }) => {
+        pendingMoreRequests.add(meta.requestId);
         state.isLoading = true;
-      }).addCase(loadMoreImages.rejected, (state, action) => {
+      }).addCase(loadMoreImages.rejected, (state) => {
         state.isLoading = false;
-      }).addCase(loadMoreVideos.pending, (state, action) => {
-        pendingMoreRequests.add(action.meta.requestId);
+      }).addCase(loadMoreVideos.pending, (state, { meta }) => {
+        pendingMoreRequests.add(meta.requestId);
         state.isLoading = true;
-      }).addCase(loadMoreVideos.rejected, (state, action) => {
+      }).addCase(loadMoreVideos.rejected, (state) => {
         state.isLoading = false;
-      }).addCase(loadMoreVideos.fulfilled, (state, action) => {
-        if (pendingMoreRequests.has(action.meta.requestId)) {
-          state.videos.pageInfo = action.payload.videosPage.pageInfo;
-          state.videos.items.push(...action.payload.videosPage.items || []);
-          pendingMoreRequests.delete(action.meta.requestId);
+      }).addCase(loadMoreVideos.fulfilled, (state, { meta, payload }) => {
+        if (pendingMoreRequests.has(meta.requestId)) {
+          state.videos.pageInfo = payload.videosPage.pageInfo;
+          state.videos.items.push(...payload.videosPage.items || []);
+          pendingMoreRequests.delete(meta.requestId);
         }
         state.isLoading = false;
-      }).addCase(loadMoreAudio.pending, (state, action) => {
-        pendingMoreRequests.add(action.meta.requestId);
+      }).addCase(loadMoreAudio.pending, (state, { meta }) => {
+        pendingMoreRequests.add(meta.requestId);
         state.isLoading = true;
-      }).addCase(loadMoreAudio.rejected, (state, action) => {
+      }).addCase(loadMoreAudio.rejected, (state) => {
         state.isLoading = false;
-      }).addCase(loadMoreAudio.fulfilled, (state, action) => {
-        if (pendingMoreRequests.has(action.meta.requestId)) {
-          state.audios.pageInfo = action.payload.audiosPage.pageInfo;
-          state.audios.items.push(...action.payload.audiosPage.items || []);
-          pendingMoreRequests.delete(action.meta.requestId);
+      }).addCase(loadMoreAudio.fulfilled, (state, { meta, payload }) => {
+        if (pendingMoreRequests.has(meta.requestId)) {
+          state.audios.pageInfo = payload.audiosPage.pageInfo;
+          state.audios.items.push(...payload.audiosPage.items || []);
+          pendingMoreRequests.delete(meta.requestId);
         }
         state.isLoading = false;
-      }).addCase(updateAlbum.fulfilled, (state, action) => {
-        state.albums.items[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
-      }).addCase(loadAlbumTags.fulfilled, (state, action) => {
-        state.albums.items[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
-      }).addCase(loadCurrentAlbumTags.fulfilled, (state, action) => {
-        state.tags = action.payload.tags;
-      }).addCase(updateCategoryTags.fulfilled, (state, action) => {
-        state.albums.items[action.payload.currentAlbumIndex] = action.payload.currentAlbum;
-      }).addCase(updateCurrentAlbumCategoryTags.fulfilled, (state, action) => {
-        state.tags = action.payload.tags;
-      }).addCase(addCategory.fulfilled, (state, action) => {
-        state.albums.items[action.payload.currentAlbumIndex].tags.categories.push(action.payload.newCategory);
-      }).addCase(changeMetaType.fulfilled, (state, action) => {
-        state.metaType = action.payload;
-      }).addCase(deleleAlbum.fulfilled, (state, action) => {
-        state.albums.items.splice(action.payload.currentAlbumIndex, 1);
+      }).addCase(updateAlbum.fulfilled, (state, { payload }) => {
+        updateAlbumByIndex(state, payload.index, payload.updatedAlbum);
+      }).addCase(loadAlbumTags.fulfilled, (state, { payload }) => {
+        updateAlbumByIndex(state, payload.index, payload.album);
+      }).addCase(updateCategoryTags.fulfilled, (state, { payload }) => {
+        updateAlbumByIndex(state, payload.index, payload.updatedAlbum);
+      }).addCase(addCategory.fulfilled, (state, { payload }) => {
+        if (payload.index === null) state.rootAlbum.tags.categories.push(payload.newCategory);
+        else state.albums.items[payload.index].tags.categories.push(payload.newCategory);
+      }).addCase(changeMetaType.fulfilled, (state, { payload }) => {
+        state.rootAlbum.metaType = payload;
+      }).addCase(deleleAlbum.fulfilled, (state, { payload }) => {
+        state.albums.items.splice(payload.index, 1);
       });
   },
 });
 
 export const selectAlbums = (state) => {
-  return state.album;
+  return state.albumState;
 }
 
 export default albumSlice.reducer;

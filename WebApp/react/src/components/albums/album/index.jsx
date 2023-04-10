@@ -9,14 +9,14 @@ import AlbumInfo from './album_info';
 import AlbumRating from './album_rating';
 import './styles.css';
 
-function Album({album, onChangeAlbum}) {
+function Album({ album }) {
   const dispatch = useDispatch();
   const [showMoreInfo, setShowMoreInfo] = useState(false);
   const [isEditing, setEditing] = useState(false);
   const [currentAlbum, setCurrentAlbum] = useState(album);
 
   const generateAlbumLink = () => {
-    return '/album?albumId=' + encodeURIComponent(album.id) + '&history=' + encodeURIComponent([]);
+    return '/album?albumId=' + encodeURIComponent(album.id);
   }
 
   const onShowMoreInfo = (albumId) => {

@@ -1,34 +1,25 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAlbums, loadCurrentAlbumInfo, changeMetaType } from '../../model/reducers/albumSlice';
+import { selectAlbums, loadRootAlbumInfo, changeMetaType, searchAlbums } from '../../model/reducers/albumSlice';
 import TabSelector from '../widgets/tab_selector';
 import SortField from '../widgets/sort_field';
-import Breadcrumbs from '../breadcrumbs';
 import SubAlbums from './subalbums';
 import ImageMedia from './media/image_media';
 import VideoMedia from './media/video_media';
 import AudioMedia from './media/audio_media';
-import AlbumInfoButton  from './album/album_info/album_info_button';
+import AlbumInfoModal  from './album/album_info/album_info_modal';
 import './styles.css';
 
 const iconClass = "album_tabs_sort_icon";
 
-function AlbumsContainer({albumId, history, selectorClass}) {
+function AlbumsContainer({albumId, selectorClass}) {
   const dispatch = useDispatch();
-  const { metaType, albumName, albums, images, videos, audios} = useSelector(selectAlbums);
-
-  const changeCurrentAlbum = (id, openNew) => {
-    const newHistory = history.length === 0 ? [] : history.split(',');
-    newHistory.push(albumId);
-    const url = '/album?albumId=' + encodeURIComponent(id) + '&history=' + encodeURIComponent(newHistory.join(','));
-    if(!openNew) window.location = url;
-    else window.open(url, '_blank');
-    return false;
-  }
+  const { rootAlbum, albums, images, videos, audios, search } = useSelector(selectAlbums);
 
   const onSortField = (sort) => {
-    dispatch(loadCurrentAlbumInfo({ albumId, sort }));
+    if (search?.isSearch) dispatch(searchAlbums({ query: search.query, sort }));
+    else dispatch(loadRootAlbumInfo({ albumId, sort }));
   }
 
   const onChangeTab = (index) => {
@@ -44,7 +35,7 @@ function AlbumsContainer({albumId, history, selectorClass}) {
   }
 
   useEffect(()=> {
-    if (albumId !== null) dispatch(loadCurrentAlbumInfo({ albumId, sort: { field: 'name', ascending: true } }));
+    if (albumId !== null) dispatch(loadRootAlbumInfo({ albumId, sort: { field: 'name', ascending: true } }));
   }, [dispatch, albumId]);
 
   const tabs = [
@@ -63,23 +54,20 @@ function AlbumsContainer({albumId, history, selectorClass}) {
   return (
     <TabSelector
         tabs={tabs}
-        selectedTab={tabs.findIndex( tab => tab.value === metaType )}
+        selectedTab={tabs.findIndex( tab => tab.value === rootAlbum?.metaType )}
         onChangeTab={onChangeTab}
         selectorClass={selectorClass}
-        footerContent={<Breadcrumbs history={history} current={albumName} />}
         sideContent={
         <>
-          {albumId === 0 && <SortField
+          {albumId < 1 && <SortField
               iconClass="albums_side_button albums_side_button_sort"
               dropdownClass="album_side_button_dropdown"
               onSortField={onSortField}
               values={sortFields} />}
-          {albumId > 0 && <div>
-            <AlbumInfoButton iconClass="albums_side_button" />
-          </div>}
+          {albumId > 0 && <AlbumInfoModal album={rootAlbum} iconClass="albums_side_button" />}
         </>
       }>
-      <SubAlbums albumId={albumId} changeCurrentAlbum={changeCurrentAlbum}/>
+      <SubAlbums albumId={albumId} />
       <ImageMedia albumId={albumId} onFullViewOpen={onHideTabPanel} />
       <VideoMedia albumId={albumId} />
       <AudioMedia albumId={albumId} />

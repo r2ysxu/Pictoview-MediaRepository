@@ -10,7 +10,7 @@ export type RootState = {
 export default configureStore({
   reducer: {
     user: userReducer,
-    album: albumReducer,
+    albumState: albumReducer,
     tagsState: tagReducer,
   },
 })

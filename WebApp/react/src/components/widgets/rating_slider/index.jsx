@@ -12,7 +12,7 @@ function RatingSlider({ ratings, onChange, tickMarkId, className = "" }) {
   }
 
   const onEditRating = (event) => {
-    setEditRating(!isEditRating);
+    setEditRating(true);
     event.preventDefault();
     return false;
   }

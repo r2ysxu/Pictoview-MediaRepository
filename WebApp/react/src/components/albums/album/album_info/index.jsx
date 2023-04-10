@@ -1,28 +1,35 @@
 import React, { useState } from 'react';
-import AlbumInfoTagView from './album_info_tags/album_info_tags_view';
+import AlbumInfoTagView from './album_info_tags';
 import '../styles.css';
 
 function AlbumInfo({album, isEditing, setEditing, description, setDescription, onUpdateAlbum, onDeleteAlbum, currentAlbum = false}) {
   const [isTagging, setTagging] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const onClose = () => {
     setDescription(album.description);
+    setSelectedCategory(null);
     setEditing(false);
+  }
+
+  const handleTagging = () => {
+    setTagging(!isTagging);
+    setSelectedCategory(null);
+  }
+
+  const handleEditting = () => {
+    setEditing(!isEditing);
   }
 
   return (
     <div className="album_info_container">
       <img className={"album_info_edit_icon " + (isTagging ? "album_info_edit_icon_enabled" : "")}
         src="/assets/icons/tags.svg" alt="" title="Edit Tags (Select category to edit)"
-        onClick={() => {
-          setTagging(!isTagging);
-        }}
+        onClick={handleTagging}
       />
       {!isEditing && <img className="album_info_edit_icon"
         src="/assets/icons/pencil.svg" alt="" title="Edit Title &amp; Description"
-        onClick={() => {
-          setEditing(!isEditing);
-        }}
+        onClick={handleEditting}
       />}
       <img className="album_info_edit_icon album_info_edit_icon_delete"
         src="/assets/icons/x.svg" alt="" title="Delete Album (Hold Ctrl & Shift)"
@@ -42,6 +49,8 @@ function AlbumInfo({album, isEditing, setEditing, description, setDescription, o
         albumId={album.id}
         tags={album.tags}
         isTagging={isTagging}
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
         onClose={() => {setTagging(false)}}
       />
     </div>);

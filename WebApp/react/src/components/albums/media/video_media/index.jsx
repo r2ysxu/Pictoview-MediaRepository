@@ -8,8 +8,7 @@ import './styles.css';
 
 function VideoMedia({albumId}) {
   const dispatch = useDispatch();
-  const { videos } = useSelector(selectAlbums);
-  const isLoading = useSelector((state) => state.album.isLoading);
+  const { videos, isLoading } = useSelector(selectAlbums);
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
   const [isFetching, setFetching] = useState(false);
 

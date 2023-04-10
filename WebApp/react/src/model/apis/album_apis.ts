@@ -29,8 +29,8 @@ export const get_listAlbums = async (page: number, parentId: ID, sort: SortField
   return request<PageItems<Album>>('/album/list?' + searchParams.toString());
 }
 
-export const get_searchAlbums = async (page: number, query: string, sortField: string): Promise<PageItems<Album>> => {
-  const searchParams = toSearchParams({page, query, sortField});
+export const get_searchAlbums = async (page: number, query: string, sort: SortField): Promise<PageItems<Album>> => {
+  const searchParams = toSearchParams({page, query, sortField: sort.field, ascending: sort.ascending});
   return request<PageItems<Album>>('/album/search?' + searchParams.toString());
 }
 

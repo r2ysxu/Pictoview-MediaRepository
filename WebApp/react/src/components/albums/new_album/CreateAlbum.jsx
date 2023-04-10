@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ClipLoader from "react-spinners/ClipLoader";
-import { uploadAlbumFile, loadCurrentAlbumInfo, selectAlbums } from '../../../model/reducers/albumSlice';
+import { uploadAlbumFile, loadRootAlbumInfo, selectAlbums } from '../../../model/reducers/albumSlice';
 import { createAlbum } from '../../../model/reducers/albumSlice';
 import ToggleButton from '../../widgets/toggle_button';
 import TextField from '../../widgets/text_field';
@@ -35,7 +35,7 @@ function CreateAlbum({onDone}) {
   const onFileUpload = () => {
     uploadAlbumFile(newAlbumFile).then( () => {
       setIsLoading(false);
-      dispatch(loadCurrentAlbumInfo({ albumId: currentAlbumId })).then(onDone);
+      dispatch(loadRootAlbumInfo({ albumId: currentAlbumId })).then(onDone);
     });
   }
 
@@ -47,7 +47,7 @@ function CreateAlbum({onDone}) {
         onFileUpload();
       } else {
         setIsLoading(false);
-        dispatch(loadCurrentAlbumInfo({ albumId: currentAlbumId })).then(onDone);
+        dispatch(loadRootAlbumInfo({ albumId: currentAlbumId })).then(onDone);
       }
     });
   };

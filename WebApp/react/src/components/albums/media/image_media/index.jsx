@@ -11,8 +11,7 @@ const LOAD_MORE_BUFFER = 10;
 
 function ImageMedia({albumId, onFullViewOpen}) {
   const dispatch = useDispatch();
-  const { images } = useSelector(selectAlbums);
-  const isLoading = useSelector((state) => state.album.isLoading);
+  const { images, isLoading } = useSelector(selectAlbums);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [isFetching, setFetching] = useState(false);
 

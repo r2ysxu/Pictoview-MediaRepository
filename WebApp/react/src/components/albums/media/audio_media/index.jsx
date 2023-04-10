@@ -9,8 +9,7 @@ import './styles.css';
 
 function AudioMedia({albumId}) {
   const dispatch = useDispatch();
-  const { audios } = useSelector(selectAlbums);
-  const isLoading = useSelector((state) => state.album.isLoading);
+  const { audios, isLoading } = useSelector(selectAlbums);
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
   const [isFetching, setFetching] = useState(false);
 

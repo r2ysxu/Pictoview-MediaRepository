@@ -22,7 +22,7 @@
 .album_container h3 {
   color: #848484;
   margin: 5px 5px 5px 5px;
-  font-size: 12pt;
+  font-size: 1em;
 }
 
 .album_container h4 {
@@ -68,6 +68,8 @@
   box-shadow: inset 0px -3px 5px 0px rgb(0 0 0 / 25%);
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  display: flex;
+  align-items: center;
 }
 
 .album_banner_video {
@@ -139,8 +141,8 @@ border-radius: 5px;
   filter: invert(42%);
   margin-top: 5px;
   margin-right: 10px;
-  height: 10pt;
-  width: 10pt;
+  height: 0.8rem;
+  width: 0.8rem;
   float: right;
 }
 
@@ -157,14 +159,15 @@ border-radius: 5px;
 }
 
 .album_info_edit_buttons {
-  margin-top: 5px;
+  margin-top: 3px;
   margin-right: 10px;
   float: right;
 }
 
 .album_info_edit_buttons img {
-  height: 15pt;
-  width: 15pt;
+  height: 0.8rem;
+  width: 0.8rem;
+  margin: 0 0.1rem;
 }
 
 .album_info_edit_buttons_save {
@@ -197,7 +200,6 @@ border-radius: 5px;
   background-color: transparent;
   border-radius: 4px;
   margin-left: 15px;
-  font-size: 14px;
   white-space: pre-wrap;
 }
 
@@ -242,5 +244,29 @@ border-radius: 5px;
   .album_image {
     max-height: unset;
     width: 100%;
+  }
+  .album_banner {
+    height: 30px;
+    font-size: 20pt;
+  }
+  .album_info_container {
+    font-size: 1rem;
+  }
+  .album_info_edit_icon {
+    width: 1rem;
+    height: 1rem;
+    margin: 0.5rem 0.5rem;
+  }
+  .album_info_edit_buttons {
+    margin-top: unset;
+    margin-right: unset;
+  }
+  .album_info_edit_buttons img {
+    width: 1rem;
+    height: 1rem;
+    margin: 0.5rem 0.5rem;
+  }
+  .album_info_edit_icon_delete {
+    display: none;
   }
 }
