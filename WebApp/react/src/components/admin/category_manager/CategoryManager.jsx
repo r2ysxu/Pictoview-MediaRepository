@@ -21,7 +21,7 @@ function CategoryManager() {
           setCategoryName(value);
         }}
         placeholder="Category" />
-      <button onClick={onCreateCategory}>Create Tag</button>
+      <button onClick={onCreateCategory}>Create Category</button>
     </div>
   )
 }

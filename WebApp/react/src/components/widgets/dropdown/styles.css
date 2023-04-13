@@ -37,6 +37,11 @@
   filter: invert(50%);
 }
 
+.dropdown_float_item {
+  padding: 0 0.3rem;
+  box-sizing: border-box;
+}
+
 .dropdown_float_item:hover {
   background-color: #656565;
   color: #fff;
@@ -49,4 +54,11 @@
 .dropdown_item_icon {
   padding: 1px 0 0 0;
   filter: invert(60%);
+}
+
+
+@media only screen and (max-width: 600px) {
+  .dropdown_float_item {
+    padding: 1rem 0.3rem;
+  }
 }

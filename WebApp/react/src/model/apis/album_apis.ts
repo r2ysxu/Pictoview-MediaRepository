@@ -17,6 +17,14 @@ export const post_uploadAlbumPath = async (path: string): Promise<Album> => {
   });
 }
 
+export const post_uploadMediaPath = async (path: string, albumId: ID): Promise<boolean> => {
+  return request<boolean>('/album/update/media/filepath', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ path, albumId }),
+  });
+}
+
 export const get_album = async (albumId: ID) => {
   if (albumId <= 0) return { metaType: "albums" };
   const searchParams = toSearchParams({ albumId });

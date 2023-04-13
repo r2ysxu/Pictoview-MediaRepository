@@ -278,6 +278,7 @@ public class AlbumService {
 		videoMediaRepo.saveAll(videoMedia).forEach(savedMedia::add);
 		audioMediaRepo.saveAll(musicMedia).forEach(savedMedia::add);
 		createImageThumbnails(albumEntity, imageMedia);
+		imageMediaRepo.saveAll(imageMedia);
 		return savedMedia;
 	}
 
@@ -313,8 +314,9 @@ public class AlbumService {
 		return mediaAlbumRepo.save(albumEntity);
 	}
 
-	public void deleteAlbum(EndUserEntity user, Long albumId) throws AlbumNotFound {
+	public Boolean deleteAlbum(EndUserEntity user, Long albumId) throws AlbumNotFound, IOException {
 		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
 		mediaAlbumRepo.delete(albumEntity);
+		return AlbumFileUtils.deleteFolder(adminThumbnailSource + albumEntity.getId()); // Delete thumbnails
 	}
 }

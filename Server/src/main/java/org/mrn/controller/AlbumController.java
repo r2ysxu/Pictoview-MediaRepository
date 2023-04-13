@@ -1,5 +1,6 @@
 package org.mrn.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ import org.mrn.query.model.Album;
 import org.mrn.query.model.AlbumTag;
 import org.mrn.query.model.Category;
 import org.mrn.query.model.CoverImage;
+import org.mrn.query.model.FileMedia;
 import org.mrn.query.model.NewAlbumInfo;
 import org.mrn.query.model.PageItems;
 import org.mrn.query.model.SortBy;
@@ -99,15 +101,16 @@ public class AlbumController extends BaseController {
 	@PostMapping(value = "/album/create", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Album createAlbum(@RequestBody Album album) throws UnauthenticatedUserException {
 		EndUserEntity user = getUser();
-		return mediaAlbumService.createAlbum(user, album.getName(), album.getAltname(), album.getPublisher(), album.getDescription());
+		return mediaAlbumService.createAlbum(user, album.getName(), album.getAltname(), album.getPublisher(),
+				album.getDescription());
 	}
 
 	@ResponseBody
 	@PostMapping(value = "/album/update", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Album updateAlbum(@RequestBody Album album) throws UnauthenticatedUserException, AlbumNotFound {
 		EndUserEntity user = getUser();
-		return mediaAlbumService.updateAlbum(user, album.getId(), album.getName(), album.getAltname(), album.getPublisher(), album.getDescription(),
-				album.getRating(), album.getMetaType());
+		return mediaAlbumService.updateAlbum(user, album.getId(), album.getName(), album.getAltname(), album.getPublisher(),
+				album.getDescription(), album.getRating(), album.getMetaType());
 	}
 
 	@PostMapping(value = "/album/update/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -119,8 +122,8 @@ public class AlbumController extends BaseController {
 		mediaAlbumService.createMediaFromFile(user, albumId, albumDirectory);
 		if (fromMetadata) {
 			NewAlbumInfo newAlbum = AlbumInfoParserUtil.loadAlbumInfoFromJson(albumDirectory.getInfoJson());
-			mediaAlbumService.updateAlbum(user, albumId, newAlbum.getName(), newAlbum.getAltname(), newAlbum.getSubtitle(), newAlbum.getDescription(),
-					newAlbum.getRating(), newAlbum.getMetaType());
+			mediaAlbumService.updateAlbum(user, albumId, newAlbum.getName(), newAlbum.getAltname(), newAlbum.getSubtitle(),
+					newAlbum.getDescription(), newAlbum.getRating(), newAlbum.getMetaType());
 			mediaAlbumService.setCoverPhotoByName(user, albumId, newAlbum.getCoverPhotoName());
 			tagService.tagAlbum(user, albumId, newAlbum.getTags());
 		} else {
@@ -151,26 +154,44 @@ public class AlbumController extends BaseController {
 	 * @throws AlbumInfoNotFound
 	 */
 	@PostMapping(value = "/album/update/filepath", consumes = "application/json;charset=UTF-8")
-	public Album uploadAlbum(@RequestBody String path)
-			throws IOException, AlbumNotFound, AlbumInfoNotFound, UnsupportedTagException, InvalidDataException, UnauthenticatedUserException {
+	public Album uploadAlbumFilepath(@RequestBody String path) throws IOException, AlbumNotFound, AlbumInfoNotFound,
+			UnsupportedTagException, InvalidDataException, UnauthenticatedUserException {
 		EndUserEntity user = getUser();
 		if (user.getRole() != Role.ADMIN) return null;
 		AlbumDirectory albumDirectory = AlbumFileUtils.generateAlbumFolder(path, true);
 		return createAlbumFromFileInfo(user, albumDirectory, null);
 	}
 
-	private Album createAlbumFromFileInfo(EndUserEntity user, AlbumDirectory albumDirectory, Long parentAlbumId) throws IOException, AlbumNotFound, AlbumInfoNotFound, UnsupportedTagException, InvalidDataException {
+	@PostMapping(value = "/album/update/media/filepath", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Boolean uploadMediaFilePath(@RequestBody FileMedia media)
+			throws UnauthenticatedUserException, UnsupportedTagException, InvalidDataException, AlbumNotFound, IOException {
+		EndUserEntity user = getUser();
+		if (user.getRole() != Role.ADMIN) return null;
+		File mediaFile = new File(media.getPath());
+		if (mediaFile.exists() && !mediaFile.isDirectory() && AlbumFileUtils.isValidMediaType(media.getPath())) {
+			AlbumDirectory albumDirectory = new AlbumDirectory(media.getPath())
+					.addMediaFile(AlbumFileUtils.generateAlbumMediaFile(mediaFile));
+			return mediaAlbumService.createMediaFromFile(user, media.getAlbumId(), albumDirectory).size() == 1;
+		}
+		return false;
+	}
+
+	private Album createAlbumFromFileInfo(EndUserEntity user, AlbumDirectory albumDirectory, Long parentAlbumId)
+			throws IOException, AlbumNotFound, AlbumInfoNotFound, UnsupportedTagException, InvalidDataException {
 		NewAlbumInfo newAlbum = AlbumInfoParserUtil.loadAlbumInfoFromJson(albumDirectory.getInfoJson());
 		if (newAlbum != null) {
 			Album album = mediaAlbumService.createAlbum(user, newAlbum.getName(), newAlbum.getAltname(), newAlbum.getSubtitle(),
 					newAlbum.getDescription(), parentAlbumId);
-			mediaAlbumService.updateAlbum(user, album.getId(), newAlbum.getName(), newAlbum.getAltname(), newAlbum.getSubtitle(),
-					newAlbum.getDescription(), newAlbum.getRating(), newAlbum.getMetaType());
+			mediaAlbumService.updateAlbum(user, album.getId(), newAlbum.getName(), newAlbum.getAltname(),
+					newAlbum.getSubtitle(), newAlbum.getDescription(), newAlbum.getRating(), newAlbum.getMetaType());
 			mediaAlbumService.createMediaFromFile(user, album.getId(), albumDirectory);
 			mediaAlbumService.setCoverPhotoByName(user, album.getId(), newAlbum.getCoverPhotoName());
 			tagService.tagAlbum(user, album.getId(), newAlbum.getTags());
 			for (AlbumDirectory subAlbumDirectory : albumDirectory.getSubAlbums()) {
-				try { createAlbumFromFileInfo(user, subAlbumDirectory, album.getId()); } catch (AlbumInfoNotFound ex) {}
+				try {
+					createAlbumFromFileInfo(user, subAlbumDirectory, album.getId());
+				} catch (AlbumInfoNotFound ex) {
+				}
 			}
 			return album;
 		} else {
@@ -185,8 +206,9 @@ public class AlbumController extends BaseController {
 		return mediaAlbumService.updateCoverPhotoById(getUser(), coverImage.getAlbumId(), coverImage.getImageId());
 	}
 
-	@DeleteMapping(value ="/album/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Boolean deleteAlbum(@RequestBody String albumId) throws UnauthenticatedUserException, AlbumNotFound {
+	@DeleteMapping(value = "/album/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Boolean deleteAlbum(@RequestBody String albumId)
+			throws UnauthenticatedUserException, AlbumNotFound, NumberFormatException, IOException {
 		mediaAlbumService.deleteAlbum(getUser(), Long.parseLong(albumId));
 		return true;
 	}

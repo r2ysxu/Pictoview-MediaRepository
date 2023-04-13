@@ -128,6 +128,10 @@ public class AlbumFileUtils {
 			default: return null;
 		}
 	}
+	
+	public static Boolean isValidMediaType(String filePath) {
+		return getMediaTypeFromPath(filePath) != null;
+	}
 
 	public static AlbumMediaFile generateAlbumMediaFile(File file) {
 		AlbumMediaFile albumMediaFile = new AlbumMediaFile()
@@ -176,5 +180,13 @@ public class AlbumFileUtils {
 			}
 		}
 		return albumFolder;
+	}
+
+	public static Boolean deleteFolder(String filePath) throws IOException {
+		File folder = new File(filePath);
+		if (folder.exists() && folder.isDirectory()) {
+			FileUtils.deleteDirectory(folder);
+		}
+		return true;
 	}
 }

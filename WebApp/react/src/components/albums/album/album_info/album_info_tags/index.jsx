@@ -5,7 +5,9 @@ import AlbumInfoTagsNewCategory  from './albumInfoTagNewCategory';
 import './styles.css';
 
 const capitalize = (str) => {
+  if (str.length > 1)
     return str.charAt(0).toUpperCase() + str.slice(1);
+  else return str;
 }
 
 function AlbumInfoTagView({albumId, tags, onClose, isTagging, selectedCategory, onSelectCategory }) {
@@ -23,7 +25,7 @@ function AlbumInfoTagView({albumId, tags, onClose, isTagging, selectedCategory, 
         <h3>Tags</h3>
       </div>
       <div className="album_info_tag_content">
-        {isTagging && <AlbumInfoTagsNewCategory albumId={albumId} existingCategories={tags.categories} />}
+        {isTagging && <AlbumInfoTagsNewCategory albumId={albumId} existingCategories={tags.categories} onSelectCategory={onSelectCategory} />}
         {tags && tags.categories.map( category => {
           return (
             <div className={"album_info_tag_category_container "  + (isTagging && selectedCategory === null ? "album_info_tag_edit" : "")} key={category.id}  onClick={() => onSelectCategory(category)}>

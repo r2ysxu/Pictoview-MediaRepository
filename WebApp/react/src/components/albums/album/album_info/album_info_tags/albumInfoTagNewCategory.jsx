@@ -6,14 +6,17 @@ import { addCategory } from 'model/reducers/albumSlice';
 import Dropdown from 'components/widgets/dropdown';
 import './styles.css';
 
-function AlbumInfoTagsNewCategory({albumId, existingCategories}) {
+function AlbumInfoTagsNewCategory({albumId, existingCategories, onSelectCategory}) {
   const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
 
   const onAddCategory = (selectedCategory) => {
     if (selectedCategory) {
       selectedCategory.tags = [];
-      dispatch(addCategory({albumId, newCategory: selectedCategory}));
+      dispatch(addCategory({albumId, newCategory: selectedCategory}))
+        .then( () => {
+          onSelectCategory(selectedCategory);
+        })
     }
   }
 
