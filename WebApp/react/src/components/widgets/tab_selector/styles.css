@@ -63,6 +63,7 @@
 
 .tab_selector_row_left {
     display: flex;
+    margin-left: 5px;
 }
 
 .tab_selector_footer {

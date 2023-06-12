@@ -38,12 +38,10 @@ function AlbumsContainer({albumId, selectorClass}) {
     if (albumId !== null) dispatch(loadRootAlbumInfo({ albumId, sort: { field: 'name', ascending: true } }));
   }, [dispatch, albumId]);
 
-  const tabs = [
-    { label: "Albums", value: "albums", badgeLabel: albums.pageInfo.total, icon: "/assets/icons/journal-album.svg" },
-    { label: "Images", value: "images", badgeLabel: images.pageInfo.total, icon: "/assets/icons/images.svg" },
-    { label: "Videos", value: "videos", badgeLabel: videos.pageInfo.total, icon: "/assets/icons/film.svg" },
-    { label: "Music",  value: "music", badgeLabel: audios.pageInfo.total, icon: '/assets/icons/music-note-list.svg' },
-  ]
+  const tabs = [{ label: "Albums", value: "albums", badgeLabel: albums.pageInfo.total, icon: "/assets/icons/journal-album.svg" }];
+  if (images.pageInfo.total > 0) tabs.push({ label: "Images", value: "images", badgeLabel: images.pageInfo.total, icon: "/assets/icons/images.svg" });
+  if (videos.pageInfo.total > 0) tabs.push({ label: "Videos", value: "videos", badgeLabel: videos.pageInfo.total, icon: "/assets/icons/film.svg" });
+  if (audios.pageInfo.total > 0) tabs.push({ label: "Music",  value: "music", badgeLabel: audios.pageInfo.total, icon: '/assets/icons/music-note-list.svg' });
 
   const sortFields = [
     {name: "Unsorted", value: "unsorted", icon: "/assets/icons/journal-medical.svg", iconClass },
