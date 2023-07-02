@@ -162,6 +162,13 @@ public class AlbumController extends BaseController {
 		return createAlbumFromFileInfo(user, albumDirectory, null);
 	}
 
+	@PostMapping(value = "/album/update/json", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Boolean generateJsonFromData(@RequestBody String albumId) throws UnauthenticatedUserException, NumberFormatException, AlbumNotFound {
+		EndUserEntity user = getUser();
+		if (user.getRole() != Role.ADMIN) return false;
+		return mediaAlbumService.generateJsonFromAlbum(user, Long.parseLong(albumId));
+	}
+
 	@PostMapping(value = "/album/update/media/filepath", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Boolean uploadMediaFilePath(@RequestBody FileMedia media)
 			throws UnauthenticatedUserException, UnsupportedTagException, InvalidDataException, AlbumNotFound, IOException {

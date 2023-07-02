@@ -21,7 +21,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.mrn.filemanager.AlbumMediaFile.Type;
 import org.mrn.jpa.model.album.MediaType;
+import org.mrn.query.model.NewAlbumInfo;
 
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
@@ -186,6 +189,17 @@ public class AlbumFileUtils {
 		File folder = new File(filePath);
 		if (folder.exists() && folder.isDirectory()) {
 			FileUtils.deleteDirectory(folder);
+		}
+		return true;
+	}
+
+	public static Boolean writeToJsonFile(String filePath, NewAlbumInfo albumInfo) {
+		File albumJson = new File(filePath + "/" + INFO_FILE);
+		try {
+			new ObjectMapper().writer(new DefaultPrettyPrinter()).writeValue(albumJson, albumInfo);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}

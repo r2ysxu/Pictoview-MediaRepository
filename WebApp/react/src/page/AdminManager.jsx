@@ -3,6 +3,7 @@ import Container from 'components/widgets/container';
 import CategoryManager from 'components/admin/category_manager/CategoryManager';
 import NewAlbumPathManager from 'components/admin/NewAlbumPathManager';
 import NewMediaPathManager from 'components/admin/NewMediaPathManager';
+import GenerateAlbumInfoManager from 'components/admin/GenerateAlbumInfoManager';
 
 function AdminManager() {
   return (
@@ -11,6 +12,7 @@ function AdminManager() {
         <CategoryManager />
         <NewAlbumPathManager />
         <NewMediaPathManager />
+        <GenerateAlbumInfoManager />
       </Container>
     </div>
   );

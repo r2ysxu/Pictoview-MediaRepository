@@ -105,6 +105,14 @@ export const post_updateAlbum = async(album: Album): Promise<Album> => {
   });
 }
 
+export const post_generateJson = async (albumId: ID): Promise<boolean> => {
+  return request<boolean>('/album/update/json', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: albumId.toString()
+  });
+}
+
 export const post_changeAlbumCover = async(albumId: ID, imageId: ID): Promise<Album> => {
   return request<Album>('/album/update/cover', {
     method: 'POST',

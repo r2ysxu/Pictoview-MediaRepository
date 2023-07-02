@@ -36,7 +36,9 @@ import org.mrn.jpa.repo.VideoMediaRepo;
 import org.mrn.query.model.Album;
 import org.mrn.query.model.AudioMediaItem;
 import org.mrn.query.model.MediaItem;
+import org.mrn.query.model.NewAlbumInfo;
 import org.mrn.query.model.PageItems;
+import org.mrn.query.model.Tag;
 import org.mrn.service.builder.AlbumBuilder;
 import org.mrn.service.builder.AudioMediaItemBuilder;
 import org.mrn.service.builder.ImageMediaItemBuilder;
@@ -117,11 +119,13 @@ public class AlbumService {
 		AlbumFileUtils.unzipFolder(zippedFile.getAbsolutePath(), albumFolderPath);
 		return AlbumFileUtils.generateAlbumFolder(albumFolderPath, loadMetadata);
 	}
+
 	public Album createAlbum(EndUserEntity user, String name, String altname, String subtitle, String description) {
 		return createAlbum(user, name, altname, subtitle, description, null);
 	}
 
-	public Album createAlbum(EndUserEntity user, String name, String altname, String subtitle, String description, Long parentId) {
+	public Album createAlbum(EndUserEntity user, String name, String altname, String subtitle, String description,
+			Long parentId) {
 		AlbumEntity newAlbum = new AlbumEntity(user, name, altname, subtitle, description);
 		if (parentId != null && parentId > 0) {
 			newAlbum.setParent(mediaAlbumRepo.findById(parentId).orElse(null));
@@ -130,8 +134,8 @@ public class AlbumService {
 		return new AlbumBuilder().build(albumEntity);
 	}
 
-	public Album updateAlbum(EndUserEntity user, Long albumId, String name, String altname, String subtitle, String description, Integer rating, String metaType)
-			throws AlbumNotFound {
+	public Album updateAlbum(EndUserEntity user, Long albumId, String name, String altname, String subtitle, String description,
+			Integer rating, String metaType) throws AlbumNotFound {
 		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).get();
 		if (albumEntity != null) {
 			if (name != null) albumEntity.setName(name);
@@ -184,7 +188,8 @@ public class AlbumService {
 		}
 	}
 
-	public MediaEntity createMediumFromFile(EndUserEntity user, Long albumId, MultipartFile mediaFile) throws UnsupportedTagException, InvalidDataException, IOException, AlbumNotFound {
+	public MediaEntity createMediumFromFile(EndUserEntity user, Long albumId, MultipartFile mediaFile)
+			throws UnsupportedTagException, InvalidDataException, IOException, AlbumNotFound {
 		File storedFile = new File(adminSource + ALBUMS_DIRECTORY + albumId + "/" + mediaFile.getOriginalFilename());
 		mediaFile.transferTo(storedFile);
 		AlbumMediaFile file = AlbumFileUtils.generateAlbumMediaFile(storedFile);
@@ -192,16 +197,14 @@ public class AlbumService {
 		mediaAlbumRepo.save(albumEntity.setUpdatedAt(Date.from(Instant.now())));
 		switch (file.getType()) {
 		case IMAGE:
-			ImageMediaEntity imageMedia = imageMediaRepo.save(new ImageMediaEntity(user,
-					file.getAbsolutePath(), file.getName(), file.getMediaType(),
-					albumEntity));
+			ImageMediaEntity imageMedia = imageMediaRepo
+					.save(new ImageMediaEntity(user, file.getAbsolutePath(), file.getName(), file.getMediaType(), albumEntity));
 			imageMedia.setThumbnailSource(generateThumbnailPath(albumEntity, imageMedia));
 			AlbumFileUtils.createPhotoThumbnail(imageMedia.getSource(), imageMedia.getThumbnailSource());
 			return imageMediaRepo.save(imageMedia);
 		case VIDEO:
-			return videoMediaRepo.save(new VideoMediaEntity(user,
-					file.getAbsolutePath(), file.getName(), file.getMediaType(),
-					albumEntity));
+			return videoMediaRepo
+					.save(new VideoMediaEntity(user, file.getAbsolutePath(), file.getName(), file.getMediaType(), albumEntity));
 		case AUDIO:
 			AudioMediaFile audioFile = AlbumFileUtils.parseAudioFile(file.getAbsolutePath());
 			AudioMediaEntity musicEntity = new AudioMediaEntity(user, file.getAbsolutePath(), file.getName(),
@@ -211,19 +214,18 @@ public class AlbumService {
 				MusicArtistEntity musicArtistEntity = musicArtistRepo.findByName(audioFile.getArtist());
 				MusicGenreEntity musicGenreEntity = musicGenreRepo.findByName(audioFile.getGenre());
 				if (musicArtistEntity == null) {
-					musicArtistEntity = musicArtistRepo.save(
-							new MusicArtistEntity().setName(audioFile.getArtist()));
+					musicArtistEntity = musicArtistRepo.save(new MusicArtistEntity().setName(audioFile.getArtist()));
 				}
 				if (musicGenreEntity == null) {
-					musicGenreEntity = musicGenreRepo.save(
-							new MusicGenreEntity().setName(audioFile.getGenre()));
+					musicGenreEntity = musicGenreRepo.save(new MusicGenreEntity().setName(audioFile.getGenre()));
 				}
 				musicEntity.setTitle(audioFile.getTitle());
 				musicEntity.setArtist(musicArtistEntity);
 				musicEntity.setGenre(musicGenreEntity);
 			}
 			return audioMediaRepo.save(musicEntity);
-		default: return null;
+		default:
+			return null;
 		}
 	}
 
@@ -296,8 +298,7 @@ public class AlbumService {
 			throws AlbumNotFound, InvalidMediaAlbumException, IOException {
 		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
 		ImageMediaEntity imageMedia = imageMediaRepo.findByOwnerAndAlbum_IdAndId(user, albumId, imageId);
-		if (imageMedia == null)
-			throw new InvalidMediaAlbumException(albumId, imageId);
+		if (imageMedia == null) throw new InvalidMediaAlbumException(albumId, imageId);
 		AlbumFileUtils.createCoverPhotoFile(imageMedia.getSource(),
 				ImageService.generateCoverPhotoPath(adminCoverSource, albumEntity, imageMedia));
 		albumEntity.setCoverPhoto(imageMedia);
@@ -318,5 +319,22 @@ public class AlbumService {
 		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
 		mediaAlbumRepo.delete(albumEntity);
 		return AlbumFileUtils.deleteFolder(adminThumbnailSource + albumEntity.getId()); // Delete thumbnails
+	}
+
+	public Boolean generateJsonFromAlbum(EndUserEntity user, Long albumId) throws AlbumNotFound {
+		AlbumEntity albumEntity = mediaAlbumRepo.findById(albumId).orElseThrow(() -> new AlbumNotFound(user, albumId));
+		NewAlbumInfo albumInfo = new NewAlbumInfo(albumEntity.getName(), albumEntity.getDescription(),
+				albumEntity.getSubtitle(), albumEntity.getCoverPhoto().getName(), albumEntity.getRating());
+		albumInfo.setAltname(albumEntity.getAltname());
+		albumInfo.setMetaType(albumEntity.getMetaType());
+		albumInfo.setTags(albumEntity.getAlbumTags().stream()
+				.map(tag -> new Tag(null, tag.getTag().getCategory().getId(), tag.getTag().getName(), tag.getRelevance()))
+				.toList());
+		return writeToJsonFileFromCoverPhoto(albumEntity, albumInfo);
+	}
+
+	private Boolean writeToJsonFileFromCoverPhoto(AlbumEntity albumEntity, NewAlbumInfo albumInfo) {
+		File mediaFile = new File(albumEntity.getCoverPhoto().getSource());
+		return AlbumFileUtils.writeToJsonFile(mediaFile.getParent(), albumInfo);
 	}
 }
