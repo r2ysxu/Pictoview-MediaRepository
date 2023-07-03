@@ -6,6 +6,7 @@ import './styles.css';
 function Tokenizer({title, tokens, setTokens, addNewToken, autoCompleteValues, onAutoComplete, onRemove, onSave, onClose, relevanceClass}) {
   const inputRef = useRef(null);
   const [inputValue, setInputValue] = useState('');
+  const [hoverIndex, setHoverIndex] = useState(0);
 
   useEffect(() => {
     inputRef.current.focus();
@@ -20,13 +21,27 @@ function Tokenizer({title, tokens, setTokens, addNewToken, autoCompleteValues, o
     onAutoComplete('');
   }
 
-  const onEnterPressed = (event) => {
-    if (event.charCode === 13 && !event.shiftKey) { // Enter
+  const onKeyDown = async (event) => {
+    console.log('event', event);
+    if (event.keyCode === 40) { // Down
+      await setHoverIndex(Math.min(hoverIndex + 1, autoCompleteValues.length - 1));
+      event.preventDefault();
+    } else if(event.keyCode === 38) { // up
+      await setHoverIndex(Math.max(0, hoverIndex - 1));
+      event.preventDefault();
+    } else if (event.keyCode === 9 && hoverIndex >= 0) { // Tab
+      setInputValue(autoCompleteValues[hoverIndex]?.value ?? '');
+      onAutoComplete('');
+      event.preventDefault();
+    } else if (event.keyCode === 13 && !event.shiftKey) { // Enter
       onAddToken();
-    } else if (event.charCode === 13 && event.shiftKey) { // Shift + Enter
+      setHoverIndex(0);
+    } else if (event.keyCode === 13 && event.shiftKey) { // Shift + Enter
       onSavePressed(event);
-    } else if (event.charCode === 96) { // `
+      setHoverIndex(0);
+    } else if (event.keyCode === 27) { // Esc
       onDiscardPressed(event);
+      setHoverIndex(0);
     }
   }
 
@@ -57,7 +72,11 @@ function Tokenizer({title, tokens, setTokens, addNewToken, autoCompleteValues, o
     <div className="tokenizer_container">
       <div className="tokenizer_input_container">
         <div className="tokenizer_input_autocomplete_container">
-          {(autoCompleteValues || []).map( (token, index) => <div className="tokenizer_input_autocomplete_item" key={index + '-' + token.id} onClick={() => onSelectItem(index)}>{token.value}</div> )}
+          {(autoCompleteValues || []).map((token, index) =>
+            <div className={"tokenizer_input_autocomplete_item " + (hoverIndex === index ? "tokenizer_input_autocomplete_item_selected" : "")}
+                key={index + '-' + token.id}
+                onMouseEnter={() => setHoverIndex(index)}
+                onClick={() => onSelectItem(index)}>{token.value}</div> )}
         </div>
         <input className="tokenizer_input_text"
             ref={inputRef}
@@ -68,7 +87,7 @@ function Tokenizer({title, tokens, setTokens, addNewToken, autoCompleteValues, o
               setInputValue(value);
               onAutoComplete(value);
             }}
-            onKeyPress={onEnterPressed} />
+            onKeyDown={onKeyDown} />
         <button className="tokenizer_image_button tokenizer_input_image_save_button" onClick={onSavePressed}>
           <img src="/assets/icons/check.svg" alt="" />
         </button>

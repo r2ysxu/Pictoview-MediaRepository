@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from "react-router-dom";
-import { selectUserLoggedIn } from '../model/reducers/userSlice';
+import { selectUserLoggedIn, toggleHeader } from '../model/reducers/userSlice';
 import { searchAlbums } from '../model/reducers/albumSlice';
 import Modal from '../components/widgets/modal';
 import Container from '../components/widgets/container';
@@ -56,6 +56,7 @@ function AlbumPage(props) {
 
   useEffect( () => {
     if (albumId === null) onSearch(albumSearchQuery);
+    else if ( albumId > 0 ) dispatch(toggleHeader({ showHeader: false }));
   }, [albumId, albumSearchQuery, onSearch]);
 
   return (
