@@ -1,0 +1,19 @@
+.admin_manager_tabs_container {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.admin_manager_tab_title {
+  display: flex;
+  padding: 5px 2px;
+  color: #fff;
+  user-select: none;
+}
+
+.admin_manager_tab_title_icon {
+  filter: invert(100%);
+  margin: 0 5px;
+}
+
+.admin_manager_tab_content {
+  padding: 5px;
+}
