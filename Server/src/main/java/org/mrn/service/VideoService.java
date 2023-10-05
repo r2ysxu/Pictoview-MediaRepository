@@ -1,50 +1,45 @@
 package org.mrn.service;
 
-import java.time.Duration;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.concurrent.TimeUnit;
 
 import org.mrn.jpa.model.album.VideoMediaEntity;
 import org.mrn.jpa.repo.VideoMediaRepo;
+import org.mrn.query.model.MediaHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-import reactor.core.publisher.Mono;
-
 @Service
 public class VideoService {
+
 	@Value("${app.admin.main.cache.size}")
 	private Integer maxCacheItemSize = 5;
 
-	Cache<String, Resource> resourceCache = CacheBuilder.newBuilder().maximumSize(maxCacheItemSize)
-			.expireAfterAccess(5L, TimeUnit.MINUTES)
-			.build();
+	Cache<String, String> sourceCache = CacheBuilder.newBuilder().maximumSize(maxCacheItemSize)
+			.expireAfterAccess(10L, TimeUnit.MINUTES).build();
 
-	@Autowired
-	private ResourceLoader resourceLoader;
 	@Autowired
 	private VideoMediaRepo videoMediaRepo;
 
-	public Mono<Resource> fetchVideoStream(UserDetails owner, Long mediaId) {
-		final Resource resource = resourceCache.getIfPresent(owner.getUsername() + mediaId);
-		Mono<Resource> monoResource;
-		if (resource == null) {
-			Resource newResource = resourceLoader.getResource("file:" + findVideo(owner, mediaId).getSource());
-			resourceCache.put(owner.getUsername() + mediaId, newResource);
-			monoResource = Mono.fromSupplier(() -> newResource);
-		} else {
-			monoResource = Mono.fromSupplier(() -> resource);
+	public MediaHandler fetchVideoStream(UserDetails owner, Long mediaId, Long startRange, Long endRange)
+			throws FileNotFoundException, IOException {
+		String source = sourceCache.getIfPresent(owner.getUsername() + "-" + mediaId);
+		if (source == null) {
+			VideoMediaEntity entity = findVideo(owner, mediaId);
+			if (entity == null) return null;
+			sourceCache.put(owner.getUsername() + "-" + mediaId, entity.getSource());
 		}
-		return monoResource.timeout(Duration.ofMinutes(1L));
+		return new MediaHandler(new RandomAccessFile(source, "r"), startRange, endRange);
 	}
 
-	public VideoMediaEntity findVideo(UserDetails owner, Long mediaId) {
+	private VideoMediaEntity findVideo(UserDetails owner, Long mediaId) {
 		return videoMediaRepo.findByOwner_UsernameAndId(owner.getUsername(), mediaId);
 	}
 }
